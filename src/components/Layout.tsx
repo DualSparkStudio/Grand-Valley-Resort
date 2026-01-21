@@ -1,0 +1,305 @@
+import {
+    Bars3Icon,
+    BuildingOfficeIcon,
+    EnvelopeIcon,
+    HomeIcon,
+    MapPinIcon,
+    SparklesIcon,
+    UserGroupIcon,
+    XMarkIcon
+} from '@heroicons/react/24/outline'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { api } from '../lib/supabase'
+import SocialMediaWidget from './SocialMediaWidget'
+import WhatsAppWidget from './WhatsAppWidget'
+
+interface LayoutProps {
+  children: React.ReactNode
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const location = useLocation()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [adminInfo, setAdminInfo] = useState<{
+    first_name: string
+    last_name: string
+    email: string
+    phone?: string
+    address?: string
+  }>({
+    first_name: 'Admin',
+    last_name: '',
+    email: '',
+    phone: '',
+    address: ''
+  })
+
+  // Fetch admin info for footer
+  useEffect(() => {
+    const fetchAdminInfo = async () => {
+      try {
+        const info = await api.getAdminInfo()
+        setAdminInfo(info)
+      } catch (error) {
+      }
+    }
+
+    fetchAdminInfo()
+  }, [])
+
+
+
+
+  const isActive = (path: string) => location.pathname === path
+
+  const navigation = [
+    { name: 'Home', href: '/', icon: HomeIcon },
+    { name: 'Rooms', href: '/rooms', icon: BuildingOfficeIcon },
+    { name: 'Attractions', href: '/attractions', icon: MapPinIcon },
+    { name: 'Features', href: '/features', icon: SparklesIcon },
+    { name: 'About', href: '/about', icon: UserGroupIcon },
+    { name: 'Contact', href: '/contact', icon: EnvelopeIcon },
+  ]
+
+  return (
+    <div className="min-h-screen bg-cream-beige">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm border-b border-gray-200 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center">
+                <div className="h-8 w-8 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3">
+                  <span className="text-white font-bold text-sm">R</span>
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-forest">Resort Booking System</h1>
+                  <p className="text-xs text-gray-500">Relax enjoy and recharge.</p>
+                </div>
+              </Link>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-8">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? 'text-forest'
+                      : 'text-gray-700 hover:text-forest'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* User Menu */}
+            <div className="flex items-center space-x-3">
+              <div className="hidden sm:flex items-center space-x-3">
+                {/* Guest user options - always show for all users */}
+                <Link
+                  to="/rooms"
+                  className="btn-primary text-sm px-5 py-2.5 rounded-lg block"
+                >
+                  <span className="inline-block">Book Now</span>
+                </Link>
+              </div>
+
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-800"
+              >
+                {isMobileMenuOpen ? (
+                  <XMarkIcon className="h-6 w-6" />
+                ) : (
+                  <Bars3Icon className="h-6 w-6" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`flex items-center px-3 py-3 rounded-md text-base font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? 'text-forest bg-forest/10'
+                      : 'text-gray-700 hover:text-forest hover:bg-gray-50'
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <item.icon className="h-5 w-5 mr-3" />
+                  {item.name}
+                </Link>
+              ))}
+              
+              <div className="pt-4 pb-3 border-t border-gray-200 space-y-3">
+                {/* Guest mobile options - always show for all users */}
+                <Link
+                  to="/rooms"
+                  className="btn-primary w-full text-center block"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="inline-block">Book Now</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Main Content */}
+      <main className="pt-16">
+        {children}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center mb-4">
+                <div className="h-8 w-8 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3">
+                  <span className="text-white font-bold text-sm">R</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Resort Booking System</h3>
+                  <p className="text-sm text-gray-400">Homestay</p>
+                </div>
+              </div>
+              <p className="text-gray-400 mb-4 max-w-md">
+                Experience luxury and comfort in the heart of Ratnagiri. Our resort offers 
+                stunning river views, world-class amenities, and unforgettable memories.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">
+                Quick Links
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/rooms" className="text-gray-300 hover:text-white transition-colors">
+                    Rooms & Suites
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/attractions" className="text-gray-300 hover:text-white transition-colors">
+                    Local Attractions
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/features" className="text-gray-300 hover:text-white transition-colors">
+                    Amenities
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
+                    About Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">
+                Contact
+              </h3>
+              <ul className="space-y-2 text-gray-300">
+                {adminInfo.address && (
+                  <li className="whitespace-pre-line">{adminInfo.address}</li>
+                )}
+                {!adminInfo.address && (
+                  <>
+                    <li>Ratnagiri, Maharashtra</li>
+                    <li>India</li>
+                  </>
+                )}
+                {adminInfo.phone && (
+                  <li>Phone: {adminInfo.phone}</li>
+                )}
+                {!adminInfo.phone && (
+                  <li>Phone: +91 123 456 7890</li>
+                )}
+                <li>Email: {adminInfo.email}</li>
+              </ul>
+              
+              {/* Social Media Links */}
+              <div>
+                <h5 className="text-sm font-semibold mb-3 text-white">Follow Us</h5>
+                <div className="flex space-x-3">
+                  <a
+                    href="https://www.instagram.com/river_breeze_homestay?igsh=M2dnbW0wZ2I3MnE3"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-white/20 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987c6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM15.156 7.987c.03.307.038.839.038 1.581v2.701c0 .742-.009 1.274-.038 1.581-.131.001-.581.002-1.362.002l-1.897.013h-2.564c-.44 0-.794-.006-1.091-.024-.858-.052-1.483-.311-1.975-.803S5.890 12.262 5.890 11.668v-2.701c0-.742.009-1.274.038-1.581.305-.708.81-1.195 1.571-1.463.761-.268 1.693-.372 2.865-.372h2.564c1.232 0 2.174.091 2.865.372.691.281 1.233.744 1.571 1.463zM11.017 6.072c1.644 0 2.977 1.333 2.977 2.977s-1.333 2.977-2.977 2.977-2.977-1.333-2.977-2.977 1.333-2.977 2.977-2.977zm0 1.424c-.858 0-1.553.695-1.553 1.553s.695 1.553 1.553 1.553 1.553-.695 1.553-1.553-.695-1.553-1.553-1.553zm3.85-.273c.384 0 .695.311.695.695s-.311.695-.695.695-.695-.311-.695-.695.311-.695.695-.695z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href={`https://wa.me/${adminInfo.phone && adminInfo.phone.trim() ? (() => {
+                      let phoneNumber = adminInfo.phone.replace(/\D/g, '')
+                      if (!phoneNumber.startsWith('91')) {
+                        phoneNumber = '91' + phoneNumber
+                      }
+                      return phoneNumber
+                    })() : '919876543210'}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-white/20 hover:bg-green-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.886 3.488"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+              <div className="flex items-center gap-4 mb-2 sm:mb-0">
+                <span>© 2025 Resort Booking System. All rights reserved.</span>
+                <span className="text-forest-600 hover:text-forest-500 font-medium transition-colors duration-200">
+                  <a href="/policy">Privacy Policy & Terms</a>
+                </span>
+              </div>
+              <p>
+                Designed & Developed by{' '}
+                <a
+                  href="https://dualsparkstudio.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-forest-600 hover:text-forest-500 font-medium transition-colors duration-200"
+                >
+                  DualSpark Studio
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* Floating Widgets */}
+      <WhatsAppWidget />
+      <SocialMediaWidget />
+    </div>
+  )
+}
+
+export default Layout 

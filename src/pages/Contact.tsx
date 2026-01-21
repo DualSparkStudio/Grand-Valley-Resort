@@ -1,0 +1,398 @@
+import {
+    ChatBubbleLeftRightIcon,
+    ClockIcon,
+    EnvelopeIcon,
+    MapPinIcon,
+    PaperAirplaneIcon,
+    PhoneIcon
+} from '@heroicons/react/24/outline'
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import FAQ from '../components/FAQ'
+import SEO from '../components/SEO'
+import { api } from '../lib/supabase'
+
+const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  })
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [adminContactInfo, setAdminContactInfo] = useState({
+    email: '',
+    phone: '',
+    name: 'Resort Booking System Team',
+    address: ''
+  })
+
+  // Load admin contact info on component mount
+  useEffect(() => {
+    const loadAdminContactInfo = async () => {
+      try {
+        const adminInfo = await api.getAdminInfo()
+        setAdminContactInfo({
+          email: adminInfo.email,
+          phone: adminInfo.phone || '+91 98765 43210',
+          name: `${adminInfo.first_name} ${adminInfo.last_name}`.trim() || 'Resort Booking System Team',
+          address: adminInfo.address || ''
+        })
+      } catch (error) {
+        // Keep default values if loading fails
+      }
+    }
+    
+    loadAdminContactInfo()
+  }, [])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    try {
+      
+      // Get SMTP configuration from admin panel
+      let smtpConfig = {}
+      try {
+        smtpConfig = await api.getSmtpConfig()
+      } catch (error) {
+        // Continue with empty smtpConfig (will use environment variables)
+      }
+      
+      // Send contact form email to admin
+      const response = await fetch('/.netlify/functions/send-contact-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contactData: formData,
+          adminEmail: adminContactInfo.email,
+          smtpConfig: smtpConfig
+        })
+      })
+
+
+      const responseData = await response.json()
+
+      if (!response.ok) {
+        throw new Error(`Failed to send contact email: ${responseData.error || response.statusText}`)
+      }
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      })
+      
+      toast.success('Thank you for your message! We will get back to you soon.')
+    } catch (error: any) {
+      toast.error(`Failed to send message: ${error.message}`)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+
+
+  const contactInfo = [
+    {
+      title: 'Address',
+      content: adminContactInfo.address || 'Resort Booking System, Ratnagiri, Maharashtra, India',
+      icon: MapPinIcon,
+      link: 'https://maps.google.com'
+    },
+    {
+      title: 'Phone',
+      content: adminContactInfo.phone,
+      icon: PhoneIcon,
+      link: `tel:${adminContactInfo.phone}`
+    },
+    {
+      title: 'Email',
+      content: adminContactInfo.email,
+      icon: EnvelopeIcon,
+      link: `mailto:${adminContactInfo.email}`
+    },
+    {
+      title: 'Hours',
+      content: 'Check-in: 1:00 PM onwards | Check-out: 10:00 AM (Flexible depending on other bookings)',
+      icon: ClockIcon,
+      link: null
+    }
+  ]
+
+  const departments = [
+    'General Inquiries',
+    'Room Reservations',
+    'Local Tours & Activities',
+    'Transportation',
+    'Special Occasions',
+    'Group Bookings',
+    'Technical Support'
+  ]
+
+  return (
+    <>
+      <SEO 
+        title="Contact Resort Booking System - Get in Touch"
+        description="Contact Resort Booking System for bookings, inquiries, or support. Reach us via phone, email, or our contact form. We're here to help."
+        keywords="contact Resort Booking System, booking system contact, resort booking inquiry, accommodation booking contact, booking support"
+        url="https://riverbreezehomestay.com/contact"
+      />
+      <div className="min-h-screen bg-gray-50">
+        {/* Hero Section */}
+        <section className="relative h-96 bg-gradient-to-r from-forest-800 to-forest-600">
+          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="relative z-10 flex items-center justify-center h-full">
+            <div className="text-center text-white">
+              <h1 className="text-5xl font-bold mb-4">Contact Us</h1>
+              <p className="text-xl max-w-2xl mx-auto">
+                We're here to help make your stay in Ratnagiri perfect. Get in touch with us anytime.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Information */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              {contactInfo.map((info, index) => (
+                <div key={index} className="text-center flex flex-col items-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-800 to-green-800 rounded-full mb-4">
+                    <info.icon className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{info.title}</h3>
+                  {info.link ? (
+                    <a 
+                      href={info.link} 
+                      className="text-gray-600 hover:text-blue-800 transition-colors duration-200 text-center"
+                    >
+                      {info.content}
+                    </a>
+                  ) : (
+                    <p className="text-gray-600 text-center">{info.content}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Form & Map */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Contact Form */}
+              <div className="bg-white rounded-2xl shadow-lg p-8">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-800 to-green-800 rounded-lg flex items-center justify-center mr-4">
+                    <ChatBubbleLeftRightIcon className="h-6 w-6 text-white" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900">Send us a Message</h2>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="input-field"
+                        placeholder="Enter your full name"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="input-field"
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="input-field"
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                        Subject *
+                      </label>
+                      <select
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
+                        className="input-field"
+                      >
+                        <option value="">Select a subject</option>
+                        {departments.map((dept, index) => (
+                          <option key={index} value={dept}>{dept}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={6}
+                      className="input-field resize-none"
+                      placeholder="Tell us how we can help you..."
+                    ></textarea>
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full btn-primary flex items-center justify-center"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <PaperAirplaneIcon className="h-5 w-5 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                  
+
+                </form>
+              </div>
+
+              {/* Map & Additional Info */}
+              <div className="space-y-8">
+                {/* Map */}
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <iframe 
+                      src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3815.1911600628246!2d73.30679097515643!3d17.014290983810714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTfCsDAwJzUxLjUiTiA3M8KwMTgnMzMuNyJF!5e0!3m2!1sen!2sin!4v1752587023965!5m2!1sen!2sin" 
+                      width="100%" 
+                      height="320" 
+                      style={{border: 0}} 
+                      allowFullScreen 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="w-full h-80"
+                    ></iframe>
+                  </div>
+                </div>
+
+                {/* Quick Contact */}
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Quick Contact</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center">
+                      <PhoneIcon className="h-6 w-6 text-forest-800 mr-3" />
+                      <div>
+                        <p className="font-medium text-gray-900">Reservations</p>
+                        <p className="text-gray-600">{adminContactInfo.phone}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <EnvelopeIcon className="h-6 w-6 text-forest-800 mr-3" />
+                      <div>
+                        <p className="font-medium text-gray-900">Email Support</p>
+                        <p className="text-gray-600">{adminContactInfo.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <ClockIcon className="h-6 w-6 text-forest-800 mr-3" />
+                      <div>
+                        <p className="font-medium text-gray-900">Response Time</p>
+                        <p className="text-gray-600">Within 24 hours</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <MapPinIcon className="h-6 w-6 text-forest-800 mr-3" />
+                      <div>
+                        <p className="font-medium text-gray-900">Location</p>
+                        <p className="text-gray-600">{adminContactInfo.address || 'Ratnagiri, Maharashtra'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <FAQ />
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-forest-800 to-forest-600">
+          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Ready to Experience Resort Booking System?
+            </h2>
+            <p className="text-xl text-white/80 mb-8">
+              Book your stay today and let us create the perfect Ratnagiri experience for you.
+            </p>
+            <a
+              href="/rooms"
+              className="inline-block bg-white text-forest-800 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+            >
+              Book Your Stay
+            </a>
+          </div>
+        </section>
+      </div>
+    </>
+  )
+}
+
+export default Contact 
