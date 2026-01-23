@@ -1,187 +1,229 @@
-import {
-    BeakerIcon,
-    CakeIcon,
-    ClockIcon,
-    CreditCardIcon,
-    MapIcon,
-    ShieldCheckIcon,
-    SparklesIcon,
-    SunIcon,
-    TruckIcon,
-    UserGroupIcon,
-    WifiIcon
-} from '@heroicons/react/24/outline';
-import React, { useEffect, useState } from 'react';
-import { api } from '../lib/supabase';
-
-interface Feature {
-  id: number;
-  name: string;
-  description: string;
-  icon_name: string;
-  category: string;
-  display_order: number;
-  is_active: boolean;
-  is_featured: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import React from 'react'
+import GlassCard from '../components/GlassCard'
+import PremiumImage from '../components/PremiumImage'
+import TextReveal from '../components/TextReveal'
 
 const Features: React.FC = () => {
-  const [features, setFeatures] = useState<Feature[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-
-  useEffect(() => {
-    loadFeatures();
-  }, []);
-
-  const loadFeatures = async () => {
-    try {
-      setLoading(true);
-      const data = await api.getFeatures();
-      setFeatures(data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
+  const facilities = [
+    {
+      title: 'COMFORT & CONVENIENCE',
+      items: ['FREE WIFI', 'FREE PARKING', 'AC ROOMS', 'BALCONY WITH VALLEY VIEW'],
+      icon: '🏨'
+    },
+    {
+      title: 'Living & Common Areas',
+      items: ['LAWN & OUTDOOR SEATING AREA'],
+      icon: '🌳'
+    },
+    {
+      title: 'RECREATION & LEISURE',
+      items: ['SWIMMING POOL', 'VALLEY VIEW', 'RELAXATION AREA', 'INDOOR ACTIVITIES'],
+      icon: '🏊'
+    },
+    {
+      title: 'DESTINATION WEDDING',
+      items: ['Breathtaking views of the Sahyadri mountains', 'Perfect setting for your dream wedding'],
+      icon: '💒'
     }
-  };
+  ]
 
-  // Get icon component by name
-  const getIconComponent = (iconName: string) => {
-    const iconMap: { [key: string]: React.ComponentType<any> } = {
-      StarIcon: () => <span>⭐</span>,
-      CheckCircleIcon: () => <span>✅</span>,
-      CalendarIcon: () => <span>📅</span>,
-      MapPinIcon: () => <span>📍</span>,
-      WifiIcon: WifiIcon,
-      BeakerIcon: BeakerIcon,
-      SparklesIcon: SparklesIcon,
-      CakeIcon: CakeIcon,
-      HeartIcon: () => <span>❤️</span>,
-      ShieldCheckIcon: ShieldCheckIcon,
-      ClockIcon: ClockIcon,
-      UserGroupIcon: UserGroupIcon,
-      SunIcon: SunIcon,
-      MapIcon: MapIcon,
-      TruckIcon: TruckIcon,
-      CreditCardIcon: CreditCardIcon,
-      UserIcon: () => <span>👤</span>
-    };
-    
-    return iconMap[iconName] || SparklesIcon;
-  };
+  const amenities = [
+    {
+      title: 'INFINITY SWIMMING POOL',
+      description: 'Experience the beauty of our infinity pool that offers stunning scenic views. The visual effect of water blending into the horizon creates a mesmerizing experience.',
+      image: 'https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?w=800',
+      icon: '🏊'
+    },
+    {
+      title: 'DESTINATION WEDDING',
+      description: 'Plan your dream wedding amidst the lush greenery of Mahabaleshwar. We offer beautiful outdoor spaces and natural backdrops that make your special day unforgettable.',
+      image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800',
+      icon: '💒'
+    },
+    {
+      title: 'INDOOR GAMES',
+      description: 'Grand Valley Resort Bhilar Annex offers indoor games and entertainment options for all ages. Enjoy quality time with family and friends.',
+      image: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800',
+      icon: '🎮'
+    },
+    {
+      title: 'PURE VEG RESTAURANT',
+      description: 'Our in-house vegetarian restaurant offers fresh, flavorful Indian classics and comfort food. Enjoy delicious meals prepared with fresh, vegetarian ingredients in a scenic setting surrounded by hills and greenery.',
+      image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800',
+      icon: '🍽️'
+    }
+  ]
 
-  // Get unique categories from features
-  const categories = ['All', ...Array.from(new Set(features.map(f => f.category)))];
-
-  const filteredFeatures = selectedCategory === 'All' 
-    ? features.filter(f => f.is_active)
-    : features.filter(f => f.category === selectedCategory && f.is_active);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading features...</p>
-        </div>
-      </div>
-    );
-  }
+  const specialAmenities = [
+    {
+      title: 'Candle Light Dinner',
+      description: 'Enjoy an unforgettable candlelight dinner for couples. Available at additional cost.',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+      icon: '🕯️'
+    },
+    {
+      title: 'Breakfast by the Pool',
+      description: 'Experience a luxurious floating breakfast by the poolside. Available at additional charge.',
+      image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800',
+      icon: '🍳'
+    },
+    {
+      title: 'Room Decoration',
+      description: 'Beautiful bedroom decoration for your special night. Available at extra charge.',
+      image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800',
+      icon: '🌹'
+    }
+  ]
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-dark-blue-900">
       {/* Hero Section */}
-      <section className="relative h-96 bg-gradient-to-r from-blue-800 to-green-800">
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 flex items-center justify-center h-full">
-          <div className="text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">Resort Features</h1>
-            <p className="text-xl max-w-2xl mx-auto">
-              Discover the world-class amenities and services that make Resort Booking System 
-              the ultimate luxury destination
-            </p>
+      <section className="relative section-padding-premium flex items-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900" />
+        <div className="container-premium relative z-10">
+          <div className="text-center">
+            <TextReveal variant="split" as="h1" className="text-premium-heading text-golden mb-6">
+              FACILITIES
+            </TextReveal>
+            <TextReveal variant="fade" delay={0.2} className="text-xl text-white/80 max-w-3xl mx-auto">
+              Discover world-class amenities and services that make Grand Valley Resort the ultimate luxury destination
+            </TextReveal>
           </div>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-                  selectedCategory === category
-                    ? 'bg-blue-800 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category}
-              </button>
+      {/* Facilities Grid */}
+      <section className="section-padding-premium bg-dark-blue-800">
+        <div className="container-premium">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {facilities.map((facility, index) => (
+              <GlassCard key={index} hover>
+                <div className="flex items-start mb-4">
+                  <span className="text-4xl mr-4">{facility.icon}</span>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-golden mb-4 font-serif">
+                      {facility.title}
+                    </h3>
+                    <ul className="space-y-2">
+                      {facility.items.map((item, i) => (
+                        <li key={i} className="flex items-center text-white/80">
+                          <span className="w-2 h-2 bg-golden rounded-full mr-3" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </GlassCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filteredFeatures.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredFeatures.map((feature) => {
-                const IconComponent = getIconComponent(feature.icon_name);
-                return (
-                  <div key={feature.id} className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-                    <div className="flex items-center mb-4">
-                      <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-800 to-green-800 rounded-lg flex items-center justify-center">
-                          <IconComponent className="h-6 w-6 text-white" />
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-xl font-bold text-gray-900">{feature.name}</h3>
-                        <span className="text-sm text-blue-800 font-medium">{feature.category}</span>
-                      </div>
-                    </div>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <SparklesIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No features found</h3>
-              <p className="text-gray-600">No features available in this category.</p>
-            </div>
-          )}
+      {/* Amenities & Services */}
+      <section className="section-padding-premium bg-dark-blue-900">
+        <div className="container-premium">
+          <div className="text-center mb-16">
+            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden mb-6">
+              AMENITIES & SERVICES
+            </TextReveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {amenities.map((amenity, index) => (
+              <div key={index} className="group">
+                <div className="relative mb-6 rounded-2xl overflow-hidden">
+                  <PremiumImage
+                    src={amenity.image}
+                    alt={amenity.title}
+                    className="h-64 w-full"
+                    parallax
+                    blur
+                  />
+                  <div className="absolute top-4 left-4 text-4xl">{amenity.icon}</div>
+                </div>
+                <h3 className="text-2xl font-bold text-golden mb-4 font-serif">
+                  {amenity.title}
+                </h3>
+                <p className="text-white/80 leading-relaxed">
+                  {amenity.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-800 to-green-800">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Experience Luxury Like Never Before
-          </h2>
-          <p className="text-xl text-white/80 mb-8">
-            Book your stay and discover all the amazing features and services 
-            that await you at Resort Booking System.
-          </p>
-          <a
-            href="/rooms"
-            className="inline-block bg-white text-blue-800 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300"
-          >
-            Book Your Stay
-          </a>
+      {/* Pure Veg Restaurant Section */}
+      <section className="section-padding-premium bg-dark-blue-800">
+        <div className="container-premium">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <PremiumImage
+                src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800"
+                alt="Pure Veg Restaurant"
+                className="rounded-2xl"
+                parallax
+                blur
+              />
+            </div>
+            <div>
+              <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden mb-6 font-serif">
+                PURE VEG RESTAURANT
+              </TextReveal>
+              <div className="space-y-4 text-white/80 leading-relaxed">
+                <p>
+                  Our in-house vegetarian restaurant offers a delightful dining experience with fresh, 
+                  vegetarian ingredients and authentic Indian dishes. Enjoy comfort meals in a scenic 
+                  setting surrounded by hills and greenery.
+                </p>
+                <p>
+                  We serve delicious, mouth-watering vegetarian food prepared with care and attention 
+                  to detail, ensuring every meal is a memorable experience.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Special Amenities */}
+      <section className="section-padding-premium bg-dark-blue-900">
+        <div className="container-premium">
+          <div className="text-center mb-16">
+            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden mb-6">
+              SPECIAL AMENITIES AND SERVICES
+            </TextReveal>
+            <TextReveal variant="fade" delay={0.2} className="text-white/80">
+              Make your stay extra special with our premium services
+            </TextReveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {specialAmenities.map((amenity, index) => (
+              <GlassCard key={index} hover>
+                <div className="relative mb-6 rounded-xl overflow-hidden h-48">
+                  <PremiumImage
+                    src={amenity.image}
+                    alt={amenity.title}
+                    className="h-full w-full"
+                    blur
+                  />
+                  <div className="absolute top-4 right-4 text-3xl">{amenity.icon}</div>
+                </div>
+                <h3 className="text-xl font-bold text-golden mb-3 font-serif">
+                  {amenity.title}
+                </h3>
+                <p className="text-white/80 text-sm">
+                  {amenity.description}
+                </p>
+              </GlassCard>
+            ))}
+          </div>
         </div>
       </section>
     </div>
   )
 }
 
-export default Features 
+export default Features

@@ -9,8 +9,10 @@ import {
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FAQ from '../components/FAQ'
+import PremiumImage from '../components/PremiumImage'
 import ReviewsSection from '../components/ReviewsSection'
 import SEO from '../components/SEO'
+import TextReveal from '../components/TextReveal'
 import type { Room } from '../lib/supabase'
 import { api } from '../lib/supabase'
 
@@ -98,9 +100,9 @@ const Home: React.FC = () => {
   const heroSlides = [
     {
       image: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nptJspjcTwF09aaC8ddaf8S4L8AgqlcLXxwB1z9TMYe4Q0ibKAfSMZOPRQ-kKTO_w-8CmxFCg8ZpYz1hwaqMSfdbV1Fc3LVyJNWeNRlqJHE_KgrrpaATsnq02Y5xn4l1RHS41r-Yw=s1360-w1360-h1020-rw',
-      title: 'Welcome to Resort Booking System',
-      subtitle: 'Experience luxury, comfort, and unforgettable moments',
-      description: 'Discover our world-class amenities and breathtaking views'
+      title: 'Welcome to Grand Valley Resort',
+      subtitle: 'A Hilltop Heaven in Mahabaleshwar',
+      description: 'Experience luxury, comfort, and unforgettable moments in the heart of nature'
     },
     {
       image: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4npV7b8etpTQ1Cx9zzMSH1r8KDTkDETjgVyT4wWnUB-8N35Lejytk9Be3xurMWHXR9qDNwdK9etdz_vge5Nb5Tlk0oYJfKzp7tD8NJAF_J_zQzYoWbnbgUza6r0M7QiTirgKT3Qudw=s1360-w1360-h1020-rw',
@@ -229,10 +231,10 @@ const Home: React.FC = () => {
   return (
     <>
       <SEO 
-        title="Resort Booking System - Luxury Resort Booking | Book Your Stay"
-        description="Experience luxury and comfort with Resort Booking System. Book your perfect getaway with stunning views, premium amenities, and exceptional service. Best rates guaranteed."
-        keywords="Resort Booking System, resort booking, luxury accommodation, resort booking platform, luxury stay, accommodation booking, resort management system"
-        url="https://riverbreezehomestay.com"
+        title="Grand Valley Resort - Luxury Hilltop Heaven in Mahabaleshwar"
+        description="Experience luxury and comfort at Grand Valley Resort. Book your perfect getaway in Mahabaleshwar with stunning valley views, premium amenities, and exceptional service."
+        keywords="Grand Valley Resort, Mahabaleshwar resort, Bhilar resort, luxury resort, hilltop heaven, valley view resort"
+        url="https://grandvalleyresort.com"
       />
       <div className="bg-cream-beige">
         {/* Hero Carousel */}
@@ -247,9 +249,9 @@ const Home: React.FC = () => {
               <div className="hero-slide" style={{ backgroundImage: `url(${slide.image})` }}>
                 <div className="hero-overlay absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 animate-fade-in">
+                    <TextReveal variant="split" as="h1" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-golden font-serif">
                       {slide.title}
-                    </h1>
+                    </TextReveal>
                     <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 animate-slide-up max-w-3xl mx-auto">
                       {slide.subtitle}
                     </p>

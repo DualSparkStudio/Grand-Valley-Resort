@@ -23,10 +23,12 @@ const Contact: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [adminContactInfo, setAdminContactInfo] = useState({
-    email: '',
-    phone: '',
-    name: 'Resort Booking System Team',
-    address: ''
+    email: 'grandvalleyresortsbhilar@gmail.com',
+    phone: '+91 8275063636',
+    name: 'Grand Valley Resort Team',
+    address: 'Post kawand, road, tal- mahabaleshwer, At, Kaswand, Bhilar, Maharashtra 412805',
+    phone2: '+91 883 011 5635',
+    phone3: '+91 9405910433'
   })
 
   // Load admin contact info on component mount
@@ -35,10 +37,12 @@ const Contact: React.FC = () => {
       try {
         const adminInfo = await api.getAdminInfo()
         setAdminContactInfo({
-          email: adminInfo.email,
-          phone: adminInfo.phone || '+91 98765 43210',
-          name: `${adminInfo.first_name} ${adminInfo.last_name}`.trim() || 'Resort Booking System Team',
-          address: adminInfo.address || ''
+          email: adminInfo.email || 'grandvalleyresortsbhilar@gmail.com',
+          phone: adminInfo.phone || '+91 8275063636',
+          name: `${adminInfo.first_name} ${adminInfo.last_name}`.trim() || 'Grand Valley Resort Team',
+          address: adminInfo.address || 'Post kawand, road, tal- mahabaleshwer, At, Kaswand, Bhilar, Maharashtra 412805',
+          phone2: '+91 883 011 5635',
+          phone3: '+91 9405910433'
         })
       } catch (error) {
         // Keep default values if loading fails
@@ -111,13 +115,13 @@ const Contact: React.FC = () => {
   const contactInfo = [
     {
       title: 'Address',
-      content: adminContactInfo.address || 'Resort Booking System, Ratnagiri, Maharashtra, India',
+      content: adminContactInfo.address || 'Post kawand, road, tal- mahabaleshwer, At, Kaswand, Bhilar, Maharashtra 412805',
       icon: MapPinIcon,
       link: 'https://maps.google.com'
     },
     {
       title: 'Phone',
-      content: adminContactInfo.phone,
+      content: `${adminContactInfo.phone}${adminContactInfo.phone2 ? `, ${adminContactInfo.phone2}` : ''}${adminContactInfo.phone3 ? `, ${adminContactInfo.phone3}` : ''}`,
       icon: PhoneIcon,
       link: `tel:${adminContactInfo.phone}`
     },
@@ -128,8 +132,8 @@ const Contact: React.FC = () => {
       link: `mailto:${adminContactInfo.email}`
     },
     {
-      title: 'Hours',
-      content: 'Check-in: 1:00 PM onwards | Check-out: 10:00 AM (Flexible depending on other bookings)',
+      title: 'Check-in/Check-out',
+      content: 'Check In: 12:00 PM | Check Out: 10:00 AM',
       icon: ClockIcon,
       link: null
     }
@@ -148,10 +152,10 @@ const Contact: React.FC = () => {
   return (
     <>
       <SEO 
-        title="Contact Resort Booking System - Get in Touch"
-        description="Contact Resort Booking System for bookings, inquiries, or support. Reach us via phone, email, or our contact form. We're here to help."
-        keywords="contact Resort Booking System, booking system contact, resort booking inquiry, accommodation booking contact, booking support"
-        url="https://riverbreezehomestay.com/contact"
+        title="Contact Grand Valley Resort - Get in Touch"
+        description="Contact Grand Valley Resort for bookings, inquiries, or support. Reach us via phone, email, or our contact form. We're here to help."
+        keywords="contact Grand Valley Resort, resort contact, Mahabaleshwar resort booking, Bhilar resort contact"
+        url="https://grandvalleyresort.com/contact"
       />
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
@@ -161,7 +165,7 @@ const Contact: React.FC = () => {
             <div className="text-center text-white">
               <h1 className="text-5xl font-bold mb-4">Contact Us</h1>
               <p className="text-xl max-w-2xl mx-auto">
-                We're here to help make your stay in Ratnagiri perfect. Get in touch with us anytime.
+                We're here to help make your stay at Grand Valley Resort perfect. Get in touch with us anytime.
               </p>
             </div>
           </div>
