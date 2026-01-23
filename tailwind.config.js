@@ -7,30 +7,55 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Luxury Resort Color Palette
+        // Grand Valley Resort Color Palette - Dark Blue & Golden
+        'dark-blue': {
+          50: '#e6eaf5',
+          100: '#b3c0e0',
+          200: '#8096cb',
+          300: '#4d6cb6',
+          400: '#1a42a1',
+          500: '#0d2d7a', // Primary dark blue
+          600: '#0a2362',
+          700: '#07194a',
+          800: '#040f32', // Deep dark blue (logo background)
+          900: '#02051a',
+        },
+        golden: {
+          50: '#fffef5',
+          100: '#fff9d9',
+          200: '#fff4bd',
+          300: '#ffefa1',
+          400: '#ffea85',
+          500: '#d4af37', // Primary golden
+          600: '#b8941f',
+          700: '#9c7a07',
+          800: '#806000',
+          900: '#644600',
+        },
+        // Keep legacy colors for compatibility
         ocean: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e3a8a', // Primary ocean
-          900: '#1e3a8a',
+          50: '#e6eaf5',
+          100: '#b3c0e0',
+          200: '#8096cb',
+          300: '#4d6cb6',
+          400: '#1a42a1',
+          500: '#0d2d7a',
+          600: '#0a2362',
+          700: '#07194a',
+          800: '#040f32', // Dark blue
+          900: '#02051a',
         },
         forest: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534', // Primary forest
-          900: '#14532d',
+          50: '#fffef5',
+          100: '#fff9d9',
+          200: '#fff4bd',
+          300: '#ffefa1',
+          400: '#ffea85',
+          500: '#d4af37', // Golden
+          600: '#b8941f',
+          700: '#9c7a07',
+          800: '#806000',
+          900: '#644600',
         },
         'cream-beige': '#f5f5dc',
         sage: '#9ca3af',
@@ -41,11 +66,14 @@ export default {
       },
       fontFamily: {
         sans: ['Poppins', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
       },
       backgroundImage: {
-        'gradient-luxury': 'linear-gradient(135deg, #1e3a8a 0%, #166534 100%)',
-        'gradient-ocean': 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-        'gradient-forest': 'linear-gradient(135deg, #166534 0%, #22c55e 100%)',
+        'gradient-luxury': 'linear-gradient(135deg, #0d2d7a 0%, #d4af37 100%)',
+        'gradient-ocean': 'linear-gradient(135deg, #0d2d7a 0%, #1a42a1 100%)',
+        'gradient-forest': 'linear-gradient(135deg, #d4af37 0%, #ffea85 100%)',
+        'gradient-golden': 'linear-gradient(135deg, #d4af37 0%, #b8941f 100%)',
       },
       boxShadow: {
         'luxury': '0 10px 30px rgba(0,0,0,0.1)',

@@ -63,20 +63,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ]
 
   return (
-    <div className="min-h-screen bg-cream-beige">
+    <div className="min-h-screen bg-dark-blue-800">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm border-b border-gray-200 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-dark-blue-800 shadow-lg border-b border-golden-500/30 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-20">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center">
-                <div className="h-8 w-8 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-sm">R</span>
+                <img 
+                  src="/images/logo.png" 
+                  alt="Grand Valley Resort Logo" 
+                  className="h-16 w-auto mr-3"
+                  onError={(e) => {
+                    // Fallback if logo image doesn't exist yet
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                />
+                <div className="h-16 w-16 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3 hidden">
+                  <span className="text-golden font-bold text-xl">GVR</span>
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-forest">Resort Booking System</h1>
-                  <p className="text-xs text-gray-500">Relax enjoy and recharge.</p>
+                  <h1 className="text-lg font-bold text-golden">Grand Valley Resort</h1>
+                  <p className="text-xs text-golden/80">Bhilar Annex - A Hilltop Heaven</p>
                 </div>
               </Link>
             </div>
@@ -89,8 +101,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   to={item.href}
                   className={`text-sm font-medium transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'text-forest'
-                      : 'text-gray-700 hover:text-forest'
+                      ? 'text-golden border-b-2 border-golden-500'
+                      : 'text-white/90 hover:text-golden'
                   }`}
                 >
                   {item.name}
@@ -113,7 +125,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-800"
+                className="lg:hidden p-2 rounded-md text-golden hover:text-golden-300 hover:bg-dark-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-golden-500"
               >
                 {isMobileMenuOpen ? (
                   <XMarkIcon className="h-6 w-6" />
@@ -128,15 +140,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="lg:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-dark-blue-800 border-t border-golden-500/30">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   className={`flex items-center px-3 py-3 rounded-md text-base font-medium transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'text-forest bg-forest/10'
-                      : 'text-gray-700 hover:text-forest hover:bg-gray-50'
+                      ? 'text-golden bg-golden/10'
+                      : 'text-white/90 hover:text-golden hover:bg-dark-blue-700'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -161,52 +173,63 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </nav>
 
       {/* Main Content */}
-      <main className="pt-16">
+      <main className="pt-20 min-h-screen">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white">
+      <footer className="bg-dark-blue-900 text-white border-t border-golden-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
-                <div className="h-8 w-8 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-white font-bold text-sm">R</span>
+                <img 
+                  src="/images/logo.png" 
+                  alt="Grand Valley Resort Logo" 
+                  className="h-12 w-auto mr-3"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                />
+                <div className="h-12 w-12 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3 hidden">
+                  <span className="text-golden font-bold text-lg">GVR</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Resort Booking System</h3>
-                  <p className="text-sm text-gray-400">Homestay</p>
+                  <h3 className="text-lg font-bold text-golden">Grand Valley Resort</h3>
+                  <p className="text-sm text-golden/80">Bhilar Annex - A Hilltop Heaven</p>
                 </div>
               </div>
-              <p className="text-gray-400 mb-4 max-w-md">
-                Experience luxury and comfort in the heart of Ratnagiri. Our resort offers 
-                stunning river views, world-class amenities, and unforgettable memories.
+              <p className="text-white/70 mb-4 max-w-md">
+                Experience luxury and comfort in the heart of nature. Our resort offers 
+                stunning views, world-class amenities, and unforgettable memories.
               </p>
             </div>
             
             <div>
-              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">
+              <h3 className="text-sm font-semibold text-golden tracking-wider uppercase mb-4">
                 Quick Links
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <Link to="/rooms" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/rooms" className="text-white/70 hover:text-golden transition-colors">
                     Rooms & Suites
                   </Link>
                 </li>
                 <li>
-                  <Link to="/attractions" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/attractions" className="text-white/70 hover:text-golden transition-colors">
                     Local Attractions
                   </Link>
                 </li>
                 <li>
-                  <Link to="/features" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/features" className="text-white/70 hover:text-golden transition-colors">
                     Amenities
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-gray-300 hover:text-white transition-colors">
+                  <Link to="/about" className="text-white/70 hover:text-golden transition-colors">
                     About Us
                   </Link>
                 </li>
@@ -214,10 +237,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
             
             <div>
-              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">
+              <h3 className="text-sm font-semibold text-golden tracking-wider uppercase mb-4">
                 Contact
               </h3>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-white/70">
                 {adminInfo.address && (
                   <li className="whitespace-pre-line">{adminInfo.address}</li>
                 )}
@@ -238,7 +261,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               
               {/* Social Media Links */}
               <div>
-                <h5 className="text-sm font-semibold mb-3 text-white">Follow Us</h5>
+                <h5 className="text-sm font-semibold mb-3 text-golden">Follow Us</h5>
                 <div className="flex space-x-3">
                   <a
                     href="https://www.instagram.com/river_breeze_homestay?igsh=M2dnbW0wZ2I3MnE3"
@@ -271,11 +294,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-gray-800">
-            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+          <div className="mt-8 pt-8 border-t border-golden-500/20">
+            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-white/60">
               <div className="flex items-center gap-4 mb-2 sm:mb-0">
-                <span>© 2025 Resort Booking System. All rights reserved.</span>
-                <span className="text-forest-600 hover:text-forest-500 font-medium transition-colors duration-200">
+                <span>© 2025 Grand Valley Resort. All rights reserved.</span>
+                <span className="text-golden hover:text-golden-300 font-medium transition-colors duration-200">
                   <a href="/policy">Privacy Policy & Terms</a>
                 </span>
               </div>
@@ -285,7 +308,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   href="https://dualsparkstudio.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-forest-600 hover:text-forest-500 font-medium transition-colors duration-200"
+                  className="text-golden hover:text-golden-300 font-medium transition-colors duration-200"
                 >
                   DualSpark Studio
                 </a>

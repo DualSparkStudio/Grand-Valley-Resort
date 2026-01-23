@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -34,8 +34,12 @@
 }
 
 :root {
-  --ocean: #1e3a8a;           /* Primary blue */
-  --forest: #166534;          /* Primary green */
+  --ocean: #0d2d7a;           /* Primary dark blue */
+  --forest: #d4af37;          /* Primary golden */
+  --dark-blue: #040f32;       /* Deep dark blue (logo background) */
+  --golden: #d4af37;          /* Primary golden */
+  --golden-light: #ffea85;    /* Light golden */
+  --golden-dark: #b8941f;     /* Dark golden */
   --cream-beige: #f5f5dc;     /* Background cream */
   --sage: #9ca3af;            /* Secondary gray */
   --terracotta: #d97706;      /* Accent orange */
@@ -64,22 +68,27 @@
   }
 
   body {
-    @apply bg-yellow-50 text-gray-800;
+    @apply bg-dark-blue-800 text-white;
+    font-family: 'Poppins', system-ui, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
   /* Responsive typography */
   .luxury-title {
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
-    color: var(--forest);
+    color: var(--golden);
     @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
+    letter-spacing: -0.02em;
   }
 
   /* Improve touch targets for mobile */
@@ -91,13 +100,15 @@
 @layer components {
   /* Luxury Theme Classes */
   .luxury-title { 
+    font-family: 'Playfair Display', serif;
     font-weight: 700; 
-    color: var(--forest); 
+    color: var(--golden);
+    letter-spacing: -0.02em;
   }
   
   .btn-luxury { 
-    background: linear-gradient(45deg, var(--ocean), var(--forest));
-    @apply text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-offset-2 cursor-pointer;
+    background: linear-gradient(45deg, var(--ocean), var(--golden));
+    @apply text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2 cursor-pointer;
     display: block;
     text-decoration: none;
   }
@@ -107,7 +118,15 @@
   }
 
   .text-forest { 
-    color: var(--forest); 
+    color: var(--golden); 
+  }
+  
+  .text-golden {
+    color: var(--golden);
+  }
+  
+  .text-dark-blue {
+    color: var(--dark-blue);
   }
   
   .text-sage { 
@@ -145,7 +164,7 @@
 
   /* Button Styles with Responsive Padding */
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-800 to-green-800 text-white font-medium py-2.5 px-4 sm:py-3 sm:px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-offset-2 cursor-pointer;
+    @apply bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium py-2.5 px-4 sm:py-3 sm:px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2 cursor-pointer;
     display: block;
     text-decoration: none;
   }
@@ -164,7 +183,7 @@
   
   /* Form Styles with Better Mobile Experience */
   .input-field {
-    @apply w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-transparent transition-all duration-300 text-base;
+    @apply w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-golden-500 focus:border-transparent transition-all duration-300 text-base;
   }
   
   /* Card Styles with Responsive Padding */
@@ -182,12 +201,12 @@
   }
   
   .sidebar-link.active {
-    @apply bg-gradient-to-r from-blue-800 to-green-800 text-white shadow-md;
+    @apply bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white shadow-md;
   }
 
   /* Hero Section */
   .hero-overlay {
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(22, 101, 52, 0.8));
+    background: linear-gradient(135deg, rgba(4, 15, 50, 0.8), rgba(212, 175, 55, 0.3));
   }
 
   /* Room Cards with Responsive Images */
@@ -196,21 +215,21 @@
   }
 
   .price-badge {
-    @apply absolute top-3 right-3 sm:top-4 sm:right-4 bg-white text-green-800 font-bold px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-lg text-sm sm:text-base;
+    @apply absolute top-3 right-3 sm:top-4 sm:right-4 bg-golden-500 text-dark-blue-800 font-bold px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-lg text-sm sm:text-base;
   }
 
   .amenity-badge {
-    @apply inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium bg-yellow-50 text-green-800 mr-1 mb-1 sm:mr-2 sm:mb-2;
+    @apply inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium bg-golden-100 text-dark-blue-800 mr-1 mb-1 sm:mr-2 sm:mb-2;
   }
 
   /* Testimonial Cards */
   .testimonial-card {
-    @apply bg-white p-4 sm:p-6 rounded-2xl shadow-lg border-l-4 border-green-800;
+    @apply bg-white p-4 sm:p-6 rounded-2xl shadow-lg border-l-4 border-golden-500;
   }
 
   /* Statistics with Responsive Design */
   .stat-card {
-    @apply bg-gradient-to-br from-blue-800 to-green-800 text-white p-4 sm:p-6 rounded-2xl text-center;
+    @apply bg-gradient-to-br from-dark-blue-800 to-golden-500 text-white p-4 sm:p-6 rounded-2xl text-center;
   }
 
   .stat-number {
@@ -235,7 +254,9 @@
   }
 
   .heading-responsive {
+    font-family: 'Playfair Display', serif;
     @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl;
+    letter-spacing: -0.02em;
   }
 
   /* Mobile-first improvements */
@@ -248,7 +269,9 @@
   }
 
   .mobile-heading {
+    font-family: 'Playfair Display', serif;
     @apply text-lg sm:text-xl lg:text-2xl;
+    letter-spacing: -0.02em;
   }
 
   /* Touch-friendly spacing */
@@ -286,16 +309,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--cream-beige);
+  background: var(--dark-blue);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--forest);
+  background: var(--golden);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--ocean);
+  background: var(--golden-light);
 }
 
 /* Mobile optimizations */
@@ -349,11 +372,11 @@ html {
 
 /* Add missing CSS classes for booking forms */
 .input-field {
-  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent;
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-golden-500 focus:border-transparent;
 }
 
 .btn-primary {
-  @apply bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium;
+  @apply bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all font-medium;
 }
 
 .btn-secondary {

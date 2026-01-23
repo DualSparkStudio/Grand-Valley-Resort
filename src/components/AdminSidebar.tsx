@@ -58,16 +58,27 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200 w-64 shadow-lg">
+    <div className="flex flex-col h-full bg-dark-blue-800 border-r border-golden-500/20 w-64 shadow-lg">
       {/* Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 flex-shrink-0">
+      <div className="flex items-center justify-between h-16 px-4 border-b border-golden-500/20 flex-shrink-0 bg-dark-blue-800">
         <div className="flex items-center">
-          <div className="h-8 w-8 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3">
-            <span className="text-white font-bold text-sm">R</span>
+          <img 
+            src="/images/logo.png" 
+            alt="Grand Valley Resort Logo" 
+            className="h-10 w-auto mr-3"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              const fallback = target.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'flex';
+            }}
+          />
+          <div className="h-10 w-10 bg-gradient-luxury rounded-lg flex items-center justify-center mr-3 hidden">
+            <span className="text-golden font-bold text-sm">GVR</span>
           </div>
           <div>
-            <h1 className="text-sm font-bold text-forest">Resort Booking System</h1>
-            <p className="text-xs text-gray-500">Admin Panel</p>
+            <h1 className="text-sm font-bold text-golden">Grand Valley Resort</h1>
+            <p className="text-xs text-golden/70">Admin Panel</p>
           </div>
         </div>
         
@@ -83,16 +94,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
       </div>
 
       {/* User info */}
-      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+      <div className="p-4 border-b border-golden-500/20 flex-shrink-0">
         <div className="flex items-center">
-          <div className="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-            <UserIcon className="h-6 w-6 text-blue-800" />
+          <div className="h-10 w-10 bg-golden-500/20 rounded-full flex items-center justify-center">
+            <UserIcon className="h-6 w-6 text-golden" />
           </div>
           <div className="ml-3 flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-white truncate">
               {user?.first_name} {user?.last_name}
             </p>
-            <p className="text-xs text-gray-500 truncate">Administrator</p>
+            <p className="text-xs text-golden/70 truncate">Administrator</p>
           </div>
         </div>
       </div>
@@ -106,13 +117,13 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
             onClick={handleLinkClick}
             className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
               isActive(item.href)
-                ? 'bg-gradient-to-r from-blue-800 to-green-800 text-white shadow-md'
-                : 'text-gray-700 hover:bg-gray-100 hover:text-green-800'
+                ? 'bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white shadow-md'
+                : 'text-white/70 hover:bg-dark-blue-700 hover:text-golden'
             }`}
           >
             <item.icon
               className={`mr-3 h-5 w-5 flex-shrink-0 ${
-                isActive(item.href) ? 'text-white' : 'text-gray-400 group-hover:text-green-800'
+                isActive(item.href) ? 'text-white' : 'text-white/50 group-hover:text-golden'
               }`}
             />
             {item.name}
@@ -121,21 +132,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
       </nav>
 
       {/* Bottom actions - Fixed at bottom */}
-      <div className="border-t border-gray-200 p-4 space-y-2 flex-shrink-0">
+      <div className="border-t border-golden-500/20 p-4 space-y-2 flex-shrink-0">
         <Link
           to="/"
           onClick={handleLinkClick}
-          className="group flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 hover:text-green-800 transition-colors duration-200"
+          className="group flex items-center px-3 py-2.5 text-sm font-medium text-white/70 rounded-lg hover:bg-dark-blue-700 hover:text-golden transition-colors duration-200"
         >
-          <HomeIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-green-800" />
+          <HomeIcon className="mr-3 h-5 w-5 text-white/50 group-hover:text-golden" />
           Back to Website
         </Link>
         
         <button
           onClick={handleLogout}
-          className="w-full group flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-red-50 hover:text-red-800 transition-colors duration-200"
+          className="w-full group flex items-center px-3 py-2.5 text-sm font-medium text-white/70 rounded-lg hover:bg-red-900/30 hover:text-red-400 transition-colors duration-200"
         >
-          <ArrowLeftOnRectangleIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-800" />
+          <ArrowLeftOnRectangleIcon className="mr-3 h-5 w-5 text-white/50 group-hover:text-red-400" />
           Sign Out
         </button>
       </div>
