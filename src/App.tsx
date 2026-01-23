@@ -7,6 +7,7 @@ import AutoSyncInitializer from './components/AutoSyncInitializer';
 import Layout from './components/Layout';
 import MaintenancePage from './components/MaintenancePage';
 import ScrollToTop from './components/ScrollToTop';
+import SmoothScroll from './components/SmoothScroll';
 import { AuthProvider } from './contexts/AuthContext';
 import { MaintenanceProvider, useMaintenance } from './contexts/MaintenanceContext';
 import About from './pages/About';
@@ -161,12 +162,14 @@ function App() {
         <ErrorBoundary>
           <Router>
             <ScrollToTop />
-            <MaintenanceProvider>
-              <AuthProvider>
-                <AutoSyncInitializer />
-                <AppContent />
-              </AuthProvider>
-            </MaintenanceProvider>
+            <SmoothScroll>
+              <MaintenanceProvider>
+                <AuthProvider>
+                  <AutoSyncInitializer />
+                  <AppContent />
+                </AuthProvider>
+              </MaintenanceProvider>
+            </SmoothScroll>
           </Router>
         </ErrorBoundary>
       </HelmetProvider>

@@ -282,6 +282,62 @@
   .touch-gap {
     @apply gap-3 sm:gap-4 lg:gap-6;
   }
+
+  /* Premium Spacing */
+  .section-padding-premium {
+    @apply py-20 sm:py-24 lg:py-32 xl:py-40;
+  }
+
+  .container-premium {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Glass Morphism */
+  .glass {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-dark-blue-900/50 border border-golden-500/20;
+  }
+
+  /* Premium Cards */
+  .premium-card {
+    @apply bg-white/5 backdrop-blur-sm border border-golden-500/20 rounded-2xl p-6 sm:p-8 lg:p-10;
+    @apply transition-all duration-500 hover:bg-white/10 hover:border-golden-500/40;
+    @apply hover:shadow-2xl hover:shadow-golden-500/20;
+  }
+
+  /* Text Styles */
+  .text-soft-black {
+    color: #111;
+  }
+
+  .text-premium-heading {
+    @apply font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold;
+    letter-spacing: 0.5px;
+    color: #111;
+  }
+
+  .text-premium-subheading {
+    @apply font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold;
+    letter-spacing: 1px;
+  }
+
+  /* Grain Texture */
+  .grain-overlay {
+    position: relative;
+  }
+
+  .grain-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+  }
 }
 
 /* Remove the problematic typography overrides that cause circular dependency */
@@ -289,6 +345,66 @@
 /* Global font size adjustment for smaller, more normal text sizes */
 html {
   font-size: 14px; /* Reduce base font size from default 16px */
+}
+
+/* Premium Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Magnetic Button Effect */
+.magnetic-button {
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Card Hover Lift */
+.card-lift {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s;
+}
+
+.card-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+}
+
+/* Ripple Effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
 }
 
 @media (min-width: 640px) {

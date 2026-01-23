@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { api } from '../lib/supabase'
+import BackgroundEffects from './BackgroundEffects'
 import SocialMediaWidget from './SocialMediaWidget'
 import WhatsAppWidget from './WhatsAppWidget'
 
@@ -63,7 +64,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ]
 
   return (
-    <div className="min-h-screen bg-dark-blue-800">
+    <div className="min-h-screen bg-dark-blue-800 relative">
+      <BackgroundEffects />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 bg-dark-blue-800 shadow-lg border-b border-golden-500/30 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
