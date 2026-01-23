@@ -56,7 +56,7 @@ const About: React.FC = () => {
           
           <div className="container-premium relative z-10">
             <div className="max-w-4xl">
-              <TextReveal variant="split" as="h1" className="text-premium-heading text-golden mb-8">
+              <TextReveal variant="split" as="h1" className="text-premium-heading text-golden-400 font-bold mb-8 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
                 WELCOME TO GRAND VALLEY RESORT
               </TextReveal>
               
@@ -74,7 +74,7 @@ const About: React.FC = () => {
           <div className="container-premium">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden mb-6">
+                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden-400 mb-6 drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
                   About Us
                 </TextReveal>
                 
@@ -113,7 +113,7 @@ const About: React.FC = () => {
         <section className="section-padding-premium bg-dark-blue-900">
           <div className="container-premium">
             <div className="text-center mb-16">
-              <TextReveal variant="split" as="h2" className="text-premium-heading text-golden mb-8">
+              <TextReveal variant="split" as="h2" className="text-premium-heading text-golden-400 font-bold mb-8 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
                 HISTORY
               </TextReveal>
             </div>
@@ -157,7 +157,7 @@ const About: React.FC = () => {
           <div className="container-premium">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden mb-6">
+                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden-400 mb-6 drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
                   Perfect Location
                 </TextReveal>
                 <p className="text-lg text-white/80 mb-8 leading-relaxed">

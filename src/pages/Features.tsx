@@ -82,10 +82,10 @@ const Features: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900" />
         <div className="container-premium relative z-10">
           <div className="text-center">
-            <TextReveal variant="split" as="h1" className="text-premium-heading text-golden mb-6">
+            <TextReveal variant="split" as="h1" className="text-premium-heading text-golden-400 font-bold mb-6 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
               FACILITIES
             </TextReveal>
-            <TextReveal variant="fade" delay={0.2} className="text-xl text-white/80 max-w-3xl mx-auto">
+            <TextReveal variant="fade" delay={0.2} className="text-xl text-white max-w-3xl mx-auto font-medium">
               Discover world-class amenities and services that make Grand Valley Resort the ultimate luxury destination
             </TextReveal>
           </div>
@@ -101,7 +101,7 @@ const Features: React.FC = () => {
                 <div className="flex items-start mb-4">
                   <span className="text-4xl mr-4">{facility.icon}</span>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-golden mb-4 font-serif">
+                    <h3 className="text-xl font-bold text-golden-400 mb-4 font-serif drop-shadow-lg" style={{ textShadow: '0 0 10px rgba(212, 175, 55, 0.3)' }}>
                       {facility.title}
                     </h3>
                     <ul className="space-y-2">
@@ -124,7 +124,7 @@ const Features: React.FC = () => {
       <section className="section-padding-premium bg-dark-blue-900">
         <div className="container-premium">
           <div className="text-center mb-16">
-            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden mb-6">
+            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden-400 font-bold mb-6 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
               AMENITIES & SERVICES
             </TextReveal>
           </div>
@@ -142,7 +142,7 @@ const Features: React.FC = () => {
                   />
                   <div className="absolute top-4 left-4 text-4xl">{amenity.icon}</div>
                 </div>
-                <h3 className="text-2xl font-bold text-golden mb-4 font-serif">
+                <h3 className="text-2xl font-bold text-golden-400 mb-4 font-serif drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
                   {amenity.title}
                 </h3>
                 <p className="text-white/80 leading-relaxed">
@@ -168,7 +168,7 @@ const Features: React.FC = () => {
               />
             </div>
             <div>
-              <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden mb-6 font-serif">
+              <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden-400 mb-6 font-serif drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
                 PURE VEG RESTAURANT
               </TextReveal>
               <div className="space-y-4 text-white/80 leading-relaxed">
@@ -191,10 +191,10 @@ const Features: React.FC = () => {
       <section className="section-padding-premium bg-dark-blue-900">
         <div className="container-premium">
           <div className="text-center mb-16">
-            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden mb-6">
+            <TextReveal variant="split" as="h2" className="text-premium-heading text-golden-400 font-bold mb-6 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
               SPECIAL AMENITIES AND SERVICES
             </TextReveal>
-            <TextReveal variant="fade" delay={0.2} className="text-white/80">
+            <TextReveal variant="fade" delay={0.2} className="text-white font-medium">
               Make your stay extra special with our premium services
             </TextReveal>
           </div>
@@ -211,7 +211,7 @@ const Features: React.FC = () => {
                   />
                   <div className="absolute top-4 right-4 text-3xl">{amenity.icon}</div>
                 </div>
-                <h3 className="text-xl font-bold text-golden mb-3 font-serif">
+                <h3 className="text-xl font-bold text-golden-400 mb-3 font-serif drop-shadow-lg" style={{ textShadow: '0 0 10px rgba(212, 175, 55, 0.3)' }}>
                   {amenity.title}
                 </h3>
                 <p className="text-white/80 text-sm">
