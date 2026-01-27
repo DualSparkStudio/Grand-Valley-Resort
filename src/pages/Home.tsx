@@ -2,6 +2,8 @@ import {
     ArrowRightIcon,
     CalendarIcon,
     CheckCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
     MapPinIcon,
     StarIcon,
     UsersIcon,
@@ -97,24 +99,25 @@ const Home: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyPress)
   }, [galleryModal.isOpen])
 
+  // Hero slides using local images from public/images folder
   const heroSlides = [
     {
-      image: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nptJspjcTwF09aaC8ddaf8S4L8AgqlcLXxwB1z9TMYe4Q0ibKAfSMZOPRQ-kKTO_w-8CmxFCg8ZpYz1hwaqMSfdbV1Fc3LVyJNWeNRlqJHE_KgrrpaATsnq02Y5xn4l1RHS41r-Yw=s1360-w1360-h1020-rw',
+      image: '/images/Exterior (Front).jpg',
       title: 'Welcome to Grand Valley Resort',
       subtitle: 'A Hilltop Heaven in Mahabaleshwar',
       description: 'Experience luxury, comfort, and unforgettable moments in the heart of nature'
     },
     {
-      image: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4npV7b8etpTQ1Cx9zzMSH1r8KDTkDETjgVyT4wWnUB-8N35Lejytk9Be3xurMWHXR9qDNwdK9etdz_vge5Nb5Tlk0oYJfKzp7tD8NJAF_J_zQzYoWbnbgUza6r0M7QiTirgKT3Qudw=s1360-w1360-h1020-rw',
+      image: '/images/Exterior (back).jpg',
       title: 'Luxury Accommodations',
       subtitle: 'Premium rooms and suites designed for your comfort',
-      description: 'From ocean-view suites to private villas, find your perfect stay'
+      description: 'From valley-view suites to private balconies, find your perfect stay'
     },
     {
-      image: 'https://lh3.googleusercontent.com/gps-cs-s/AC9h4nob-5lRJgcoYg6PYP_YDZiBWXbOhnKWGCOc0YYZVV2zfRrjt9iriicineshZwV4CCtM3qUvgp87UvAyEKOSXQnogS1xes3PqpBTuhdKEQDXS3S29QQt8ysKe_YsxrdLG9ViR3yTVA=s1360-w1360-h1020-rw',
+      image: '/images/exteror (night).jpg',
       title: 'Exclusive Amenities',
       subtitle: 'World-class facilities and personalized service',
-      description: 'Spa, pool, wellness center, and more await your arrival'
+      description: 'Infinity pool, restaurant, and more await your arrival'
     }
   ]
 
@@ -246,28 +249,60 @@ const Home: React.FC = () => {
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <div className="hero-slide" style={{ backgroundImage: `url(${slide.image})` }}>
-                <div className="hero-overlay absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <TextReveal variant="split" as="h1" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-golden font-serif">
+              <div className="hero-slide relative overflow-hidden bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900">
+                {/* Background Image using PremiumImage for optimal loading */}
+                <div className="absolute inset-0 w-full h-full">
+                  <PremiumImage
+                    src={slide.image}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                    priority={index === 0}
+                    blur={false}
+                    parallax={false}
+                  />
+                </div>
+                
+                {/* Professional Multi-Layer Gradient Overlay for optimal text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-dark-blue-900/40 to-dark-blue-900/85"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-900/90 via-dark-blue-900/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_rgba(4,15,50,0.5)_100%)]"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-dark-blue-900/20 via-transparent to-dark-blue-900/20"></div>
+                
+                {/* Content Overlay */}
+                <div className="hero-overlay absolute inset-0 flex items-center justify-center z-10">
+                  <div className="text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                    <TextReveal 
+                      variant="split" 
+                      as="h1" 
+                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-golden font-serif drop-shadow-2xl"
+                      style={{ 
+                        textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.3)' 
+                      }}
+                    >
                       {slide.title}
                     </TextReveal>
-                    <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 animate-slide-up max-w-3xl mx-auto">
+                    <p 
+                      className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 animate-slide-up max-w-3xl mx-auto font-medium drop-shadow-lg"
+                      style={{ textShadow: '0 2px 15px rgba(0, 0, 0, 0.7), 0 1px 5px rgba(0, 0, 0, 0.5)' }}
+                    >
                       {slide.subtitle}
                     </p>
-                    <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 opacity-90 animate-slide-up max-w-2xl mx-auto">
+                    <p 
+                      className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 opacity-95 animate-slide-up max-w-2xl mx-auto drop-shadow-md"
+                      style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4)' }}
+                    >
                       {slide.description}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-scale-in max-w-md sm:max-w-none mx-auto">
-                        <Link
-                          to="/rooms"
-                          className="btn-luxury block w-full sm:w-auto text-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg"
-                        >
-                          <span className="inline-flex items-center justify-center">
-                            Book Now
-                            <ArrowRightIcon className="ml-2 h-5 w-5 sm:h-6 sm:w-6" />
-                          </span>
-                        </Link>
+                      <Link
+                        to="/rooms"
+                        className="btn-luxury block w-full sm:w-auto text-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg shadow-2xl hover:shadow-golden-500/50 transition-all duration-300"
+                      >
+                        <span className="inline-flex items-center justify-center">
+                          Book Now
+                          <ArrowRightIcon className="ml-2 h-5 w-5 sm:h-6 sm:w-6" />
+                        </span>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -275,15 +310,34 @@ const Home: React.FC = () => {
             </div>
           ))}
           
+          {/* Navigation Arrows */}
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
+            className="absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full p-2 sm:p-3 transition-all duration-300 hover:scale-110 group"
+            aria-label="Previous slide"
+          >
+            <ChevronLeftIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white group-hover:text-golden-400 transition-colors" />
+          </button>
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
+            className="absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full p-2 sm:p-3 transition-all duration-300 hover:scale-110 group"
+            aria-label="Next slide"
+          >
+            <ChevronRightIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white group-hover:text-golden-400 transition-colors" />
+          </button>
+          
           {/* Carousel Indicators */}
-          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3">
+          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2 sm:space-x-3">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'bg-white scale-125' : 'bg-white/50'
+                  index === currentSlide 
+                    ? 'bg-golden-400 scale-125 shadow-lg shadow-golden-400/50' 
+                    : 'bg-white/50 hover:bg-white/70'
                 }`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
