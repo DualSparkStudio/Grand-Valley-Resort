@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
+import GoogleReviews from '../components/GoogleReviews'
 import PremiumImage from '../components/PremiumImage'
 import SEO from '../components/SEO'
 import TextReveal from '../components/TextReveal'
@@ -669,6 +670,9 @@ const Home: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Google Reviews Section */}
+        <GoogleReviews />
 
         {/* Location & Map Section */}
         <div className="py-12 sm:py-16 lg:py-20 bg-gray-50">
