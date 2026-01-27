@@ -74,11 +74,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center">
               <Link to="/" className="flex items-center">
                 <img 
-                  src="/images/logo.png" 
+                  src="/images/GRAND VALLEY LOGO.jpg.jpeg" 
                   alt="Grand Valley Resort Logo" 
-                  className="h-16 w-auto mr-3"
+                  className="h-16 w-auto mr-3 object-contain"
                   onError={(e) => {
-                    // Fallback if logo image doesn't exist yet
+                    // Fallback if logo image doesn't load
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     const fallback = target.nextElementSibling as HTMLElement;
@@ -186,9 +186,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
                 <img 
-                  src="/images/logo.png" 
+                  src="/images/GRAND VALLEY LOGO.jpg.jpeg" 
                   alt="Grand Valley Resort Logo" 
-                  className="h-12 w-auto mr-3"
+                  className="h-12 w-auto mr-3 object-contain"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
