@@ -364,7 +364,7 @@ const Contact: React.FC = () => {
                       <MapPinIcon className="h-6 w-6 text-forest-800 mr-3" />
                       <div>
                         <p className="font-medium text-gray-900">Location</p>
-                        <p className="text-gray-600">{adminContactInfo.address || 'Ratnagiri, Maharashtra'}</p>
+                        <p className="text-gray-600">{adminContactInfo.address || 'Post Kawand, Road, Tal- Mahabaleshwar, At, Kaswand, Bhilar, Maharashtra 412805'}</p>
                       </div>
                     </div>
                   </div>
@@ -384,7 +384,7 @@ const Contact: React.FC = () => {
               Ready to Experience Resort Booking System?
             </h2>
             <p className="text-xl text-white/80 mb-8">
-              Book your stay today and let us create the perfect Ratnagiri experience for you.
+              Book your stay today and let us create the perfect Mahabaleshwar experience for you.
             </p>
             <a
               href="/rooms"

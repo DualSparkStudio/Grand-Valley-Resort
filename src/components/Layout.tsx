@@ -248,7 +248,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 )}
                 {!adminInfo.address && (
                   <>
-                    <li>Ratnagiri, Maharashtra</li>
+                    <li>Bhilar, Mahabaleshwar, Maharashtra</li>
                     <li>India</li>
                   </>
                 )}

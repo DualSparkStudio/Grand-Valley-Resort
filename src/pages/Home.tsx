@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
 import PremiumImage from '../components/PremiumImage'
 import ReviewsSection from '../components/ReviewsSection'
@@ -31,6 +32,21 @@ interface Feature {
   updated_at: string;
 }
 
+interface Attraction {
+  id: number;
+  name: string;
+  description: string;
+  images: string[];
+  distance: string;
+  travel_time: string;
+  type: string;
+  highlights: string[];
+  best_time: string;
+  category: string;
+  created_at: string;
+  updated_at: string;
+}
+
 const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   
@@ -38,6 +54,8 @@ const Home: React.FC = () => {
   const [roomsLoading, setRoomsLoading] = useState(true)
   const [features, setFeatures] = useState<Feature[]>([])
   const [featuresLoading, setFeaturesLoading] = useState(true)
+  const [attractions, setAttractions] = useState<Attraction[]>([])
+  const [attractionsLoading, setAttractionsLoading] = useState(true)
   const [adminContactInfo, setAdminContactInfo] = useState({
     email: '',
     phone: ''
@@ -195,6 +213,25 @@ const Home: React.FC = () => {
     loadAdminContactInfo()
   }, [])
 
+  // Load attractions for homepage preview
+  useEffect(() => {
+    const loadAttractions = async () => {
+      try {
+        setAttractionsLoading(true)
+        const data = await api.getTouristAttractions()
+        // Show first 6 attractions on homepage
+        setAttractions(data?.slice(0, 6) || [])
+      } catch (error) {
+        // Keep empty array if loading fails
+        setAttractions([])
+      } finally {
+        setAttractionsLoading(false)
+      }
+    }
+    
+    loadAttractions()
+  }, [])
+
   // Testimonials are now handled by the ReviewsSection component
 
   // Get icon component by name
@@ -230,6 +267,30 @@ const Home: React.FC = () => {
       [roomId]: !prev[roomId]
     }))
   }
+
+  // Gallery functions for attractions
+  const openAttractionGallery = (images: string[], title: string) => {
+    setGalleryModal({
+      isOpen: true,
+      images,
+      title,
+      currentIndex: 0
+    })
+  }
+
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
+      beach: 'bg-blue-100 text-blue-800',
+      fort: 'bg-red-100 text-red-800',
+      temple: 'bg-yellow-100 text-yellow-800',
+      market: 'bg-green-100 text-green-800',
+      viewpoint: 'bg-purple-100 text-purple-800',
+      museum: 'bg-indigo-100 text-indigo-800',
+      park: 'bg-emerald-100 text-emerald-800',
+      agriculture: 'bg-green-100 text-green-800'
+    };
+    return colors[category] || 'bg-gray-100 text-gray-800';
+  };
 
   return (
     <>
@@ -545,13 +606,78 @@ const Home: React.FC = () => {
           </div>
         </div>
 
+        {/* Tourist Attractions Section */}
+        {attractions.length > 0 && (
+          <div className="py-12 sm:py-16 lg:py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12 sm:mb-16">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-forest mb-4">
+                  Explore Nearby Attractions
+                </h2>
+                <p className="text-lg sm:text-xl text-sage max-w-3xl mx-auto">
+                  Discover the beautiful tourist attractions near our resort. Plan your perfect getaway with easy access to stunning beaches, historic forts, and scenic viewpoints.
+                </p>
+              </div>
+
+              {attractionsLoading ? (
+                // Loading skeleton
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                      <div className="h-64 sm:h-72 bg-gray-300"></div>
+                      <div className="p-6">
+                        <div className="h-6 bg-gray-300 rounded mb-4"></div>
+                        <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
+                    {attractions.map((attraction) => (
+                      <AttractionCard
+                        key={attraction.id}
+                        id={attraction.id}
+                        name={attraction.name}
+                        description={attraction.description}
+                        images={attraction.images}
+                        distance={attraction.distance}
+                        travel_time={attraction.travel_time}
+                        type={attraction.type}
+                        highlights={attraction.highlights}
+                        best_time={attraction.best_time}
+                        category={attraction.category}
+                        onImageClick={() => openAttractionGallery(attraction.images, attraction.name)}
+                        getCategoryColor={getCategoryColor}
+                      />
+                    ))}
+                  </div>
+
+                  {/* View All Attractions Button */}
+                  <div className="text-center mt-8">
+                    <Link
+                      to="/attractions"
+                      className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-green-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-green-700 group"
+                    >
+                      <span>View All Attractions</span>
+                      <ArrowRightIcon className="ml-2 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Location & Map Section */}
         <div className="py-12 sm:py-16 lg:py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-forest mb-4">Find Us</h2>
               <p className="text-lg sm:text-xl text-sage max-w-3xl mx-auto">
-                Located in the heart of beautiful Ratnagiri, our homestay offers easy access to all major attractions
+                Located in the heart of beautiful Mahabaleshwar, our resort offers easy access to all major attractions
               </p>
             </div>
             
@@ -593,7 +719,7 @@ const Home: React.FC = () => {
                               ))}
                             </span>
                           ) : (
-                            <>Resort Booking System<br />Ratnagiri, Maharashtra<br />India</>
+                            <>Grand Valley Resort Bhilar<br />Post Kawand, Road, Tal- Mahabaleshwar<br />At, Kaswand, Bhilar, Maharashtra 412805<br />India</>
                           )}
                         </p>
                       </div>
@@ -621,10 +747,10 @@ const Home: React.FC = () => {
                   <div className="mt-6 pt-6 border-t border-gray-200">
                     <h4 className="font-semibold text-forest mb-3">Nearby Attractions</h4>
                     <div className="grid grid-cols-2 gap-2 text-sm text-sage">
-                      <div>• Ganpatipule Beach (25 km)</div>
-                      <div>• Ratnagiri Fort (12 km)</div>
-                      <div>• Ratnadurg Fort (8 km)</div>
-                      <div>• Thibaw Palace (15 km)</div>
+                      <div>• Pratapgad Fort (24 km)</div>
+                      <div>• Venna Lake (12 km)</div>
+                      <div>• Mapro Garden (8 km)</div>
+                      <div>• Lingmala Waterfall (18 km)</div>
                     </div>
                   </div>
                 </div>

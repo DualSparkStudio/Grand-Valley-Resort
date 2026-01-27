@@ -18,7 +18,7 @@ const MaintenancePage: React.FC = () => {
               <span className="text-4xl">🏠</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-2">Resort Booking System</h1>
-            <p className="text-xl text-white/80">Ratnagiri, Maharashtra</p>
+            <p className="text-xl text-white/80">Bhilar, Mahabaleshwar, Maharashtra</p>
           </div>
 
           {/* Maintenance Message */}
@@ -62,7 +62,7 @@ const MaintenancePage: React.FC = () => {
               </p>
               <p className="text-lg">
                 <span className="font-semibold">📍 Location:</span> 
-                <span className="ml-2">Ratnagiri, Maharashtra, India</span>
+                <span className="ml-2">Post Kawand, Road, Tal- Mahabaleshwar, At, Kaswand, Bhilar, Maharashtra 412805, India</span>
               </p>
             </div>
           </div>
