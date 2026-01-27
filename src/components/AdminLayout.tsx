@@ -49,7 +49,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-50">
+    <div className="h-screen flex bg-gray-50">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div 
@@ -66,7 +66,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Mobile header - only visible on mobile */}
         <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200 flex-shrink-0">
           <h1 className="text-lg font-semibold text-gray-900">Admin Panel</h1>
@@ -79,8 +79,8 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
 
         {/* Scrollable content area */}
-        <main className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-emerald-50">
-          <div className="p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-gradient-to-br from-blue-50 to-emerald-50" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <div className="p-4 sm:p-6 lg:p-8 min-h-full">
             {children}
           </div>
         </main>
