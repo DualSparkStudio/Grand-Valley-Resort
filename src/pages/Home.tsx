@@ -240,69 +240,81 @@ const Home: React.FC = () => {
         url="https://grandvalleyresort.com"
       />
       <div className="bg-cream-beige">
-        {/* Hero Carousel */}
-        <div className="relative h-[70vh] sm:h-[80vh] lg:h-screen overflow-hidden">
+        {/* Hero Carousel - Modern Professional Design */}
+        <div className="relative h-screen overflow-hidden">
           {heroSlides.map((slide, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
             >
-              <div className="hero-slide relative overflow-hidden bg-gradient-to-br from-dark-blue-900 via-dark-blue-800 to-dark-blue-900">
-                {/* Background Image using PremiumImage for optimal loading */}
-                <div className="absolute inset-0 w-full h-full">
-                  <PremiumImage
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover"
-                    priority={index === 0}
-                    blur={false}
-                    parallax={false}
-                  />
-                </div>
+              <div className="relative w-full h-full">
+                {/* Full-Screen Image - Crystal Clear, No Overlays */}
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                    filter: 'none',
+                    WebkitFilter: 'none',
+                    imageRendering: 'auto',
+                    willChange: 'opacity'
+                  }}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
                 
-                {/* Professional Multi-Layer Gradient Overlay for optimal text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-dark-blue-900/40 to-dark-blue-900/85"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-900/90 via-dark-blue-900/60 to-transparent"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_rgba(4,15,50,0.5)_100%)]"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-dark-blue-900/20 via-transparent to-dark-blue-900/20"></div>
-                
-                {/* Content Overlay */}
-                <div className="hero-overlay absolute inset-0 flex items-center justify-center z-10">
-                  <div className="text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-                    <TextReveal 
-                      variant="split" 
-                      as="h1" 
-                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-golden font-serif drop-shadow-2xl"
-                      style={{ 
-                        textShadow: '0 4px 20px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.3)' 
-                      }}
-                    >
-                      {slide.title}
-                    </TextReveal>
-                    <p 
-                      className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 animate-slide-up max-w-3xl mx-auto font-medium drop-shadow-lg"
-                      style={{ textShadow: '0 2px 15px rgba(0, 0, 0, 0.7), 0 1px 5px rgba(0, 0, 0, 0.5)' }}
-                    >
-                      {slide.subtitle}
-                    </p>
-                    <p 
-                      className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 opacity-95 animate-slide-up max-w-2xl mx-auto drop-shadow-md"
-                      style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4)' }}
-                    >
-                      {slide.description}
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-scale-in max-w-md sm:max-w-none mx-auto">
-                      <Link
-                        to="/rooms"
-                        className="btn-luxury block w-full sm:w-auto text-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg shadow-2xl hover:shadow-golden-500/50 transition-all duration-300"
-                      >
-                        <span className="inline-flex items-center justify-center">
-                          Book Now
-                          <ArrowRightIcon className="ml-2 h-5 w-5 sm:h-6 sm:w-6" />
-                        </span>
-                      </Link>
+                {/* Modern Split Layout - Image on Left, Content on Right */}
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full lg:w-3/5 h-full relative">
+                    {/* Image takes full space - completely clear */}
+                  </div>
+                  
+                  {/* Content Panel - Floating on Right Side */}
+                  <div className="absolute right-0 top-0 bottom-0 w-full lg:w-2/5 flex items-center justify-center p-6 sm:p-8 lg:p-12">
+                    <div className="w-full max-w-lg">
+                      {/* Modern Glass Card with Content */}
+                      <div className="bg-gradient-to-br from-dark-blue-900/95 via-dark-blue-800/95 to-dark-blue-900/95 backdrop-blur-xl rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl border border-golden-500/30 relative overflow-hidden">
+                        {/* Decorative Golden Accent */}
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-golden-500 to-transparent"></div>
+                        
+                        {/* Content */}
+                        <div className="relative z-10">
+                          <TextReveal 
+                            variant="split" 
+                            as="h1" 
+                            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 text-golden-400 font-serif leading-tight"
+                          >
+                            {slide.title}
+                          </TextReveal>
+                          
+                          <div className="w-20 h-1 bg-gradient-to-r from-golden-500 to-transparent mb-6"></div>
+                          
+                          <p className="text-xl sm:text-2xl lg:text-3xl mb-4 text-white font-medium leading-relaxed">
+                            {slide.subtitle}
+                          </p>
+                          
+                          <p className="text-base sm:text-lg lg:text-xl mb-8 text-white/90 leading-relaxed">
+                            {slide.description}
+                          </p>
+                          
+                          <Link
+                            to="/rooms"
+                            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-golden-500 to-golden-600 text-dark-blue-900 font-bold text-lg rounded-xl shadow-2xl hover:shadow-golden-500/50 transition-all duration-300 hover:scale-105 hover:from-golden-400 hover:to-golden-500 group"
+                          >
+                            <span>Book Now</span>
+                            <ArrowRightIcon className="ml-2 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
+                        
+                        {/* Decorative Elements */}
+                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-golden-500/10 rounded-full blur-3xl"></div>
+                        <div className="absolute -top-10 -left-10 w-32 h-32 bg-golden-500/5 rounded-full blur-2xl"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -310,32 +322,32 @@ const Home: React.FC = () => {
             </div>
           ))}
           
-          {/* Navigation Arrows */}
+          {/* Modern Navigation Arrows */}
           <button
             onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full p-2 sm:p-3 transition-all duration-300 hover:scale-110 group"
+            className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-white/15 hover:bg-white/25 backdrop-blur-lg border-2 border-white/30 rounded-full p-4 transition-all duration-300 hover:scale-110 hover:border-golden-400/50 group shadow-xl"
             aria-label="Previous slide"
           >
-            <ChevronLeftIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white group-hover:text-golden-400 transition-colors" />
+            <ChevronLeftIcon className="h-7 w-7 text-white group-hover:text-golden-400 transition-colors" />
           </button>
           <button
             onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full p-2 sm:p-3 transition-all duration-300 hover:scale-110 group"
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-white/15 hover:bg-white/25 backdrop-blur-lg border-2 border-white/30 rounded-full p-4 transition-all duration-300 hover:scale-110 hover:border-golden-400/50 group shadow-xl"
             aria-label="Next slide"
           >
-            <ChevronRightIcon className="h-6 w-6 sm:h-8 sm:w-8 text-white group-hover:text-golden-400 transition-colors" />
+            <ChevronRightIcon className="h-7 w-7 text-white group-hover:text-golden-400 transition-colors" />
           </button>
           
-          {/* Carousel Indicators */}
-          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2 sm:space-x-3">
+          {/* Modern Carousel Indicators */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-3 bg-white/10 backdrop-blur-lg rounded-full px-4 py-2 border border-white/20">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+                className={`transition-all duration-300 rounded-full ${
                   index === currentSlide 
-                    ? 'bg-golden-400 scale-125 shadow-lg shadow-golden-400/50' 
-                    : 'bg-white/50 hover:bg-white/70'
+                    ? 'w-12 h-2 bg-golden-400 shadow-lg shadow-golden-400/50' 
+                    : 'w-2 h-2 bg-white/50 hover:bg-white/70'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

@@ -154,6 +154,19 @@
     background-position: center; 
   }
   
+  /* Ensure hero images are sharp and clear - no blur */
+  .hero-slide img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    filter: none !important;
+    -webkit-filter: none !important;
+  }
+  
   .luxury-badge { 
     position: absolute; 
     top: 15px; 
