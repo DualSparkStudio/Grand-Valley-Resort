@@ -51,10 +51,8 @@ const AdminCalendar: React.FC = () => {
         blockedDates: blockedDatesData?.length || 0
       });
 
-      // Filter out Airbnb blocked dates - only show manual blocked dates
-      const filteredBlockedDates = (blockedDatesData || []).filter(blocked => 
-        blocked.source !== 'airbnb_blocked'
-      )
+      // Show all blocked dates
+      const filteredBlockedDates = blockedDatesData || []
 
       setBookings(bookingsData || [])
       setRooms(roomsData || [])

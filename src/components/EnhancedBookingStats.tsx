@@ -12,15 +12,11 @@ import type { Booking } from '../lib/supabase';
 interface EnhancedBookingStatsProps {
   bookings: Booking[];
   rooms: any[];
-  airbnbBookings?: any[]; // Add Airbnb bookings prop
-  airbnbBlockedDates?: any[]; // Add Airbnb blocked dates prop
 }
 
 const EnhancedBookingStats: React.FC<EnhancedBookingStatsProps> = ({ 
   bookings, 
-  rooms, 
-  airbnbBookings = [],
-  airbnbBlockedDates = []
+  rooms
 }) => {
   const stats = useMemo(() => {
     const currentMonth = new Date().getMonth()
@@ -58,11 +54,6 @@ const EnhancedBookingStats: React.FC<EnhancedBookingStatsProps> = ({
     const confirmedRevenue = confirmedBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0)
     const currentMonthRevenue = currentMonthBookings.reduce((sum, booking) => sum + (booking.total_amount || 0), 0)
     
-    // Airbnb booking stats
-    const airbnbConfirmed = airbnbBookings.filter(b => b.extendedProps?.bookingStatus === 'confirmed')
-    const airbnbPending = airbnbBookings.filter(b => b.extendedProps?.bookingStatus === 'pending')
-    const airbnbCancelled = airbnbBookings.filter(b => b.extendedProps?.bookingStatus === 'cancelled')
-    const airbnbBlocked = airbnbBlockedDates.length // Count of blocked dates
     
     // Room-specific breakdowns
     const roomStats = rooms.map(room => {
@@ -108,16 +99,11 @@ const EnhancedBookingStats: React.FC<EnhancedBookingStatsProps> = ({
       totalRevenue,
       confirmedRevenue,
       currentMonthRevenue,
-      airbnbBookings,
-      airbnbConfirmed,
-      airbnbPending,
-      airbnbCancelled,
-      airbnbBlocked,
-      totalBookings: bookings.length + airbnbBookings.length,
+      totalBookings: bookings.length,
       roomStats,
       monthlyTrends
     }
-  }, [bookings, rooms, airbnbBookings])
+  }, [bookings, rooms])
 
   return (
     <div className="space-y-6">
@@ -253,60 +239,6 @@ const EnhancedBookingStats: React.FC<EnhancedBookingStatsProps> = ({
                 <span className="font-bold text-gray-900">
                   {stats.totalBookings > 0 ? ((stats.websiteBookings.length / stats.totalBookings) * 100).toFixed(1) : 0}%
                 </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Airbnb Bookings */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
-          <div className="flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl flex items-center justify-center">
-              <HomeIcon className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-gray-900">Airbnb Bookings</h3>
-              <p className="text-sm text-gray-600">Bookings from Airbnb platform</p>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="flex justify-between items-center p-3 bg-emerald-50 rounded-xl">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-emerald-600 rounded-full"></div>
-                <span className="text-gray-700">Confirmed</span>
-              </div>
-              <span className="font-bold text-emerald-600">{stats.airbnbConfirmed.length}</span>
-            </div>
-            
-            <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-xl">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-yellow-600 rounded-full"></div>
-                <span className="text-gray-700">Pending</span>
-              </div>
-              <span className="font-bold text-yellow-600">{stats.airbnbPending.length}</span>
-            </div>
-            
-            <div className="flex justify-between items-center p-3 bg-red-50 rounded-xl">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-600 rounded-full"></div>
-                <span className="text-gray-700">Cancelled</span>
-              </div>
-              <span className="font-bold text-red-600">{stats.airbnbCancelled.length}</span>
-            </div>
-            
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
-                <span className="text-gray-700">Blocked</span>
-              </div>
-              <span className="font-bold text-gray-600">{stats.airbnbBlocked}</span>
-            </div>
-            
-            <div className="border-t pt-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Total Bookings</span>
-                <span className="font-bold text-gray-900">{stats.airbnbBookings.length}</span>
               </div>
             </div>
           </div>

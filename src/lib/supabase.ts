@@ -354,7 +354,7 @@ export const api = {
     return data
   },
 
-  async checkRoomAvailabilityWithAirbnb(roomId: number, checkIn: string, checkOut: string) {
+  async checkRoomAvailability(roomId: number, checkIn: string, checkOut: string) {
     
     // Check if check-in and check-out are the same date
     if (checkIn === checkOut) {
@@ -442,34 +442,6 @@ export const api = {
       }
     }
 
-    // TEMPORARILY DISABLE AIRBNB CHECK FOR DEBUGGING
-    
-    // Check Airbnb availability by getting the room's Airbnb iCal URL
-    // try {
-    //   const { data: settings, error: settingsError } = await supabase
-    //     .from('calendar_settings')
-    //     .select('setting_value')
-    //     .eq('setting_key', `airbnb_room_${roomId}_ical`)
-    //     .single()
-
-
-    //   if (!settingsError && settings?.setting_value) {
-    //     // Import the Airbnb integration functions
-    //     const { checkAirbnbAvailability } = await import('./airbnb-integration')
-    //     const airbnbAvailability = await checkAirbnbAvailability(checkIn, checkOut, settings.setting_value)
-        
-        
-    //     if (!airbnbAvailability.available) {
-    //       return {
-    //         available: false,
-    //         reason: airbnbAvailability.reason,
-    //         conflicts: airbnbAvailability.conflicts
-    //       }
-    //     }
-    //   }
-    // } catch (error) {
-    //   // If Airbnb check fails, we'll still allow the booking but log the error
-    // }
     
     return {
       available: true,
@@ -540,7 +512,7 @@ export const api = {
   async getCalendarEvents(roomId: number) {
     try {
       
-      // Get all bookings from database (both website and Airbnb)
+      // Get all bookings from database
       const { data: bookings, error: bookingsError } = await supabase
         .from('bookings')
         .select('id, check_in_date, check_out_date, booking_status, first_name, last_name, room_id, booking_source')
@@ -570,23 +542,16 @@ export const api = {
 
       // Combine all events
       const events = [
-        // All bookings (website and Airbnb)
-        ...(bookings || []).map(booking => {
-          const isAirbnb = booking.booking_source === 'airbnb'
-          return {
-            ...booking,
-            type: 'booking',
-            source: isAirbnb ? 'airbnb' : 'website',
-            title: 'Booked',
-            backgroundColor: isAirbnb 
-              ? '#ff5a5f' 
-              : (booking.booking_status === 'confirmed' ? '#ef4444' : '#f59e0b'),
-            borderColor: isAirbnb 
-              ? '#ff5a5f' 
-              : (booking.booking_status === 'confirmed' ? '#dc2626' : '#d97706'),
-            textColor: '#ffffff'
-          }
-        }),
+        // All bookings
+        ...(bookings || []).map(booking => ({
+          ...booking,
+          type: 'booking',
+          source: 'website',
+          title: 'Booked',
+          backgroundColor: booking.booking_status === 'confirmed' ? '#ef4444' : '#f59e0b',
+          borderColor: booking.booking_status === 'confirmed' ? '#dc2626' : '#d97706',
+          textColor: '#ffffff'
+        })),
         // Blocked dates (only if they exist)
         ...(blockedDates || []).map(blocked => ({
           id: `blocked-${blocked.id}`,
@@ -637,7 +602,7 @@ export const api = {
     end_date: string
     reason: string
     notes?: string
-    source?: string // Added source field for manual vs Airbnb blocked dates
+    source?: string // Source of the blocked date (e.g., 'manual')
   }) {
     const { data, error } = await supabase
       .from('blocked_dates')
@@ -851,15 +816,6 @@ export const api = {
     if (error) throw error
   },
 
-  async deleteAirbnbBookingsForRoom(roomId: number) {
-    const { error } = await supabase
-      .from('bookings')
-      .delete()
-      .eq('room_id', roomId)
-      .eq('booking_source', 'airbnb')
-
-    if (error) throw error
-  },
 
   // Facility Management
   async getFacilities() {
@@ -1711,38 +1667,6 @@ export const api = {
 
 
 
-  // Airbnb Integration
-  async syncAirbnbBlockedDates(roomId?: number) {
-    try {
-      const { airbnbApi } = await import('../services/airbnbApi')
-      
-      if (roomId) {
-        await airbnbApi.syncAirbnbBlockedDates(roomId)
-      } else {
-        await airbnbApi.syncAllAirbnbBlockedDates()
-      }
-    } catch (error) {
-      throw error
-    }
-  },
-
-  async syncAirbnbBookings(roomId?: number) {
-    try {
-      const { airbnbApi } = await import('../services/airbnbApi')
-      
-      if (roomId) {
-        await airbnbApi.syncRoomBookings(roomId)
-      } else {
-        // Sync all rooms
-        const rooms = await this.getRooms()
-        for (const room of rooms) {
-          await airbnbApi.syncRoomBookings(room.id)
-        }
-      }
-    } catch (error) {
-      throw error
-    }
-  },
 
   // Utility function to generate slug from room name
   generateSlug(name: string): string {
@@ -1848,6 +1772,5 @@ export const api = {
     }
   },
 
-  // Test function to create a sample Airbnb blocked date
 
 }

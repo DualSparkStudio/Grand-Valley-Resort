@@ -202,7 +202,7 @@ const BookingForm: React.FC = () => {
 
     try {
       // Use the comprehensive availability checking function
-      const availability = await api.checkRoomAvailabilityWithAirbnb(
+      const availability = await api.checkRoomAvailability(
         room.id,
         selectedDates.checkIn,
         selectedDates.checkOut

@@ -3,7 +3,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Outlet, Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import AdminLayout from './components/AdminLayout';
-import AutoSyncInitializer from './components/AutoSyncInitializer';
 import Layout from './components/Layout';
 import MaintenancePage from './components/MaintenancePage';
 import ScrollToTop from './components/ScrollToTop';
@@ -165,7 +164,6 @@ function App() {
             <SmoothScroll>
               <MaintenanceProvider>
                 <AuthProvider>
-                  <AutoSyncInitializer />
                   <AppContent />
                 </AuthProvider>
               </MaintenanceProvider>

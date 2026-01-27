@@ -95,33 +95,6 @@ const AdminCalendarFeed: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">How to Use This Calendar Feed</h2>
               
               <div className="space-y-6">
-                {/* Airbnb Integration */}
-                <div className="border border-gray-200 rounded-lg p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3">
-                      <CalendarIcon className="h-6 w-6 text-pink-600" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900">Airbnb Integration</h3>
-                  </div>
-                  <div className="space-y-3 text-sm text-gray-600">
-                    <p>To sync your website bookings with Airbnb:</p>
-                    <ol className="list-decimal list-inside space-y-2 ml-4">
-                      <li>Go to your Airbnb host dashboard</li>
-                      <li>Navigate to <strong>Calendar</strong> → <strong>Sync calendars</strong></li>
-                      <li>Click <strong>"Import calendar"</strong></li>
-                      <li>Paste the calendar URL above</li>
-                      <li>Choose <strong>"Block dates"</strong> as the import type</li>
-                      <li>Save the settings</li>
-                    </ol>
-                    <div className="mt-4 p-3 bg-pink-50 border border-pink-200 rounded-lg">
-                      <p className="text-pink-800 font-medium">💡 Pro Tip:</p>
-                      <p className="text-pink-700 text-xs mt-1">
-                        This will automatically block dates in Airbnb when you have website bookings, preventing double bookings.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Other Calendar Apps */}
                 <div className="border border-gray-200 rounded-lg p-6">
                   <div className="flex items-center mb-4">
@@ -162,7 +135,6 @@ const AdminCalendarFeed: React.FC = () => {
                     <ul className="space-y-1 text-blue-800">
                       <li>✅ Website bookings (confirmed & pending)</li>
                       <li>✅ Manually blocked dates</li>
-                      <li>❌ Airbnb bookings (handled separately)</li>
                       <li>❌ Cancelled bookings</li>
                     </ul>
                   </div>
@@ -177,7 +149,7 @@ const AdminCalendarFeed: React.FC = () => {
                 <h4 className="font-medium text-yellow-900 mb-2">Common Issues</h4>
                 <div className="space-y-2 text-sm text-yellow-800">
                   <p><strong>Calendar not updating:</strong> Some apps cache calendar feeds. Wait 5-10 minutes or manually refresh.</p>
-                  <p><strong>Import not working:</strong> Make sure you're using the exact URL and selecting "Block dates" in Airbnb.</p>
+                  <p><strong>Import not working:</strong> Make sure you're using the exact URL and selecting the correct import type in your calendar application.</p>
                   <p><strong>Wrong timezone:</strong> The calendar uses Asia/Kolkata timezone. Adjust your calendar app settings if needed.</p>
                 </div>
               </div>

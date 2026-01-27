@@ -1,6 +1,25 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import React from 'react';
-import type { CalendarEvent } from '../lib/airbnb-integration';
+
+interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  extendedProps: {
+    booking?: any;
+    room?: any;
+    platform?: string;
+    bookingStatus?: string;
+    paymentStatus?: string;
+    guestName?: string;
+    numGuests?: number;
+    phone?: string;
+    email?: string;
+    roomInfo?: string;
+    totalAmount?: number;
+  };
+}
 
 interface BookingDetailsModalProps {
   event: CalendarEvent | null;
@@ -15,7 +34,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
 }) => {
   if (!isOpen || !event) return null;
 
-  const isAirbnbBooking = event.extendedProps.platform === 'Airbnb';
+  const isWebsiteBooking = true; // All bookings are from website now
   const booking = event.extendedProps.booking;
   const room = event.extendedProps.room;
   
@@ -79,17 +98,15 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-full ${
-                isAirbnbBooking ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'
-              }`}>
-                {isAirbnbBooking ? '🏠' : '🌐'}
+              <div className="p-2 rounded-full bg-blue-100 text-blue-600">
+                🌐
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">
-                  {isAirbnbBooking ? 'Airbnb Booking' : 'Website Booking'} Details
+                  Booking Details
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {event.extendedProps.platform} • {event.extendedProps.bookingStatus}
+                  Website Booking • {event.extendedProps.bookingStatus}
                 </p>
               </div>
             </div>
@@ -144,7 +161,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
                     {event.extendedProps.roomInfo || 'Not specified'}
                   </p>
                 </div>
-                {!isAirbnbBooking && room?.check_in_time && (
+                {room?.check_in_time && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Check-in Time</label>
                     <p className="mt-1 text-sm text-gray-900">
@@ -152,7 +169,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
                     </p>
                   </div>
                 )}
-                {!isAirbnbBooking && room?.check_out_time && (
+                {room?.check_out_time && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Check-out Time</label>
                     <p className="mt-1 text-sm text-gray-900">
@@ -212,7 +229,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
                       ${(event.extendedProps.totalAmount || booking?.total_amount || 0).toFixed(2)}
                     </p>
                   </div>
-                  {!isAirbnbBooking && booking?.payment_gateway && (
+                  {booking?.payment_gateway && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Payment Gateway</label>
                       <p className="mt-1 text-sm text-gray-900 capitalize">
@@ -225,7 +242,7 @@ const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
             )}
 
             {/* Special Requests */}
-            {!isAirbnbBooking && booking?.special_requests && (
+            {booking?.special_requests && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Special Requests</h3>
                 <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-md">

@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     payment_gateway VARCHAR(20) DEFAULT 'direct' CHECK (payment_gateway IN ('direct', 'razorpay')),
     razorpay_order_id VARCHAR(255),
     razorpay_payment_id VARCHAR(255),
-    booking_source VARCHAR(50) DEFAULT 'website', -- 'website', 'airbnb', etc.
+    booking_source VARCHAR(50) DEFAULT 'website', -- 'website', etc.
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     -- Ensure check-out is after check-in
@@ -133,8 +133,8 @@ CREATE TABLE IF NOT EXISTS blocked_dates (
     end_date DATE NOT NULL,
     reason VARCHAR(255) NOT NULL,
     notes TEXT,
-    source VARCHAR(50) DEFAULT 'manual', -- 'manual', 'airbnb_blocked', etc.
-    external_id VARCHAR(255), -- External reference ID (e.g., Airbnb UID)
+    source VARCHAR(50) DEFAULT 'manual', -- 'manual', etc.
+    external_id VARCHAR(255), -- External reference ID
     platform_data JSONB, -- Additional metadata from source platform
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     -- Ensure end_date is after start_date
@@ -149,8 +149,8 @@ CREATE INDEX IF NOT EXISTS idx_blocked_dates_source ON blocked_dates(source);
 CREATE INDEX IF NOT EXISTS idx_blocked_dates_external_id ON blocked_dates(external_id);
 
 -- Add comments
-COMMENT ON COLUMN blocked_dates.source IS 'Source of the blocked date: manual (admin panel), airbnb_blocked (from Airbnb iCal), etc.';
-COMMENT ON COLUMN blocked_dates.external_id IS 'External reference ID from the source platform (e.g., Airbnb UID)';
+COMMENT ON COLUMN blocked_dates.source IS 'Source of the blocked date: manual (admin panel), etc.';
+COMMENT ON COLUMN blocked_dates.external_id IS 'External reference ID from the source platform';
 COMMENT ON COLUMN blocked_dates.platform_data IS 'Additional metadata from the source platform (JSON format)';
 
 -- ============================================

@@ -323,24 +323,6 @@ const ReviewsSection: React.FC = () => {
               <p className="text-sm text-gray-600">Read 150+ guest reviews</p>
             </a>
 
-            <a
-              href="https://www.airbnb.co.in/rooms/862832331363200128/reviews?source_impression_id=p3_1752592428_P3zxAqmOKTAHQor_"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-transparent hover:border-pink-500"
-            >
-              <div className="flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-pink-600" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm6.8 16.2c-.8 1.4-2.4 2.3-4.1 2.3-1.7 0-3.3-.9-4.1-2.3-.4-.7-.6-1.5-.6-2.3 0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5c0 .8-.2 1.6-.6 2.3-.6 1.1-1.6 1.9-2.8 2.2v1.4c0 .3-.2.5-.5.5s-.5-.2-.5-.5v-1.4c-1.2-.3-2.2-1.1-2.8-2.2-.4-.7-.6-1.5-.6-2.3 0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5c0 .8-.2 1.6-.6 2.3zm-6.8-8.7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5z"/>
-                </svg>
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Airbnb Reviews</h4>
-              <div className="flex items-center justify-center mb-2">
-                {renderStars(5)}
-                <span className="ml-2 text-sm text-gray-600">4.9/5</span>
-              </div>
-              <p className="text-sm text-gray-600">Check our Airbnb listing</p>
-            </a>
           </div>
         </div>
 

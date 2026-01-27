@@ -23,7 +23,7 @@ interface CombinedBooking {
   paymentStatus: string;
   totalAmount?: number;
   roomName: string;
-  source: 'Website' | 'Airbnb';
+  source: 'Website';
   special_requests?: string;
   originalBooking?: Booking; // For website bookings
   payment_gateway?: string;
