@@ -384,32 +384,32 @@ const Home: React.FC = () => {
             </div>
           ))}
           
-          {/* Modern Navigation Arrows */}
+          {/* Elegant Navigation Arrows */}
           <button
             onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-white/15 hover:bg-white/25 backdrop-blur-lg border-2 border-white/30 rounded-full p-4 transition-all duration-300 hover:scale-110 hover:border-golden-400/50 group shadow-xl"
+            className="absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 bg-gradient-to-r from-golden-500 to-golden-600 hover:from-golden-600 hover:to-golden-700 backdrop-blur-sm rounded-full p-3 sm:p-3.5 transition-all duration-300 hover:scale-110 group shadow-2xl border border-golden-400/30"
             aria-label="Previous slide"
           >
-            <ChevronLeftIcon className="h-7 w-7 text-white group-hover:text-golden-400 transition-colors" />
+            <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white drop-shadow-lg" />
           </button>
           <button
             onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-white/15 hover:bg-white/25 backdrop-blur-lg border-2 border-white/30 rounded-full p-4 transition-all duration-300 hover:scale-110 hover:border-golden-400/50 group shadow-xl"
+            className="absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 bg-gradient-to-r from-golden-500 to-golden-600 hover:from-golden-600 hover:to-golden-700 backdrop-blur-sm rounded-full p-3 sm:p-3.5 transition-all duration-300 hover:scale-110 group shadow-2xl border border-golden-400/30"
             aria-label="Next slide"
           >
-            <ChevronRightIcon className="h-7 w-7 text-white group-hover:text-golden-400 transition-colors" />
+            <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white drop-shadow-lg" />
           </button>
           
-          {/* Modern Carousel Indicators */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-3 bg-white/10 backdrop-blur-lg rounded-full px-4 py-2 border border-white/20">
+          {/* Simple Dot Indicators */}
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex items-center gap-2">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
                 className={`transition-all duration-300 rounded-full ${
                   index === currentSlide 
-                    ? 'w-12 h-2 bg-golden-400 shadow-lg shadow-golden-400/50' 
-                    : 'w-2 h-2 bg-white/50 hover:bg-white/70'
+                    ? 'w-2.5 h-2.5 bg-golden-400 shadow-lg' 
+                    : 'w-2 h-2 bg-white/60 hover:bg-white/80 hover:scale-110'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

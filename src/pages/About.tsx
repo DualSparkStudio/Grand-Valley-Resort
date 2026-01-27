@@ -84,12 +84,10 @@ const About: React.FC = () => {
               </div>
               
               <div className="relative rounded-lg overflow-hidden shadow-lg">
-                <PremiumImage
-                  src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
-                  alt="Grand Valley Resort Building"
-                  className="rounded-lg"
-                  parallax
-                  blur
+                <img
+                  src="/images/Exterior (Front).PNG"
+                  alt="Grand Valley Resort - Front View"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </div>
             </div>
@@ -107,12 +105,10 @@ const About: React.FC = () => {
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative rounded-lg overflow-hidden shadow-lg">
-                <PremiumImage
-                  src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800"
-                  alt="Resort Exterior"
-                  className="rounded-lg"
-                  parallax
-                  blur
+                <img
+                  src="/images/Exterior (back).PNG"
+                  alt="Grand Valley Resort - Back View"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               
@@ -139,8 +135,60 @@ const About: React.FC = () => {
           </div>
         </section>
 
-        {/* Location Section */}
+        {/* Resort Gallery Section */}
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Resort Gallery
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Explore the beauty and elegance of Grand Valley Resort
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Image 1 - Front View */}
+              <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300">
+                <img
+                  src="/images/Exterior (Front).PNG"
+                  alt="Grand Valley Resort - Front Exterior"
+                  className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <p className="text-white font-semibold p-4">Front Exterior View</p>
+                </div>
+              </div>
+
+              {/* Image 2 - Back View */}
+              <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300">
+                <img
+                  src="/images/Exterior (back).PNG"
+                  alt="Grand Valley Resort - Back Exterior"
+                  className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <p className="text-white font-semibold p-4">Back Exterior View</p>
+                </div>
+              </div>
+
+              {/* Image 3 - Night View */}
+              <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300">
+                <img
+                  src="/images/exteror (night).jpg"
+                  alt="Grand Valley Resort - Night View"
+                  className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <p className="text-white font-semibold p-4">Night Ambiance</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Location Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
