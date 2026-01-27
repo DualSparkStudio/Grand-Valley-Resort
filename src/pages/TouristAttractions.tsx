@@ -553,7 +553,7 @@ const TouristAttractions: React.FC = () => {
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 flex items-center justify-center h-full">
           <div className="text-center text-white px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Tourist Attractions</h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Explore Mahabaleshwar</h1>
             <p className="text-lg sm:text-xl max-w-2xl mx-auto">
               Discover the beautiful places to visit around Grand Valley Resort Bhilar
             </p>
@@ -564,14 +564,6 @@ const TouristAttractions: React.FC = () => {
       {/* Attractions Grid */}
       <section className="py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Explore Mahabaleshwar
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              From scenic viewpoints to historic temples, discover the best attractions in and around Mahabaleshwar
-            </p>
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {attractions.map((attraction) => (
