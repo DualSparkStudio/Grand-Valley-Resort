@@ -138,6 +138,7 @@ export interface TouristAttraction {
   name: string
   description: string
   image_url?: string
+  images?: string[] // Array of image URLs
   location: string
   distance_from_resort: number
   estimated_time: string

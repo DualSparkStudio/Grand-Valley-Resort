@@ -21,6 +21,7 @@ const AdminTouristAttractions: React.FC = () => {
     name: '',
     description: '',
     image_url: '',
+    images: [] as string[],
     location: '',
     distance_from_resort: '',
     estimated_time: '',
@@ -58,6 +59,7 @@ const AdminTouristAttractions: React.FC = () => {
         name: attraction.name,
         description: attraction.description,
         image_url: attraction.image_url || '',
+        images: attraction.images || [],
         location: attraction.location,
         distance_from_resort: attraction.distance_from_resort.toString(),
         estimated_time: attraction.estimated_time,
@@ -74,6 +76,7 @@ const AdminTouristAttractions: React.FC = () => {
         name: '',
         description: '',
         image_url: '',
+        images: [],
         location: '',
         distance_from_resort: '',
         estimated_time: '',
@@ -95,6 +98,7 @@ const AdminTouristAttractions: React.FC = () => {
       name: '',
       description: '',
       image_url: '',
+      images: [],
       location: '',
       distance_from_resort: '',
       estimated_time: '',
@@ -115,7 +119,8 @@ const AdminTouristAttractions: React.FC = () => {
         ...formData,
         distance_from_resort: parseFloat(formData.distance_from_resort),
         rating: parseFloat(formData.rating),
-        display_order: parseInt(formData.display_order) || 0
+        display_order: parseInt(formData.display_order) || 0,
+        images: formData.images.filter(img => img.trim() !== '') // Remove empty strings
       }
 
       if (modalMode === 'add') {
@@ -131,6 +136,29 @@ const AdminTouristAttractions: React.FC = () => {
     } catch (error) {
       toast.error('Failed to save tourist attraction')
     }
+  }
+
+  const addImageUrl = () => {
+    setFormData({
+      ...formData,
+      images: [...formData.images, '']
+    })
+  }
+
+  const removeImageUrl = (index: number) => {
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index)
+    })
+  }
+
+  const updateImageUrl = (index: number, value: string) => {
+    const newImages = [...formData.images]
+    newImages[index] = value
+    setFormData({
+      ...formData,
+      images: newImages
+    })
   }
 
   const handleDelete = async (id: number) => {
@@ -452,7 +480,7 @@ const AdminTouristAttractions: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image URL
+                    Primary Image URL (for backward compatibility)
                   </label>
                   <input
                     type="url"
@@ -460,7 +488,51 @@ const AdminTouristAttractions: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     disabled={modalMode === 'view'}
+                    placeholder="https://example.com/image.jpg"
                   />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Additional Images (Multiple URLs)
+                    </label>
+                    {modalMode !== 'view' && (
+                      <button
+                        type="button"
+                        onClick={addImageUrl}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        + Add Image
+                      </button>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    {formData.images.map((imageUrl, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <input
+                          type="url"
+                          value={imageUrl}
+                          onChange={(e) => updateImageUrl(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          disabled={modalMode === 'view'}
+                          placeholder="https://example.com/image.jpg"
+                        />
+                        {modalMode !== 'view' && (
+                          <button
+                            type="button"
+                            onClick={() => removeImageUrl(index)}
+                            className="px-3 py-2 text-red-600 hover:text-red-800 font-medium"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {formData.images.length === 0 && modalMode === 'view' && (
+                      <p className="text-sm text-gray-500">No additional images</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
