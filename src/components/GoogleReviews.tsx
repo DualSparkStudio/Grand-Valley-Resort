@@ -37,6 +37,14 @@ const GoogleReviews: React.FC = () => {
       setError(null)
       
       const response = await fetch('/.netlify/functions/get-google-reviews')
+      
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        // If not JSON, the function might not be deployed or returning HTML
+        throw new Error('Reviews service unavailable')
+      }
+      
       const data = await response.json()
 
       if (!response.ok || !data.success) {
@@ -45,8 +53,8 @@ const GoogleReviews: React.FC = () => {
 
       setReviewsData(data)
     } catch (err) {
-      console.error('Error loading Google reviews:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load reviews')
+      // Silently fail - don't show errors to users
+      setError(null)
     } finally {
       setLoading(false)
     }

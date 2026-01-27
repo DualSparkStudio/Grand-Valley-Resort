@@ -37,8 +37,11 @@ export const MaintenanceProvider: React.FC<MaintenanceProviderProps> = ({ childr
       const mode = await api.getMaintenanceMode();
       setIsMaintenanceMode(mode);
       setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading maintenance mode:', error);
+    } catch (error: any) {
+      // Only log non-network errors
+      if (!error?.message?.includes('Failed to fetch') && !error?.message?.includes('ERR_NAME_NOT_RESOLVED')) {
+        console.error('Error loading maintenance mode:', error);
+      }
       // Fallback to false if there's an error
       setIsMaintenanceMode(false);
       setIsLoading(false);

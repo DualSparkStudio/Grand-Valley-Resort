@@ -1201,7 +1201,10 @@ export const api = {
         .maybeSingle()
 
       if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-        console.error('Error fetching maintenance mode:', error)
+        // Only log non-network errors
+        if (!error.message?.includes('Failed to fetch') && !error.message?.includes('ERR_NAME_NOT_RESOLVED')) {
+          console.error('Error fetching maintenance mode:', error)
+        }
         return false
       }
 
@@ -1210,8 +1213,11 @@ export const api = {
       }
 
       return false
-    } catch (error) {
-      console.error('Error in getMaintenanceMode:', error)
+    } catch (error: any) {
+      // Only log non-network errors
+      if (!error?.message?.includes('Failed to fetch') && !error?.message?.includes('ERR_NAME_NOT_RESOLVED')) {
+        console.error('Error in getMaintenanceMode:', error)
+      }
       return false
     }
   },
