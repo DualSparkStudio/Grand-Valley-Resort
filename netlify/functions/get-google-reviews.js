@@ -1,9 +1,10 @@
 exports.handler = async (event, context) => {
-  // Enable CORS
+  // Enable CORS with cache control
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS'
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Cache-Control': 'public, max-age=1800' // Cache for 30 minutes
   }
 
   // Handle preflight requests
@@ -99,7 +100,8 @@ exports.handler = async (event, context) => {
           user_ratings_total: place.user_ratings_total,
           formatted_address: place.formatted_address
         },
-        reviews: reviews.slice(0, 10) // Return latest 10 reviews
+        reviews: reviews.slice(0, 10), // Return latest 10 reviews
+        cached_at: new Date().toISOString() // Add timestamp for debugging
       })
     }
 
