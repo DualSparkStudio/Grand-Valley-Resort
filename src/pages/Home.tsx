@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
 import PremiumImage from '../components/PremiumImage'
-import ReviewsSection from '../components/ReviewsSection'
 import SEO from '../components/SEO'
 import TextReveal from '../components/TextReveal'
 import type { Room } from '../lib/supabase'
@@ -761,9 +760,6 @@ const Home: React.FC = () => {
 
         {/* FAQ Section */}
         <FAQ />
-
-        {/* Dynamic Reviews Section */}
-        <ReviewsSection />
 
         {/* CTA Section */}
         <div className="py-12 sm:py-16 lg:py-20 bg-cream-beige">

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { StarIcon, PlusIcon, UserIcon } from '@heroicons/react/24/outline'
+import { StarIcon, UserIcon } from '@heroicons/react/24/outline'
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
-import { useAuth } from '../contexts/AuthContext'
 import { api } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
@@ -16,38 +15,13 @@ interface Review {
   location?: string
 }
 
-interface ReviewFormData {
-  rating: number
-  comment: string
-  guest_name: string
-  location: string
-}
-
 const ReviewsSection: React.FC = () => {
-  const { user } = useAuth()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
-  const [showForm, setShowForm] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [formData, setFormData] = useState<ReviewFormData>({
-    rating: 5,
-    comment: '',
-    guest_name: user ? `${user.first_name} ${user.last_name}` : '',
-    location: ''
-  })
 
   useEffect(() => {
     loadReviews()
   }, [])
-
-  useEffect(() => {
-    if (user) {
-      setFormData(prev => ({
-        ...prev,
-        guest_name: `${user.first_name} ${user.last_name}`
-      }))
-    }
-  }, [user])
 
   const loadReviews = async () => {
     try {
@@ -61,67 +35,15 @@ const ReviewsSection: React.FC = () => {
     }
   }
 
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!formData.comment.trim()) {
-      toast.error('Please write a review comment')
-      return
-    }
-
-    if (!formData.guest_name.trim()) {
-      toast.error('Please enter your name')
-      return
-    }
-
-    try {
-      setSubmitting(true)
-      
-      // Submit review to testimonials table
-      await api.createTestimonial({
-        guest_name: formData.guest_name,
-        rating: formData.rating,
-        comment: formData.comment,
-        is_featured: false,
-        is_active: true
-      })
-
-      toast.success('Thank you for your review! It will be visible once approved.')
-      
-      // Reset form
-      setFormData({
-        rating: 5,
-        comment: '',
-        guest_name: user ? `${user.first_name} ${user.last_name}` : '',
-        location: ''
-      })
-      setShowForm(false)
-      
-      // Reload reviews
-      loadReviews()
-    } catch (error) {
-      toast.error('Failed to submit review. Please try again.')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const renderStars = (rating: number, interactive = false, onRate?: (rating: number) => void) => {
+  const renderStars = (rating: number) => {
     return (
       <div className="flex items-center">
         {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type={interactive ? "button" : undefined}
-            onClick={interactive && onRate ? () => onRate(star) : undefined}
-            className={interactive ? "cursor-pointer" : "cursor-default"}
-          >
-            {star <= rating ? (
-              <StarIconSolid className="w-5 h-5 text-yellow-400" />
-            ) : (
-              <StarIcon className="w-5 h-5 text-gray-300" />
-            )}
-          </button>
+          star <= rating ? (
+            <StarIconSolid key={star} className="w-5 h-5 text-yellow-400" />
+          ) : (
+            <StarIcon key={star} className="w-5 h-5 text-gray-300" />
+          )
         ))}
       </div>
     )
@@ -145,92 +67,7 @@ const ReviewsSection: React.FC = () => {
           <p className="text-lg sm:text-xl text-sage max-w-3xl mx-auto mb-8">
             Read testimonials from our satisfied guests who experienced luxury at its finest
           </p>
-          
-          {/* Add Review Button */}
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="btn-primary inline-flex items-center justify-center px-6 py-3 text-base"
-          >
-            <PlusIcon className="w-5 h-5 mr-2" />
-            Share Your Experience
-          </button>
         </div>
-
-        {/* Review Form */}
-        {showForm && (
-          <div className="max-w-2xl mx-auto mb-12 bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Write a Review</h3>
-            
-            <form onSubmit={handleSubmitReview} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.guest_name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, guest_name: e.target.value }))}
-                  className="input-field"
-                  placeholder="Enter your name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Location (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                  className="input-field"
-                  placeholder="e.g., Mumbai, India"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Rating
-                </label>
-                {renderStars(formData.rating, true, (rating) => 
-                  setFormData(prev => ({ ...prev, rating }))
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Review
-                </label>
-                <textarea
-                  value={formData.comment}
-                  onChange={(e) => setFormData(prev => ({ ...prev, comment: e.target.value }))}
-                  className="input-field"
-                  rows={4}
-                  placeholder="Share your experience at Resort Booking System..."
-                  required
-                />
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="btn-primary flex-1"
-                >
-                  {submitting ? 'Submitting...' : 'Submit Review'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="btn-secondary flex-1"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
 
         {/* Reviews Grid */}
         {loading ? (
@@ -294,15 +131,15 @@ const ReviewsSection: React.FC = () => {
           </div>
         )}
 
-        {/* External Reviews Section */}
+        {/* External Reviews Links Section */}
         <div className="mt-16 text-center">
           <h3 className="text-xl sm:text-2xl font-bold text-forest mb-8">
-            See What Others Say About Us
+            See More Reviews
           </h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-3xl mx-auto">
             <a
-              href="https://www.google.com/travel/search?q=River%20Breeze%20Homestay%20reviews&g2lb=4965990%2C4969803%2C72277293%2C72302247%2C72317059%2C72414906%2C72471280%2C72472051%2C72485658%2C72560029%2C72573224%2C72616120%2C72647020%2C72648289%2C72686036%2C72760082%2C72803964%2C72832976%2C72882230%2C72958594%2C72958624%2C72959983%2C72990341%2C73006382%2C73010541%2C73016492%2C73034801&hl=en-IN&gl=in&cs=1&ssta=1&ts=CAEaRwopEicyJTB4M2JlYTBkODAxZTdjOGMwMzoweGU3NDI5YTBiZWZlYWRmZDQSGhIUCgcI6Q8QBxgQEgcI6Q8QBxgRGAEyAhAA&qs=CAEyFENnc0kxTC1yXzc3QnBxSG5BUkFCOAJCCQnU3-rvC5pC50IJCdTf6u8LmkLn&ap=ugEHcmV2aWV3cw&ictx=111&ved=0CAAQ5JsGahcKEwiI2e68jcGOAxUAAAAAHQAAAAAQBw"
+              href="https://www.google.com/maps/search/?api=1&query=Grand+Valley+Resort+Bhilar"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border-2 border-transparent hover:border-blue-500"
@@ -315,14 +152,9 @@ const ReviewsSection: React.FC = () => {
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Google Reviews</h4>
-              <div className="flex items-center justify-center mb-2">
-                {renderStars(5)}
-                <span className="ml-2 text-sm text-gray-600">4.8/5</span>
-              </div>
-              <p className="text-sm text-gray-600">Read 150+ guest reviews</p>
+              <h4 className="font-semibold text-gray-900 mb-2">View on Google</h4>
+              <p className="text-sm text-gray-600">Read all Google reviews</p>
             </a>
-
           </div>
         </div>
 
