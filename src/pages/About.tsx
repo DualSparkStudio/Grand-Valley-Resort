@@ -4,10 +4,8 @@ import {
     PhoneIcon
 } from '@heroicons/react/24/outline'
 import React, { useEffect, useState } from 'react'
-import GlassCard from '../components/GlassCard'
 import PremiumImage from '../components/PremiumImage'
 import SEO from '../components/SEO'
-import TextReveal from '../components/TextReveal'
 import { api } from '../lib/supabase'
 
 const About: React.FC = () => {
@@ -42,43 +40,32 @@ const About: React.FC = () => {
         keywords="about Grand Valley Resort, resort history, Mahabaleshwar resort, luxury resort, hilltop heaven"
         url="https://grandvalleyresort.com/about"
       />
-      <div className="min-h-screen bg-dark-blue-900">
+      <div className="min-h-screen bg-gray-50">
         {/* Welcome Hero Section */}
-        <section className="relative min-h-screen flex items-center section-padding-premium">
-          <PremiumImage
-            src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920"
-            alt="Luxury Bedroom"
-            className="absolute inset-0"
-            parallax
-            blur
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-dark-blue-900/80 via-dark-blue-900/60 to-dark-blue-900/90" />
-          
-          <div className="container-premium relative z-10">
-            <div className="max-w-4xl">
-              <TextReveal variant="split" as="h1" className="text-premium-heading text-golden-400 font-bold mb-8 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
-                WELCOME TO GRAND VALLEY RESORT
-              </TextReveal>
-              
-              <TextReveal variant="fade" delay={0.3} className="text-xl text-white/90 leading-relaxed mb-8">
+        <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-blue-800 to-green-800">
+          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="relative z-10 flex items-center justify-center h-full">
+            <div className="text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Welcome to Grand Valley Resort</h1>
+              <p className="text-lg sm:text-xl max-w-2xl mx-auto">
                 Grand Valley Resort is a destination that blends comfort, nature, and modern amenities. 
                 Located near Bhilar on Kawand-Bhilar Road, our resort offers a perfect escape from the 
                 hustle and bustle of city life, surrounded by the natural beauty of the Sahyadri Range.
-              </TextReveal>
+              </p>
             </div>
           </div>
         </section>
 
         {/* About Us Section */}
-        <section className="section-padding-premium bg-dark-blue-800">
-          <div className="container-premium">
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden-400 mb-6 drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">
                   About Us
-                </TextReveal>
+                </h2>
                 
-                <div className="space-y-6 text-white/80 leading-relaxed">
+                <div className="space-y-6 text-gray-700 leading-relaxed">
                   <p>
                     Grand Valley Resort represents a philosophy where luxury meets nature. Nestled in 
                     the heart of Mahabaleshwar, our resort offers an escape that combines modern comfort 
@@ -96,11 +83,11 @@ const About: React.FC = () => {
                 </div>
               </div>
               
-              <div className="relative">
+              <div className="relative rounded-lg overflow-hidden shadow-lg">
                 <PremiumImage
                   src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
                   alt="Grand Valley Resort Building"
-                  className="rounded-2xl"
+                  className="rounded-lg"
                   parallax
                   blur
                 />
@@ -110,27 +97,27 @@ const About: React.FC = () => {
         </section>
 
         {/* History Section */}
-        <section className="section-padding-premium bg-dark-blue-900">
-          <div className="container-premium">
-            <div className="text-center mb-16">
-              <TextReveal variant="split" as="h2" className="text-premium-heading text-golden-400 font-bold mb-8 drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3)' }}>
-                HISTORY
-              </TextReveal>
+        <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                History
+              </h2>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="relative">
+              <div className="relative rounded-lg overflow-hidden shadow-lg">
                 <PremiumImage
                   src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800"
                   alt="Resort Exterior"
-                  className="rounded-2xl"
+                  className="rounded-lg"
                   parallax
                   blur
                 />
               </div>
               
               <div>
-                <div className="space-y-6 text-white/80 leading-relaxed">
+                <div className="space-y-6 text-gray-700 leading-relaxed">
                   <p>
                     Grand Valley Resort emerged as a nature-inspired hideaway in the breathtaking Sahyadri 
                     Range. What started as a vision to create a perfect blend of luxury and natural beauty 
@@ -153,34 +140,34 @@ const About: React.FC = () => {
         </section>
 
         {/* Location Section */}
-        <section className="section-padding-premium bg-dark-blue-800">
-          <div className="container-premium">
+        <section className="py-12 sm:py-16 lg:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <TextReveal variant="fade" as="h2" className="text-3xl font-bold text-golden-400 mb-6 drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(212, 175, 55, 0.4)' }}>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">
                   Perfect Location
-                </TextReveal>
-                <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                </h2>
+                <p className="text-lg text-gray-700 mb-8 leading-relaxed">
                   Located in the heart of Mahabaleshwar, our resort offers the perfect balance 
                   of seclusion and accessibility. Just a short distance from major attractions 
                   yet worlds away from the everyday.
                 </p>
                 <div className="space-y-4">
-                  <div className="flex items-center text-white/90">
-                    <MapPinIcon className="h-6 w-6 text-golden mr-3 flex-shrink-0" />
+                  <div className="flex items-center text-gray-700">
+                    <MapPinIcon className="h-6 w-6 text-blue-600 mr-3 flex-shrink-0" />
                     <span>{adminContactInfo.address}</span>
                   </div>
-                  <div className="flex items-center text-white/90">
-                    <PhoneIcon className="h-6 w-6 text-golden mr-3 flex-shrink-0" />
+                  <div className="flex items-center text-gray-700">
+                    <PhoneIcon className="h-6 w-6 text-blue-600 mr-3 flex-shrink-0" />
                     <span>{adminContactInfo.phone}</span>
                   </div>
-                  <div className="flex items-center text-white/90">
-                    <EnvelopeIcon className="h-6 w-6 text-golden mr-3 flex-shrink-0" />
+                  <div className="flex items-center text-gray-700">
+                    <EnvelopeIcon className="h-6 w-6 text-blue-600 mr-3 flex-shrink-0" />
                     <span>{adminContactInfo.email}</span>
                   </div>
                 </div>
               </div>
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative rounded-lg overflow-hidden shadow-lg">
                 <iframe 
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14671.936717416102!2d73.7584162481834!3d17.90826147912499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc269ff80f61731%3A0xffc74f4030ef9795!2sGrand%20Valley%20Resort%20Bhilar%20Annex!5e1!3m2!1sen!2sin!4v1769187769047!5m2!1sen!2sin" 
                   width="100%" 
@@ -189,7 +176,7 @@ const About: React.FC = () => {
                   allowFullScreen 
                   loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-[450px] rounded-2xl"
+                  className="w-full h-[450px] rounded-lg"
                 ></iframe>
               </div>
             </div>

@@ -110,57 +110,35 @@ const Features: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-blue-900 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-golden-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-      </div>
-
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-blue-900 via-dark-blue-800/95 to-dark-blue-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.1),transparent_70%)]" />
-        
-        <div className="container-premium relative z-10 py-32">
-          <div className="text-center max-w-4xl mx-auto">
+      <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-blue-800 to-green-800">
+        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="relative z-10 flex items-center justify-center h-full">
+          <div className="text-center text-white px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <TextReveal 
-                variant="split" 
-                as="h1" 
-                className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-golden-400 font-bold mb-8 font-serif"
-                style={{ 
-                  textShadow: '0 0 30px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.3)',
-                  letterSpacing: '0.02em'
-                }}
-              >
-                FACILITIES & AMENITIES
-              </TextReveal>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Facilities & Amenities</h1>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <TextReveal 
-                variant="fade" 
-                delay={0.3} 
-                className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto font-light leading-relaxed"
-              >
+              <p className="text-lg sm:text-xl max-w-2xl mx-auto">
                 Discover world-class amenities and services that make Grand Valley Resort the ultimate luxury destination in the heart of Mahabaleshwar
-              </TextReveal>
+              </p>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Facilities Grid */}
-      <section className="relative section-padding-premium bg-gradient-to-b from-dark-blue-900 via-dark-blue-800 to-dark-blue-900">
-        <div className="container-premium">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -170,33 +148,28 @@ const Features: React.FC = () => {
           >
             {facilities.map((facility, index) => (
               <motion.div key={index} variants={itemVariants}>
-                <GlassCard hover className="h-full group relative overflow-hidden">
-                  {/* Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${facility.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-start gap-6">
-                      <div className="flex-shrink-0">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-golden-500/20 to-golden-600/20 border border-golden-500/30 flex items-center justify-center text-3xl backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                          {facility.icon}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl sm:text-2xl font-bold text-golden-400 mb-5 font-serif group-hover:text-golden-300 transition-colors">
-                          {facility.title}
-                        </h3>
-                        <ul className="space-y-3">
-                          {facility.items.map((item, i) => (
-                            <li key={i} className="flex items-center text-white/90 group-hover:text-white transition-colors">
-                              <div className="w-1.5 h-1.5 bg-golden-500 rounded-full mr-3 flex-shrink-0 group-hover:scale-150 transition-transform" />
-                              <span className="text-sm sm:text-base font-light">{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                <div className="bg-white rounded-lg shadow-md p-6 h-full group hover:shadow-xl transition-shadow duration-300">
+                  <div className="flex items-start gap-6">
+                    <div className="flex-shrink-0">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-green-100 border border-blue-200 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                        {facility.icon}
                       </div>
                     </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 group-hover:text-blue-600 transition-colors">
+                        {facility.title}
+                      </h3>
+                      <ul className="space-y-3">
+                        {facility.items.map((item, i) => (
+                          <li key={i} className="flex items-center text-gray-700 group-hover:text-gray-900 transition-colors">
+                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-3 flex-shrink-0 group-hover:scale-150 transition-transform" />
+                            <span className="text-sm sm:text-base">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </GlassCard>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -204,29 +177,21 @@ const Features: React.FC = () => {
       </section>
 
       {/* Amenities & Services */}
-      <section className="relative section-padding-premium bg-dark-blue-900">
-        <div className="container-premium">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-16"
           >
-            <TextReveal 
-              variant="split" 
-              as="h2" 
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-golden-400 font-bold mb-6 font-serif"
-              style={{ 
-                textShadow: '0 0 30px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.3)',
-                letterSpacing: '0.02em'
-              }}
-            >
-              AMENITIES & SERVICES
-            </TextReveal>
-            <TextReveal variant="fade" delay={0.2} className="text-lg text-white/80 font-light">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              Amenities & Services
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Experience luxury redefined
-            </TextReveal>
+            </p>
           </motion.div>
 
           <motion.div
@@ -242,7 +207,7 @@ const Features: React.FC = () => {
                 variants={itemVariants}
                 className="group relative"
               >
-                <div className="relative rounded-3xl overflow-hidden bg-dark-blue-800/50 backdrop-blur-sm border border-golden-500/10 group-hover:border-golden-500/30 transition-all duration-500">
+                <div className="relative rounded-lg overflow-hidden bg-white shadow-md group-hover:shadow-xl transition-all duration-500">
                   {/* Image Container */}
                   <div className="relative h-72 lg:h-80 overflow-hidden">
                     <PremiumImage
@@ -253,11 +218,11 @@ const Features: React.FC = () => {
                       blur
                     />
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-900/90 via-dark-blue-900/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-gray-900/20 to-transparent" />
                     
                     {/* Icon Badge */}
                     <div className="absolute top-6 left-6">
-                      <div className="w-14 h-14 rounded-xl bg-golden-500/20 backdrop-blur-md border border-golden-500/40 flex items-center justify-center text-2xl shadow-lg group-hover:bg-golden-500/30 transition-colors">
+                      <div className="w-14 h-14 rounded-xl bg-white/90 backdrop-blur-md border border-white/40 flex items-center justify-center text-2xl shadow-lg group-hover:bg-white transition-colors">
                         {amenity.icon}
                       </div>
                     </div>
@@ -265,7 +230,7 @@ const Features: React.FC = () => {
                     {/* Featured Badge */}
                     {amenity.featured && (
                       <div className="absolute top-6 right-6">
-                        <div className="px-4 py-2 rounded-full bg-golden-500/20 backdrop-blur-md border border-golden-500/40 text-golden-400 text-xs font-semibold uppercase tracking-wider">
+                        <div className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-blue-600 text-xs font-semibold uppercase tracking-wider">
                           Featured
                         </div>
                       </div>
@@ -274,10 +239,10 @@ const Features: React.FC = () => {
 
                   {/* Content */}
                   <div className="p-6 lg:p-8">
-                    <h3 className="text-2xl lg:text-3xl font-bold text-golden-400 mb-4 font-serif group-hover:text-golden-300 transition-colors">
+                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
                       {amenity.title}
                     </h3>
-                    <p className="text-white/80 leading-relaxed text-base lg:text-lg font-light">
+                    <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
                       {amenity.description}
                     </p>
                   </div>
@@ -289,8 +254,8 @@ const Features: React.FC = () => {
       </section>
 
       {/* Pure Veg Restaurant Section */}
-      <section className="relative section-padding-premium bg-gradient-to-b from-dark-blue-900 via-dark-blue-800 to-dark-blue-900 overflow-hidden">
-        <div className="container-premium">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -331,18 +296,13 @@ const Features: React.FC = () => {
               className="space-y-6"
             >
               <div>
-                <TextReveal 
-                  variant="fade" 
-                  as="h2" 
-                  className="text-4xl lg:text-5xl font-bold text-golden-400 mb-6 font-serif"
-                  style={{ textShadow: '0 0 20px rgba(212, 175, 55, 0.4)' }}
-                >
-                  PURE VEG RESTAURANT
-                </TextReveal>
-                <div className="w-24 h-1 bg-gradient-to-r from-golden-500 to-transparent mb-8" />
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                  Pure Veg Restaurant
+                </h2>
+                <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-green-600 mb-8" />
               </div>
               
-              <div className="space-y-5 text-white/90 leading-relaxed text-base lg:text-lg font-light">
+              <div className="space-y-5 text-gray-700 leading-relaxed text-base lg:text-lg">
                 <p>
                   Our in-house vegetarian restaurant offers a delightful dining experience with fresh, 
                   vegetarian ingredients and authentic Indian dishes. Enjoy comfort meals in a scenic 
@@ -359,8 +319,8 @@ const Features: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 pt-6">
                 {['Fresh Ingredients', 'Authentic Recipes', 'Scenic Views', 'Comfort Food'].map((feature, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-golden-500 rounded-full" />
-                    <span className="text-white/80 text-sm font-light">{feature}</span>
+                    <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                    <span className="text-gray-700 text-sm">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -370,29 +330,21 @@ const Features: React.FC = () => {
       </section>
 
       {/* Special Amenities */}
-      <section className="relative section-padding-premium bg-dark-blue-900">
-        <div className="container-premium">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-16"
           >
-            <TextReveal 
-              variant="split" 
-              as="h2" 
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-golden-400 font-bold mb-6 font-serif"
-              style={{ 
-                textShadow: '0 0 30px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.3)',
-                letterSpacing: '0.02em'
-              }}
-            >
-              SPECIAL AMENITIES
-            </TextReveal>
-            <TextReveal variant="fade" delay={0.2} className="text-lg text-white/80 font-light">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              Special Amenities
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Make your stay extra special with our premium services
-            </TextReveal>
+            </p>
           </motion.div>
 
           <motion.div
@@ -404,27 +356,27 @@ const Features: React.FC = () => {
           >
             {specialAmenities.map((amenity, index) => (
               <motion.div key={index} variants={itemVariants}>
-                <GlassCard hover className="h-full group relative overflow-hidden">
+                <div className="bg-white rounded-lg shadow-md p-6 h-full group hover:shadow-xl transition-shadow duration-300">
                   {/* Image Container */}
-                  <div className="relative h-56 mb-6 rounded-2xl overflow-hidden">
+                  <div className="relative h-56 mb-6 rounded-lg overflow-hidden">
                     <PremiumImage
                       src={amenity.image}
                       alt={amenity.title}
                       className="h-full w-full scale-100 group-hover:scale-110 transition-transform duration-700"
                       blur
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-900/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
                     
                     {/* Icon */}
                     <div className="absolute top-4 right-4">
-                      <div className="w-12 h-12 rounded-xl bg-golden-500/20 backdrop-blur-md border border-golden-500/40 flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-md border border-white/40 flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform">
                         {amenity.icon}
                       </div>
                     </div>
 
                     {/* Price Badge */}
                     <div className="absolute bottom-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-golden-500/20 backdrop-blur-md border border-golden-500/40 text-golden-400 text-xs font-semibold uppercase tracking-wider">
+                      <div className="px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-blue-600 text-xs font-semibold uppercase tracking-wider">
                         {amenity.price}
                       </div>
                     </div>
@@ -432,14 +384,14 @@ const Features: React.FC = () => {
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <h3 className="text-xl lg:text-2xl font-bold text-golden-400 mb-3 font-serif group-hover:text-golden-300 transition-colors">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                       {amenity.title}
                     </h3>
-                    <p className="text-white/80 text-sm lg:text-base leading-relaxed font-light">
+                    <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
                       {amenity.description}
                     </p>
                   </div>
-                </GlassCard>
+                </div>
               </motion.div>
             ))}
           </motion.div>
