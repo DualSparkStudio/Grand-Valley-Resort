@@ -120,13 +120,13 @@ const Home: React.FC = () => {
   // Hero slides using local images from public/images folder
   const heroSlides = [
     {
-      image: '/images/Exterior (Front).jpg',
+      image: '/images/Exterior (Front).PNG',
       title: 'Welcome to Grand Valley Resort',
       subtitle: 'A Hilltop Heaven in Mahabaleshwar',
       description: 'Experience luxury, comfort, and unforgettable moments in the heart of nature'
     },
     {
-      image: '/images/Exterior (back).jpg',
+      image: '/images/Exterior (back).PNG',
       title: 'Luxury Accommodations',
       subtitle: 'Premium rooms and suites designed for your comfort',
       description: 'From valley-view suites to private balconies, find your perfect stay'
@@ -302,7 +302,7 @@ const Home: React.FC = () => {
       />
       <div className="bg-cream-beige">
         {/* Hero Carousel - Modern Professional Design */}
-        <div className="relative h-screen overflow-hidden">
+        <div className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] overflow-hidden">
           {heroSlides.map((slide, index) => (
             <div
               key={index}
@@ -311,18 +311,19 @@ const Home: React.FC = () => {
               }`}
             >
               <div className="relative w-full h-full">
-                {/* Full-Screen Image - Crystal Clear, No Overlays */}
+                {/* Fitted Image - Proper sizing */}
                 <img
                   src={slide.image}
                   alt={slide.title}
                   className="absolute inset-0 w-full h-full object-cover"
                   style={{
                     objectFit: 'cover',
-                    objectPosition: 'center',
+                    objectPosition: 'center center',
                     filter: 'none',
                     WebkitFilter: 'none',
                     imageRendering: 'auto',
-                    willChange: 'opacity'
+                    willChange: 'opacity',
+                    maxHeight: '100%'
                   }}
                   loading={index === 0 ? 'eager' : 'lazy'}
                   fetchpriority={index === 0 ? 'high' : 'auto'}
@@ -336,45 +337,45 @@ const Home: React.FC = () => {
                   </div>
                   
                   {/* Content Panel - Floating on Right Side */}
-                  <div className="absolute right-0 top-0 bottom-0 w-full lg:w-2/5 flex items-center justify-center p-6 sm:p-8 lg:p-12">
-                    <div className="w-full max-w-lg">
-                      {/* Modern Glass Card with Content */}
-                      <div className="bg-gradient-to-br from-dark-blue-900/95 via-dark-blue-800/95 to-dark-blue-900/95 backdrop-blur-xl rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl border border-golden-500/30 relative overflow-hidden">
+                  <div className="absolute right-0 top-0 bottom-0 w-full lg:w-2/5 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+                    <div className="w-full max-w-md">
+                      {/* Modern Glass Card with Content - Reduced Size */}
+                      <div className="bg-gradient-to-br from-dark-blue-900/95 via-dark-blue-800/95 to-dark-blue-900/95 backdrop-blur-xl rounded-2xl p-6 sm:p-7 lg:p-8 shadow-2xl border border-golden-500/30 relative overflow-hidden">
                         {/* Decorative Golden Accent */}
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-golden-500 to-transparent"></div>
+                        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-golden-500 to-transparent"></div>
                         
                         {/* Content */}
                         <div className="relative z-10">
                           <TextReveal 
                             variant="split" 
                             as="h1" 
-                            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 text-golden-400 font-serif leading-tight"
+                            className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 text-golden-400 font-serif leading-tight"
                           >
                             {slide.title}
                           </TextReveal>
                           
-                          <div className="w-20 h-1 bg-gradient-to-r from-golden-500 to-transparent mb-6"></div>
+                          <div className="w-16 h-0.5 bg-gradient-to-r from-golden-500 to-transparent mb-4"></div>
                           
-                          <p className="text-xl sm:text-2xl lg:text-3xl mb-4 text-white font-medium leading-relaxed">
+                          <p className="text-base sm:text-lg lg:text-xl mb-3 text-white font-medium leading-relaxed">
                             {slide.subtitle}
                           </p>
                           
-                          <p className="text-base sm:text-lg lg:text-xl mb-8 text-white/90 leading-relaxed">
+                          <p className="text-sm sm:text-base lg:text-lg mb-6 text-white/90 leading-relaxed">
                             {slide.description}
                           </p>
                           
                           <Link
                             to="/rooms"
-                            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-golden-500 to-golden-600 text-dark-blue-900 font-bold text-lg rounded-xl shadow-2xl hover:shadow-golden-500/50 transition-all duration-300 hover:scale-105 hover:from-golden-400 hover:to-golden-500 group"
+                            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-golden-500 to-golden-600 text-dark-blue-900 font-bold text-base rounded-lg shadow-2xl hover:shadow-golden-500/50 transition-all duration-300 hover:scale-105 hover:from-golden-400 hover:to-golden-500 group"
                           >
                             <span>Book Now</span>
-                            <ArrowRightIcon className="ml-2 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                           </Link>
                         </div>
                         
                         {/* Decorative Elements */}
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-golden-500/10 rounded-full blur-3xl"></div>
-                        <div className="absolute -top-10 -left-10 w-32 h-32 bg-golden-500/5 rounded-full blur-2xl"></div>
+                        <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-golden-500/10 rounded-full blur-3xl"></div>
+                        <div className="absolute -top-8 -left-8 w-24 h-24 bg-golden-500/5 rounded-full blur-2xl"></div>
                       </div>
                     </div>
                   </div>
