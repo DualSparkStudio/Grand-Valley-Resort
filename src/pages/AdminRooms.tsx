@@ -224,6 +224,7 @@ const AdminRooms: React.FC = () => {
         image_url: validImages[0], // Use first image as main image
         images: validImages, // Store all images
         is_active: roomTypeForm.is_active,
+        is_available: true, // Set room as available when creating
         extra_guest_price: roomTypeForm.extra_guest_price ? parseFloat(roomTypeForm.extra_guest_price) : 0,
         accommodation_details: roomTypeForm.accommodation_details.trim(),
         floor: roomTypeForm.floor ? parseInt(roomTypeForm.floor) : undefined,
@@ -239,14 +240,22 @@ const AdminRooms: React.FC = () => {
         await api.updateRoom(selectedRoomType.id, roomData);
         toast.success('Room updated successfully!');
       } else {
-        await api.createRoom(roomData);
+        console.log('Creating room with data:', roomData);
+        const result = await api.createRoom(roomData);
+        console.log('Room created successfully:', result);
         toast.success('Room added successfully!');
       }
 
       closeModal();
       await loadData();
     } catch (error) {
-      toast.error(`Failed to save room: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Error saving room:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to save room: ${errorMessage}`);
+      // Show more detailed error in console for debugging
+      if (error && typeof error === 'object' && 'details' in error) {
+        console.error('Error details:', error);
+      }
     }
   };
 
