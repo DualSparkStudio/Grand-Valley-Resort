@@ -250,7 +250,7 @@ const AdminCalendar: React.FC = () => {
           <select
             value={selectedRoom}
             onChange={(e) => setSelectedRoom(e.target.value === 'all' ? 'all' : parseInt(e.target.value))}
-            className="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="block w-full max-w-xs rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
             disabled={loading}
           >
             <option value="all">All Rooms</option>
@@ -308,7 +308,7 @@ const AdminCalendar: React.FC = () => {
                         value={blockForm.room_id}
                         onChange={(e) => setBlockForm({ ...blockForm, room_id: e.target.value })}
                         required
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
                         disabled={loading || isUnblockMode}
                       >
                         <option value="">Select a room</option>
@@ -353,7 +353,7 @@ const AdminCalendar: React.FC = () => {
                         value={blockForm.start_date}
                         onChange={(e) => setBlockForm({ ...blockForm, start_date: e.target.value })}
                         required
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
                         disabled={isUnblockMode}
                       />
                     </div>
@@ -367,7 +367,7 @@ const AdminCalendar: React.FC = () => {
                         value={blockForm.end_date}
                         onChange={(e) => setBlockForm({ ...blockForm, end_date: e.target.value })}
                         required
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
                         disabled={isUnblockMode}
                       />
                     </div>
@@ -382,7 +382,7 @@ const AdminCalendar: React.FC = () => {
                         onChange={(e) => setBlockForm({ ...blockForm, reason: e.target.value })}
                         required
                         placeholder="e.g., Maintenance, Holiday"
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
                         disabled={isUnblockMode}
                       />
                     </div>
@@ -396,7 +396,7 @@ const AdminCalendar: React.FC = () => {
                         onChange={(e) => setBlockForm({ ...blockForm, notes: e.target.value })}
                         rows={3}
                         placeholder="Additional notes..."
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-gray-900"
                         disabled={isUnblockMode}
                       />
                     </div>
