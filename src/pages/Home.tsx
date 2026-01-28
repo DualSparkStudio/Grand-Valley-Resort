@@ -8,6 +8,7 @@ import {
     StarIcon,
     UsersIcon,
 } from '@heroicons/react/24/outline'
+import { motion, AnimatePresence } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
@@ -301,86 +302,190 @@ const Home: React.FC = () => {
         url="https://grandvalleyresort.com"
       />
       <div className="bg-cream-beige">
-        {/* Hero Carousel - Modern Professional Design */}
+        {/* Hero Carousel - Stunning Animated Design */}
         <div className="relative h-[300px] sm:h-[400px] lg:h-[80vh] overflow-hidden">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              }`}
-            >
-              <div className="relative w-full h-full">
-                {/* Fitted Image - Proper sizing */}
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    objectFit: 'cover',
-                    objectPosition: 'center center',
-                    filter: 'none',
-                    WebkitFilter: 'none',
-                    imageRendering: 'auto',
-                    willChange: 'opacity',
-                    maxHeight: '100%'
-                  }}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  fetchpriority={index === 0 ? 'high' : 'auto'}
-                  decoding="async"
-                />
-                
-                {/* Full Width Image with Overlay Card */}
-                {/* Image is already full width via absolute positioning */}
-                
-                {/* Content Card - Overlay on Right Side */}
-                <div className="absolute inset-0 flex items-center justify-end">
-                  <div className="w-full sm:w-[45%] lg:w-[40%] flex items-center justify-center p-2 sm:p-4 lg:pr-16 lg:pl-8 py-4 sm:py-6 lg:py-8">
-                    <div className="w-full max-w-md sm:max-w-lg">
-                      {/* Modern Glass Card with Content - Professional sizing */}
-                      <div className="bg-gradient-to-br from-dark-blue-900/95 via-dark-blue-800/95 to-dark-blue-900/95 backdrop-blur-xl rounded-lg sm:rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-8 shadow-2xl border border-golden-500/30 relative overflow-hidden">
-                        {/* Decorative Golden Accent */}
-                        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-golden-500 to-transparent"></div>
-                        
-                        {/* Content */}
-                        <div className="relative z-10">
-                          <TextReveal 
-                            variant="split" 
-                            as="h1" 
-                            className="text-lg sm:text-2xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-3 lg:mb-4 text-golden-400 font-serif leading-tight"
+          <AnimatePresence mode="wait">
+            {heroSlides.map((slide, index) => (
+              index === currentSlide && (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <div className="relative w-full h-full">
+                    {/* Animated Background Image */}
+                    <motion.img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      initial={{ scale: 1.1, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 1.2, ease: "easeOut" }}
+                      style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center center',
+                        filter: 'none',
+                        WebkitFilter: 'none',
+                        imageRendering: 'auto',
+                        willChange: 'opacity, transform',
+                        maxHeight: '100%'
+                      }}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchpriority={index === 0 ? 'high' : 'auto'}
+                      decoding="async"
+                    />
+                    
+                    {/* Animated Gradient Overlay */}
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/60 sm:from-black/40 sm:via-transparent sm:to-black/50"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2 }}
+                    />
+                    
+                    {/* Floating Particles Effect */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      {[...Array(6)].map((_, i) => {
+                        const width = typeof window !== 'undefined' ? window.innerWidth : 1920
+                        const height = typeof window !== 'undefined' ? window.innerHeight : 1080
+                        return (
+                          <motion.div
+                            key={i}
+                            className="absolute w-2 h-2 bg-golden-400/30 rounded-full"
+                            initial={{
+                              x: Math.random() * width,
+                              y: Math.random() * height,
+                              opacity: 0,
+                            }}
+                            animate={{
+                              y: [null, Math.random() * height],
+                              opacity: [0, 0.5, 0],
+                            }}
+                            transition={{
+                              duration: 8 + Math.random() * 4,
+                              repeat: Infinity,
+                              delay: Math.random() * 2,
+                              ease: "linear"
+                            }}
+                          />
+                        )
+                      })}
+                    </div>
+                    
+                    {/* Content Card - Bottom on Mobile, Right on Desktop */}
+                    <div className="absolute inset-0 flex items-end justify-center sm:items-center sm:justify-end">
+                      <motion.div 
+                        className="w-[90%] sm:w-[38%] lg:w-[32%] flex items-center justify-center p-3 sm:p-4 lg:pr-12 lg:pl-6 pb-4 sm:py-5 lg:py-6"
+                        initial={{ opacity: 0, x: 50, y: 30 }}
+                        animate={{ opacity: 1, x: 0, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      >
+                        <div className="w-full max-w-[280px] sm:max-w-sm">
+                          {/* Compact Glass Card - Smaller on Mobile */}
+                          <motion.div 
+                            className="bg-gradient-to-br from-dark-blue-900/98 via-dark-blue-800/96 to-dark-blue-900/98 backdrop-blur-xl rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-6 lg:p-7 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] border border-golden-500/50 relative overflow-hidden"
+                            initial={{ scale: 0.9, opacity: 0, rotateY: -15 }}
+                            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
                           >
-                            {slide.title}
-                          </TextReveal>
-                          
-                          <div className="w-10 sm:w-12 lg:w-16 h-0.5 bg-gradient-to-r from-golden-500 to-transparent mb-2 sm:mb-3 lg:mb-4"></div>
-                          
-                          <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-3 lg:mb-3 text-white font-medium leading-snug sm:leading-relaxed">
-                            {slide.subtitle}
-                          </p>
-                          
-                          <p className="text-xs sm:text-sm lg:text-lg mb-3 sm:mb-4 lg:mb-6 text-white/90 leading-snug sm:leading-relaxed">
-                            {slide.description}
-                          </p>
-                          
-                          <Link
-                            to="/rooms"
-                            className="inline-flex items-center justify-center px-4 sm:px-5 lg:px-6 py-2 sm:py-2.5 lg:py-3 bg-gradient-to-r from-golden-500 to-golden-600 text-dark-blue-900 font-bold text-xs sm:text-sm lg:text-base rounded-md sm:rounded-lg shadow-2xl hover:shadow-golden-500/50 transition-all duration-300 hover:scale-105 hover:from-golden-400 hover:to-golden-500 group"
-                          >
-                            <span>Book Now</span>
-                            <ArrowRightIcon className="ml-1 sm:ml-2 h-3 sm:h-4 lg:h-5 w-3 sm:w-4 lg:w-5 group-hover:translate-x-1 transition-transform" />
-                          </Link>
+                            {/* Animated Golden Top Accent */}
+                            <motion.div 
+                              className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-golden-400 to-transparent"
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: 1 }}
+                              transition={{ duration: 1, delay: 0.8 }}
+                            />
+                            
+                            {/* Animated Background Glow Effects */}
+                            <motion.div 
+                              className="absolute -top-16 -right-16 w-32 h-32 bg-golden-500/20 rounded-full blur-3xl"
+                              animate={{
+                                scale: [1, 1.2, 1],
+                                opacity: [0.3, 0.5, 0.3],
+                              }}
+                              transition={{
+                                duration: 4,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                              }}
+                            />
+                            <motion.div 
+                              className="absolute -bottom-12 -left-12 w-24 h-24 bg-golden-500/15 rounded-full blur-2xl"
+                              animate={{
+                                scale: [1, 1.3, 1],
+                                opacity: [0.2, 0.4, 0.2],
+                              }}
+                              transition={{
+                                duration: 5,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: 1
+                              }}
+                            />
+                            
+                            {/* Content with Mobile-Optimized Compact Styling */}
+                            <div className="relative z-10">
+                              {/* Animated Heading - Much Smaller on Mobile */}
+                              <motion.h1
+                                className="text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-5 lg:mb-6 text-golden-400 font-serif leading-tight tracking-tight"
+                                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.8, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+                              >
+                                {slide.title}
+                              </motion.h1>
+                              
+                              {/* Animated Elegant Divider - Smaller on Mobile */}
+                              <motion.div 
+                                className="w-10 sm:w-16 lg:w-20 h-0.5 bg-gradient-to-r from-golden-500 via-golden-400 to-transparent mb-3 sm:mb-6 lg:mb-7"
+                                initial={{ scaleX: 0 }}
+                                animate={{ scaleX: 1 }}
+                                transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
+                              />
+                              
+                              {/* Animated Compact CTA Button - Smaller, No Background */}
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                              >
+                                <Link
+                                  to="/rooms"
+                                  className="group relative inline-flex items-center justify-center px-2.5 py-1 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5 bg-transparent border-2 border-golden-400 text-golden-400 font-semibold text-xs sm:text-sm lg:text-base rounded-lg sm:rounded-lg lg:rounded-xl hover:bg-golden-400/10 transition-all duration-300 overflow-hidden"
+                                >
+                                  {/* Button Shine Effect */}
+                                  <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-golden-400/20 to-transparent"
+                                    initial={{ x: '-100%' }}
+                                    whileHover={{ x: '100%' }}
+                                    transition={{ duration: 0.6 }}
+                                  />
+                                  
+                                  {/* Button Content */}
+                                  <span className="relative z-10 font-semibold tracking-wide">Book Now</span>
+                                  <motion.div
+                                    className="relative z-10 ml-1.5 sm:ml-2"
+                                    whileHover={{ x: 3 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                  >
+                                    <ArrowRightIcon className="h-3 w-3 sm:h-4 sm:w-4 lg:h-4 lg:w-4" />
+                                  </motion.div>
+                                </Link>
+                              </motion.div>
+                            </div>
+                          </motion.div>
                         </div>
-                        
-                        {/* Decorative Elements */}
-                        <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-golden-500/10 rounded-full blur-3xl"></div>
-                        <div className="absolute -top-8 -left-8 w-24 h-24 bg-golden-500/5 rounded-full blur-2xl"></div>
-                      </div>
+                      </motion.div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          ))}
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
           
           {/* Elegant Navigation Arrows - Hidden on mobile & tablet, visible on desktop only */}
           <button
