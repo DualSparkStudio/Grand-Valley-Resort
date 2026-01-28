@@ -263,7 +263,7 @@ const AdminSocialMedia: React.FC = () => {
                     value={formData.platform}
                     onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
                     required
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   >
                     <option value="">Select Platform</option>
                     {socialPlatforms.map(platform => (
@@ -282,7 +282,7 @@ const AdminSocialMedia: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                     required
                     placeholder="https://..."
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   />
                 </div>
 
@@ -295,7 +295,7 @@ const AdminSocialMedia: React.FC = () => {
                     value={formData.icon_class}
                     onChange={(e) => setFormData({ ...formData, icon_class: e.target.value })}
                     placeholder="fab fa-facebook"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   />
                 </div>
 
@@ -308,7 +308,7 @@ const AdminSocialMedia: React.FC = () => {
                     value={formData.display_order}
                     onChange={(e) => setFormData({ ...formData, display_order: e.target.value })}
                     placeholder="1"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   />
                 </div>
 

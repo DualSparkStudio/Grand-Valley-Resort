@@ -266,7 +266,7 @@ const AdminFAQ: React.FC = () => {
                     type="text"
                     value={formData.question}
                     onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="Enter the question"
                     required
                   />
@@ -279,7 +279,7 @@ const AdminFAQ: React.FC = () => {
                     value={formData.answer}
                     onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="Enter the answer"
                     required
                   />

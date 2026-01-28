@@ -816,7 +816,7 @@ const BookingForm: React.FC = () => {
                       type="button"
                       onClick={() => setShowCalendar(true)}
                       disabled={!room?.is_active}
-                      className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100"
+                      className="w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                     >
                       <span className="text-gray-900">
                         {selectedDates 
@@ -837,7 +837,7 @@ const BookingForm: React.FC = () => {
                       value={numGuests}
                       onChange={handleGuestChange}
                       disabled={!room?.is_active}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                       required
                     >
                       {Array.from({ length: room?.max_occupancy || 3 }, (_, i) => i + 1).map(num => (
@@ -871,7 +871,7 @@ const BookingForm: React.FC = () => {
                           value={formData.first_name}
                     onChange={handleInputChange}
                     required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                           placeholder="First Name"
                   />
                       </div>
@@ -886,7 +886,7 @@ const BookingForm: React.FC = () => {
                         value={formData.last_name}
                     onChange={handleInputChange}
                     required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="Last Name"
                   />
                 </div>
@@ -937,7 +937,7 @@ const BookingForm: React.FC = () => {
                       value={formData.special_requests}
                       onChange={handleInputChange}
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="Any special requests or requirements..."
                     />
                   </div>

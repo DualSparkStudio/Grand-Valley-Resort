@@ -388,7 +388,7 @@ const AdminRooms: React.FC = () => {
                   type="text"
                   value={globalTimes.check_in_time}
                   onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_in_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="e.g., 1:00 PM"
                 />
               </div>
@@ -400,7 +400,7 @@ const AdminRooms: React.FC = () => {
                   type="text"
                   value={globalTimes.check_out_time}
                   onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_out_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="e.g., 10:00 AM"
                 />
               </div>
@@ -602,7 +602,7 @@ const AdminRooms: React.FC = () => {
                       name="name"
                       value={roomTypeForm.name}
                       onChange={handleRoomTypeFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="Enter room name"
                       required
                                              disabled={roomTypeModalMode === 'view'}
@@ -618,7 +618,7 @@ const AdminRooms: React.FC = () => {
                       value={roomTypeForm.description}
                       onChange={handleRoomTypeFormChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="Enter room description"
                       disabled={roomTypeModalMode === 'view'}
                     />
@@ -634,7 +634,7 @@ const AdminRooms: React.FC = () => {
                         name="price_per_night"
                         value={roomTypeForm.price_per_night}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="0"
                         disabled={roomTypeModalMode === 'view'}
                         required
@@ -650,7 +650,7 @@ const AdminRooms: React.FC = () => {
                         name="max_occupancy"
                         value={roomTypeForm.max_occupancy}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="2"
                         disabled={roomTypeModalMode === 'view'}
                         required
@@ -667,7 +667,7 @@ const AdminRooms: React.FC = () => {
                       name="extra_guest_price"
                       value={roomTypeForm.extra_guest_price}
                       onChange={handleRoomTypeFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="0"
                       disabled={roomTypeModalMode === 'view'}
                       min="0"
@@ -688,7 +688,7 @@ const AdminRooms: React.FC = () => {
                           name="price_double_occupancy"
                           value={roomTypeForm.price_double_occupancy}
                           onChange={handleRoomTypeFormChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                           placeholder="2500"
                           disabled={roomTypeModalMode === 'view'}
                           min="0"
@@ -703,7 +703,7 @@ const AdminRooms: React.FC = () => {
                           name="price_triple_occupancy"
                           value={roomTypeForm.price_triple_occupancy}
                           onChange={handleRoomTypeFormChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                           placeholder="2800"
                           disabled={roomTypeModalMode === 'view'}
                           min="0"
@@ -719,7 +719,7 @@ const AdminRooms: React.FC = () => {
                         name="extra_mattress_price"
                         value={roomTypeForm.extra_mattress_price}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="200"
                         disabled={roomTypeModalMode === 'view'}
                         min="0"
@@ -738,7 +738,7 @@ const AdminRooms: React.FC = () => {
                         value={roomTypeForm.accommodation_details || ''}
                         onChange={handleRoomTypeFormChange}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="e.g., Accommodation: Extra Mattress for ₹200"
                         disabled={roomTypeModalMode === 'view'}
                       />
@@ -753,7 +753,7 @@ const AdminRooms: React.FC = () => {
                         name="floor"
                         value={roomTypeForm.floor}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="1"
                         disabled={roomTypeModalMode === 'view'}
                       />
@@ -771,7 +771,7 @@ const AdminRooms: React.FC = () => {
                       value={roomTypeForm.amenities}
                       onChange={handleRoomTypeFormChange}
                       rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="Wi-Fi&#10;AC&#10;TV&#10;River View"
                       disabled={roomTypeModalMode === 'view'}
                     />
@@ -845,7 +845,7 @@ const AdminRooms: React.FC = () => {
                             type="url"
                             value={image}
                             onChange={(e) => updateImage(index, e.target.value)}
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                               image.trim() && !validateImageUrl(image) 
                                 ? 'border-red-300 focus:ring-red-500' 
                                 : image.trim() && validateImageUrl(image)

@@ -387,7 +387,7 @@ const AdminFeatures: React.FC = () => {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="e.g., Easy Booking"
                   />
                 </div>
@@ -399,7 +399,7 @@ const AdminFeatures: React.FC = () => {
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   >
                     {categories.filter(cat => cat !== 'All').map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
@@ -414,7 +414,7 @@ const AdminFeatures: React.FC = () => {
                   <select
                     value={formData.icon_name}
                     onChange={(e) => setFormData(prev => ({ ...prev, icon_name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   >
                     {iconOptions.map(icon => (
                       <option key={icon.value} value={icon.value}>{icon.label}</option>
@@ -430,7 +430,7 @@ const AdminFeatures: React.FC = () => {
                     type="number"
                     value={formData.display_order}
                     onChange={(e) => setFormData(prev => ({ ...prev, display_order: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="0"
                   />
                 </div>

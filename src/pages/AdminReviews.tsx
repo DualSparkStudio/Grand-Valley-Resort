@@ -493,7 +493,7 @@ const AdminReviews: React.FC = () => {
                       type="text"
                       value={formData.guest_name}
                       onChange={(e) => setFormData({ ...formData, guest_name: e.target.value })}
-                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       required
                     />
                   </div>
@@ -511,7 +511,7 @@ const AdminReviews: React.FC = () => {
                       value={formData.comment}
                       onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
                       rows={4}
-                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       required
                     />
                   </div>
@@ -521,7 +521,7 @@ const AdminReviews: React.FC = () => {
                     <select
                       value={formData.source}
                       onChange={(e) => setFormData({ ...formData, source: e.target.value as 'website' | 'google' })}
-                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                     >
                       <option value="website">Website</option>
                       <option value="google">Google</option>

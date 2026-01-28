@@ -257,7 +257,7 @@ const AdminProfile: React.FC = () => {
                         id="first_name"
                         value={profileForm.first_name}
                         onChange={(e) => setProfileForm(prev => ({ ...prev, first_name: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         required
                       />
                     </div>
@@ -270,7 +270,7 @@ const AdminProfile: React.FC = () => {
                         id="last_name"
                         value={profileForm.last_name}
                         onChange={(e) => setProfileForm(prev => ({ ...prev, last_name: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         required
                       />
                     </div>
@@ -285,7 +285,7 @@ const AdminProfile: React.FC = () => {
                       id="email"
                       value={profileForm.email}
                       onChange={(e) => setProfileForm(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     />
                     <p className="mt-1 text-sm text-gray-500">Changing email may require verification</p>
                   </div>
@@ -299,7 +299,7 @@ const AdminProfile: React.FC = () => {
                       id="phone"
                       value={profileForm.phone}
                       onChange={(e) => setProfileForm(prev => ({ ...prev, phone: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     />
                   </div>
                   
@@ -312,7 +312,7 @@ const AdminProfile: React.FC = () => {
                       rows={3}
                       value={profileForm.address}
                       onChange={(e) => setProfileForm(prev => ({ ...prev, address: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     />
                   </div>
                   
@@ -361,7 +361,7 @@ const AdminProfile: React.FC = () => {
                         id="current_password"
                         value={passwordForm.current_password}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, current_password: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         required
                       />
                     </div>
@@ -374,7 +374,7 @@ const AdminProfile: React.FC = () => {
                         id="new_password"
                         value={passwordForm.new_password}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, new_password: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         required
                       />
                       <p className="mt-1 text-sm text-gray-500">Password must be at least 8 characters long</p>
@@ -388,7 +388,7 @@ const AdminProfile: React.FC = () => {
                         id="confirm_password"
                         value={passwordForm.confirm_password}
                         onChange={(e) => setPasswordForm(prev => ({ ...prev, confirm_password: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                         required
                       />
                     </div>
@@ -447,7 +447,7 @@ const AdminProfile: React.FC = () => {
                             id="mail_username"
                             value={settingsForm.mail_username}
                             onChange={(e) => setSettingsForm(prev => ({ ...prev, mail_username: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                             placeholder="your-email@gmail.com"
                             required
                           />
@@ -461,7 +461,7 @@ const AdminProfile: React.FC = () => {
                             id="mail_password"
                             value={settingsForm.mail_password}
                             onChange={(e) => setSettingsForm(prev => ({ ...prev, mail_password: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                             placeholder="16-character app password"
                             required
                           />
@@ -475,7 +475,7 @@ const AdminProfile: React.FC = () => {
                             id="mail_server"
                             value={settingsForm.mail_server}
                             onChange={(e) => setSettingsForm(prev => ({ ...prev, mail_server: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                           />
                         </div>
                         <div>
@@ -487,7 +487,7 @@ const AdminProfile: React.FC = () => {
                             id="mail_port"
                             value={settingsForm.mail_port}
                             onChange={(e) => setSettingsForm(prev => ({ ...prev, mail_port: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                           />
                         </div>
                       </div>

@@ -365,7 +365,7 @@ const AdminTouristAttractions: React.FC = () => {
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     />
@@ -378,7 +378,7 @@ const AdminTouristAttractions: React.FC = () => {
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     >
@@ -397,7 +397,7 @@ const AdminTouristAttractions: React.FC = () => {
                       type="text"
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     />
@@ -412,7 +412,7 @@ const AdminTouristAttractions: React.FC = () => {
                       step="0.1"
                       value={formData.distance_from_resort}
                       onChange={(e) => setFormData({ ...formData, distance_from_resort: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     />
@@ -427,7 +427,7 @@ const AdminTouristAttractions: React.FC = () => {
                       value={formData.estimated_time}
                       onChange={(e) => setFormData({ ...formData, estimated_time: e.target.value })}
                       placeholder="e.g., 30 minutes, 2 hours"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     />
@@ -444,7 +444,7 @@ const AdminTouristAttractions: React.FC = () => {
                       step="0.1"
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       required
                       disabled={modalMode === 'view'}
                     />
@@ -458,7 +458,7 @@ const AdminTouristAttractions: React.FC = () => {
                       type="number"
                       value={formData.display_order}
                       onChange={(e) => setFormData({ ...formData, display_order: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       disabled={modalMode === 'view'}
                     />
                   </div>
@@ -472,7 +472,7 @@ const AdminTouristAttractions: React.FC = () => {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     required
                     disabled={modalMode === 'view'}
                   />
@@ -486,7 +486,7 @@ const AdminTouristAttractions: React.FC = () => {
                     type="url"
                     value={formData.image_url}
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     disabled={modalMode === 'view'}
                     placeholder="https://example.com/image.jpg"
                   />
@@ -543,7 +543,7 @@ const AdminTouristAttractions: React.FC = () => {
                     type="url"
                     value={formData.google_maps_url}
                     onChange={(e) => setFormData({ ...formData, google_maps_url: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     disabled={modalMode === 'view'}
                   />
                 </div>
