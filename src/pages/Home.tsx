@@ -272,8 +272,8 @@ const Home: React.FC = () => {
         url="https://grandvalleyresort.com"
       />
       <div className="bg-cream-beige">
-        {/* Hero Section - Consistent Across All Views */}
-        <div className="relative h-screen max-h-[100vh] overflow-hidden flex flex-col">
+        {/* Hero Section - Responsive Height, Same Design */}
+        <div className="relative h-[300px] sm:h-[600px] lg:h-screen max-h-[100vh] overflow-hidden flex flex-col">
           <div className="relative flex-1 w-full">
             {/* Background Image with Dark Overlay */}
             <img
@@ -294,74 +294,76 @@ const Home: React.FC = () => {
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black/40"></div>
             
-            {/* Content Container - Consistent Layout All Views */}
-            <div className="relative h-full flex flex-col px-4 pt-20 pb-4">
+            {/* Content Container - Optimized for 300px Mobile Height */}
+            <div className="relative h-full flex flex-col px-2 sm:px-4 pt-12 sm:pt-20 pb-1 sm:pb-4">
               <div className="w-full max-w-5xl mx-auto flex flex-col flex-1 justify-between">
-                {/* Top Section: Heading - Same on All Views */}
-                <div className="text-center mb-4">
+                {/* Top Section: Heading - Compact for Mobile */}
+                <div className="text-center mb-2 sm:mb-4">
                   <motion.h1
-                    className="text-5xl font-serif font-bold text-golden-400 leading-tight tracking-tight"
+                    className="text-3xl sm:text-5xl font-serif font-bold text-golden-400 leading-tight tracking-tight"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                   >
-                    <span className="inline-block mr-2">ENJOY A</span>
-                    <span className="inline-block mr-2">LUXURY</span>
+                    <span className="inline-block mr-1 sm:mr-2">ENJOY A</span>
+                    <span className="inline-block mr-1 sm:mr-2">LUXURY</span>
                     <span className="inline-block">EXPERIENCE</span>
                   </motion.h1>
                 </div>
                 
-                {/* Middle Section: Booking Form - Same on All Views */}
-                <div className="mb-4">
+                {/* Middle Section: Booking Form - 280x45 mobile */}
+                <div className="mb-2 sm:mb-4">
                   <motion.div
-                    className="bg-white rounded-xl p-3 shadow-lg max-w-4xl mx-auto"
+                    className="bg-white rounded-lg sm:rounded-xl py-0.5 px-1.5 sm:p-3 shadow-lg max-w-[280px] sm:max-w-4xl mx-auto"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                   >
-                    <div className="flex flex-wrap items-center justify-center gap-2">
+                    <div className="flex items-stretch justify-center gap-1 sm:gap-2">
                       {/* Guest Select */}
-                      <div className="flex-1 min-w-[80px]">
-                        <select className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900">
-                          <option>Guest</option>
-                          <option>1 Guest</option>
-                          <option>2 Guests</option>
-                          <option>3 Guests</option>
-                          <option>4+ Guests</option>
+                      <div className="flex-1 min-w-0">
+                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                          <option value="">Guest</option>
+                          <option value="1">1 Guest</option>
+                          <option value="2">2 Guests</option>
+                          <option value="3">3 Guests</option>
+                          <option value="4">4+ Guests</option>
                         </select>
                       </div>
                       
                       {/* Room Select */}
-                      <div className="flex-1 min-w-[80px]">
-                        <select className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900">
-                          <option>Room</option>
-                          <option>1 Room</option>
-                          <option>2 Rooms</option>
-                          <option>3 Rooms</option>
+                      <div className="flex-1 min-w-0">
+                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                          <option value="">Room</option>
+                          <option value="1">1 Room</option>
+                          <option value="2">2 Rooms</option>
+                          <option value="3">3 Rooms</option>
                         </select>
                       </div>
                       
                       {/* Check In */}
-                      <div className="flex-1 min-w-[100px]">
+                      <div className="flex-1 min-w-0">
                         <input 
                           type="date" 
-                          className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900"
+                          placeholder="Check In"
+                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
                         />
                       </div>
                       
                       {/* Check Out */}
-                      <div className="flex-1 min-w-[100px]">
+                      <div className="flex-1 min-w-0">
                         <input 
                           type="date" 
-                          className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900"
+                          placeholder="Check Out"
+                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
                         />
                       </div>
                       
                       {/* Book Now Button - Matching Navbar Style */}
-                      <div className="flex-1 min-w-[110px]">
+                      <div className="flex-1 min-w-0">
                         <Link
                           to="/rooms"
-                          className="w-full flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
+                          className="w-full h-[18px] sm:h-5 flex items-center justify-center px-1.5 sm:px-3 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-[10px] sm:text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
                         >
                           <span>Book Now</span>
                         </Link>
@@ -370,12 +372,12 @@ const Home: React.FC = () => {
                   </motion.div>
                 </div>
                 
-                {/* Bottom Section: Image Gallery - Center Cards Larger */}
+                {/* Bottom Section: Image Gallery - Compact for Mobile */}
                 <div className="mt-auto">
-                  <div className="flex items-end justify-center gap-2 max-w-5xl mx-auto">
+                  <div className="flex items-end justify-center gap-1 sm:gap-2 max-w-5xl mx-auto flex-nowrap">
                     {/* Gallery Image 1 - Smaller (Left) */}
                     <motion.div
-                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[20%]"
+                      className="relative overflow-hidden rounded-md sm:rounded-lg aspect-[4/3] sm:aspect-[3/4] shadow-md flex-shrink-0 w-[20%] h-[50px] sm:h-auto"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.6 }}
@@ -389,7 +391,7 @@ const Home: React.FC = () => {
                     
                     {/* Gallery Image 2 - Larger (Middle Left) with White Border */}
                     <motion.div
-                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[23%] border-2 border-white"
+                      className="relative overflow-hidden rounded-md sm:rounded-lg aspect-[4/3] sm:aspect-[3/4] shadow-md flex-shrink-0 w-[23%] h-[60px] sm:h-auto border-2 border-white"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.7 }}
@@ -403,7 +405,7 @@ const Home: React.FC = () => {
                     
                     {/* Gallery Image 3 - Larger (Middle Right) with White Border */}
                     <motion.div
-                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[23%] border-2 border-white"
+                      className="relative overflow-hidden rounded-md sm:rounded-lg aspect-[4/3] sm:aspect-[3/4] shadow-md flex-shrink-0 w-[23%] h-[60px] sm:h-auto border-2 border-white"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.8 }}
@@ -417,7 +419,7 @@ const Home: React.FC = () => {
                     
                     {/* Gallery Image 4 - Smaller (Right) */}
                     <motion.div
-                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[20%]"
+                      className="relative overflow-hidden rounded-md sm:rounded-lg aspect-[4/3] sm:aspect-[3/4] shadow-md flex-shrink-0 w-[20%] h-[50px] sm:h-auto"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.9 }}
