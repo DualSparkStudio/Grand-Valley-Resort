@@ -437,55 +437,64 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Features Section */}
-        <div className="py-12 sm:py-16 lg:py-20 bg-white">
+        {/* About Us Section */}
+        <div className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-forest mb-4">Why Choose Resort Booking System?</h2>
-              <p className="text-lg sm:text-xl text-sage max-w-3xl mx-auto">
-                Discover what makes us the perfect choice for your next luxury vacation
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {featuresLoading ? (
-                // Loading skeleton
-                Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="text-center animate-pulse">
-                    <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 rounded-full bg-gray-300 mx-auto mb-4 sm:mb-6"></div>
-                    <div className="h-6 bg-gray-300 rounded mb-3 sm:mb-4"></div>
-                    <div className="h-4 bg-gray-300 rounded"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* Left Side - Image */}
+              <div className="relative">
+                <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden">
+                  <img
+                    src="/images/Exterior (Front).PNG"
+                    alt="Grand Valley Resort"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Right Side - Content */}
+              <div className="space-y-6 sm:space-y-8">
+                {/* Sub-heading */}
+                <div className="flex items-center gap-2">
+                  <span className="text-golden-500 text-sm sm:text-base font-medium tracking-wider">
+                    ~ ABOUT GRAND VALLEY RESORT ~
+                  </span>
+                </div>
+
+                {/* Main Heading */}
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-gray-900 leading-tight">
+                  Enjoy Summer In The Lap Of Luxury
+                </h2>
+
+                {/* Description */}
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                  Welcome to Grand Valley Resort – your trusted resort booking partner. We make it easy to find and book the perfect stay, whether for business or vacation. Enjoy a seamless experience with handpicked accommodations, great deals, and 24/7 support.
+                </p>
+
+                {/* Explore More Button */}
+                <div className="flex items-center gap-4">
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
+                  >
+                    <span>Explore More</span>
+                    <ArrowRightIcon className="h-5 w-5" />
+                  </Link>
+
+                  {/* Decorative Icons */}
+                  <div className="flex items-center gap-4 text-golden-500">
+                    {/* Umbrella Icon */}
+                    <svg className="w-7 h-7 sm:w-9 sm:h-9" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2c-4.97 0-9 4.03-9 9 0 1.1.9 2 2 2h2v-4c0-1.1.9-2 2-2s2 .9 2 2v4h2c1.1 0 2-.9 2-2 0-4.97-4.03-9-9-9zm0 2c3.86 0 7 3.14 7 7 0 .55-.45 1-1 1h-2v-2c0-1.1-.9-2-2-2s-2 .9-2 2v2H6c-.55 0-1-.45-1-1 0-3.86 3.14-7 7-7z"/>
+                      <path d="M12 20v-6h-2v6h2z"/>
+                    </svg>
+                    {/* Wavy Line Icon */}
+                    <svg className="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" viewBox="0 0 24 24">
+                      <path d="M2 8c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2M2 16c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/>
+                    </svg>
                   </div>
-                ))
-              ) : featuredFeatures.length > 0 ? (
-                featuredFeatures.map((feature, index) => {
-                  const IconComponent = getIconComponent(feature.icon_name);
-                  return (
-                    <div key={feature.id} className="text-center animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 rounded-full bg-gradient-luxury text-white mx-auto mb-4 sm:mb-6">
-                        <IconComponent className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-semibold text-forest mb-3 sm:mb-4">{feature.name}</h3>
-                      <p className="text-sage text-sm sm:text-base">{feature.description}</p>
-                    </div>
-                  );
-                })
-              ) : (
-                // Fallback features if no featured features found
-                [
-                  { name: 'Easy Booking', description: 'Book your stay with just a few clicks', icon: CalendarIcon },
-                  { name: 'Prime Location', description: 'Located in the heart of paradise', icon: MapPinIcon },
-                  { name: '5-Star Service', description: 'Experience luxury and comfort', icon: StarIcon },
-                  { name: 'Instant Confirmation', description: 'Get immediate booking confirmation', icon: CheckCircleIcon }
-                ].map((feature, index) => (
-                  <div key={feature.name} className="text-center animate-slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                    <div className="flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 rounded-full bg-gradient-luxury text-white mx-auto mb-4 sm:mb-6">
-                      <feature.icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-forest mb-3 sm:mb-4">{feature.name}</h3>
-                    <p className="text-sage text-sm sm:text-base">{feature.description}</p>
-                  </div>
-                ))
-              )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
