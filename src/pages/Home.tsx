@@ -58,6 +58,7 @@ const Home: React.FC = () => {
     phone: ''
   })
   const [expandedAmenities, setExpandedAmenities] = useState<{ [key: string]: boolean }>({})
+  const [currentRoomIndex, setCurrentRoomIndex] = useState(0)
 
   // Gallery modal state
   const [galleryModal, setGalleryModal] = useState<{
@@ -499,140 +500,178 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Rooms Section */}
-        <div className="py-12 sm:py-16 lg:py-20 bg-cream-beige">
+        {/* Rooms Section - Redesigned */}
+        <div className="py-12 sm:py-16 lg:py-20 bg-cream-beige relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-forest mb-4">Our Luxury Accommodations</h2>
-              <p className="text-lg sm:text-xl text-sage max-w-3xl mx-auto">
-                Choose from our selection of premium rooms and suites designed for ultimate comfort
-              </p>
-            </div>
-            <div className={`grid gap-6 sm:gap-8 auto-rows-fr ${
-              rooms.length === 1 
-                ? 'grid-cols-1 max-w-4xl mx-auto' 
-                : rooms.length === 2
-                ? 'grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto'
-                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'
-            }`}>
-              {roomsLoading ? (
-                // Loading skeleton
-                Array.from({ length: 3 }).map((_, index) => (
-                  <div key={index} className="room-card animate-pulse">
-                    <div className="h-48 sm:h-56 lg:h-64 bg-gray-300 rounded-t-2xl"></div>
-                    <div className="p-4 sm:p-6">
-                      <div className="h-6 bg-gray-300 rounded mb-2"></div>
-                      <div className="h-4 bg-gray-300 rounded mb-4"></div>
-                      <div className="h-4 bg-gray-300 rounded w-24 mb-4"></div>
-                      <div className="flex gap-2 mb-6">
-                        <div className="h-6 bg-gray-300 rounded w-16"></div>
-                        <div className="h-6 bg-gray-300 rounded w-20"></div>
-                      </div>
-                      <div className="h-10 bg-gray-300 rounded"></div>
-                    </div>
+            {/* Header Section */}
+            <div className="mb-12 sm:mb-16">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-8">
+                {/* Left Side - Title */}
+                <div className="flex-1">
+                  {/* Sub-heading with decorative lines */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <svg className="w-8 h-4 text-golden-500" fill="currentColor" viewBox="0 0 24 4">
+                      <path d="M0 2c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/>
+                    </svg>
+                    <span className="text-golden-500 text-sm sm:text-base font-medium tracking-wider">
+                      ROOM & SUITES
+                    </span>
+                    <svg className="w-8 h-4 text-golden-500" fill="currentColor" viewBox="0 0 24 4">
+                      <path d="M0 2c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/>
+                    </svg>
                   </div>
-                ))
-              ) : (
-                rooms.map((room, index) => {
-                  // Get the primary image or first image from room.images array
-                  const getMainImage = () => {
-                    if (room.images && room.images.length > 0) {
-                      // Use the first valid image from the images array
-                      const firstValidImage = room.images.find((img: string) => img && img.trim())
-                      if (firstValidImage) return firstValidImage
+                  {/* Main Title */}
+                  <motion.h2
+                    className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    Discover Our Rooms
+                  </motion.h2>
+                </div>
+
+                {/* Right Side - Description & Button */}
+                <div className="flex-1 lg:max-w-md">
+                  <motion.p
+                    className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    Explore a variety of rooms tailored to your comfort and style. Whether you're traveling solo or with family, find the perfect space to unwind.
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    <Link
+                      to="/rooms"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
+                    >
+                      <span>Explore All Suite</span>
+                      <ArrowRightIcon className="h-5 w-5" />
+                    </Link>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+
+            {/* Rooms Carousel */}
+            {roomsLoading ? (
+              <div className="flex justify-center gap-6">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="w-full max-w-sm animate-pulse">
+                    <div className="h-64 bg-gray-300 rounded-2xl mb-4"></div>
+                    <div className="h-6 bg-gray-300 rounded mb-2"></div>
+                  </div>
+                ))}
+              </div>
+            ) : rooms.length > 0 ? (
+              <div className="relative">
+                {/* Carousel Container */}
+                <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 overflow-hidden">
+                  {rooms.slice(0, 3).map((room, index) => {
+                    const isCenter = index === currentRoomIndex;
+                    const getMainImage = () => {
+                      if (room.images && room.images.length > 0) {
+                        const firstValidImage = room.images.find((img: string) => img && img.trim())
+                        if (firstValidImage) return firstValidImage
+                      }
+                      return room.image_url || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
                     }
                     
-                    // Fallback to main image_url
-                    return room.image_url || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                  }
-                  
-                  const imageUrl = getMainImage()
-                  
-                  return (
-                    <div key={room.id} className={`room-card animate-scale-in ${!room.is_active ? 'opacity-75' : ''}`} style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="relative">
-                        <img
-                          src={imageUrl}
-                          alt={room.name}
-                          className={`room-image ${!room.is_active ? 'grayscale' : ''}`}
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-                          }}
-                        />
-                        {!room.is_active && (
-                          <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold z-10">
-                            Currently Unavailable
+                    const imageUrl = getMainImage();
+                    const roomSize = room.accommodation_details || '120m²';
+                    const bedrooms = room.max_occupancy ? `${Math.ceil(room.max_occupancy / 2)} Bedroom` : '2 Bedroom';
+                    
+                    return (
+                      <motion.div
+                        key={room.id}
+                        className={`relative ${isCenter ? 'flex-1 max-w-md lg:max-w-lg' : 'flex-1 max-w-xs opacity-75'} transition-all duration-500 cursor-pointer`}
+                        onClick={() => setCurrentRoomIndex(index)}
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        whileInView={{ opacity: isCenter ? 1 : 0.75, scale: isCenter ? 1 : 0.9, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        whileHover={{ scale: isCenter ? 1.02 : 0.95 }}
+                      >
+                        <div className="relative rounded-2xl overflow-hidden shadow-lg bg-white">
+                          {/* Image */}
+                          <div className={`relative ${isCenter ? 'h-80 lg:h-96' : 'h-64'} overflow-hidden`}>
+                            <img
+                              src={imageUrl}
+                              alt={room.name}
+                              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                              }}
+                            />
+                            {/* Price Badge */}
+                            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md">
+                              <span className="text-gray-900 font-semibold text-sm sm:text-base">
+                                Per Night ₹{room.price_per_night.toLocaleString()}
+                              </span>
+                            </div>
+                            {!room.is_active && (
+                              <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold">
+                                Unavailable
+                              </div>
+                            )}
                           </div>
-                        )}
-                        <div className="price-badge text-sm sm:text-base">
-                          ₹{room.price_per_night.toLocaleString()}
-                        </div>
-                      </div>
-                      <div className="p-4 sm:p-6">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-lg sm:text-xl font-semibold text-forest">{room.name}</h3>
-                          {!room.is_active && (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                              Unavailable
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sage mb-4 text-sm sm:text-base">{room.description}</p>
-                        <div className="flex items-center text-sm text-sage mb-4">
-                          <UsersIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-                          <span>Up to {room.max_occupancy} guests</span>
-                        </div>
-                        <div className="mb-4 sm:mb-6">
-                          {room.amenities && room.amenities.slice(0, 4).map((amenity, idx) => (
-                            <span key={idx} className="amenity-badge text-xs sm:text-sm">
-                              {amenity}
-                            </span>
-                          ))}
-                          {room.amenities && room.amenities.length > 4 && !expandedAmenities[room.id] && (
-                            <button 
-                              onClick={() => toggleAmenities(room.id)}
-                              className="amenity-badge text-xs sm:text-sm cursor-pointer hover:bg-blue-100 transition-colors"
-                            >
-                              +{room.amenities.length - 4} more
-                            </button>
-                          )}
-                          {room.amenities && room.amenities.length > 4 && expandedAmenities[room.id] && (
-                            <>
-                              {room.amenities.slice(4).map((amenity: string, index: number) => (
-                                <span key={index + 4} className="amenity-badge text-xs sm:text-sm">
-                                  {amenity}
-                                </span>
-                              ))}
-                              <button 
-                                onClick={() => toggleAmenities(room.id)}
-                                className="amenity-badge text-xs sm:text-sm cursor-pointer hover:bg-blue-100 transition-colors"
+
+                          {/* Content */}
+                          <div className={`p-4 sm:p-6 ${isCenter ? 'lg:p-8' : ''}`}>
+                            <h3 className={`font-semibold text-gray-900 mb-2 ${isCenter ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg sm:text-xl'}`}>
+                              {room.name}
+                            </h3>
+                            
+                            {/* Details - Only show for center card */}
+                            {isCenter && (
+                              <motion.div
+                                className="text-gray-600 text-sm sm:text-base mb-4"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
                               >
-                                Show less
-                              </button>
-                            </>
-                          )}
+                                {roomSize} / {bedrooms} / {room.amenities && room.amenities.length > 0 ? 'pet friendly' : ''}
+                              </motion.div>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                                   <Link
-                             to={room.slug ? `/room/${room.slug}` : '#'}
-                             className="flex-1 btn-primary text-center text-sm sm:text-base"
-                           >
-                             View Details
-                           </Link>
-                           <Link
-                             to={room.slug ? `/room/${room.slug}` : '#'}
-                             className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-2.5 px-4 sm:py-3 sm:px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y1 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 text-center text-sm sm:text-base block"
-                           >
-                            <span className="inline-block">Book Now</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Carousel Indicators */}
+                {rooms.length > 1 && (
+                  <div className="flex justify-center items-center gap-2 mt-8">
+                    {rooms.slice(0, 3).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentRoomIndex(index)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          index === currentRoomIndex
+                            ? 'w-8 bg-golden-500'
+                            : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-600 text-lg">No rooms available at the moment.</p>
+              </div>
+            )}
           </div>
         </div>
 
