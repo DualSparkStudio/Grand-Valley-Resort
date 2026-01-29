@@ -692,7 +692,7 @@ const Home: React.FC = () => {
                             transition={{ duration: 0.6, ease: "easeOut" }}
                           >
                             <motion.h3
-                              className={`font-semibold text-gray-900 mb-2 ${isCenter ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg sm:text-xl'}`}
+                              className={`font-semibold text-gray-900 mb-3 ${isCenter ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg sm:text-xl'}`}
                               animate={{
                                 opacity: 1
                               }}
@@ -701,23 +701,84 @@ const Home: React.FC = () => {
                               {room.name}
                             </motion.h3>
                             
-                            {/* Details - Only show for center card */}
-                            {isCenter && (
-                              <motion.div
-                                className="text-gray-600 text-sm sm:text-base mb-4"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ 
-                                  type: "spring",
-                                  stiffness: 400,
-                                  damping: 25,
-                                  delay: 0.15
-                                }}
-                              >
-                                {roomSize} / {bedrooms} / {room.amenities && room.amenities.length > 0 ? 'pet friendly' : ''}
-                              </motion.div>
-                            )}
+                            {/* Room Details */}
+                            <motion.div
+                              className="space-y-3"
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ 
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 25,
+                                delay: isCenter ? 0.15 : 0.1
+                              }}
+                            >
+                              {/* Size and Bedrooms */}
+                              <div className="flex items-center gap-4 text-gray-600 text-sm sm:text-base">
+                                <div className="flex items-center gap-1.5">
+                                  <svg className="w-4 h-4 text-golden-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                  </svg>
+                                  <span>{roomSize}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <svg className="w-4 h-4 text-golden-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                  </svg>
+                                  <span>{bedrooms}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <UsersIcon className="w-4 h-4 text-golden-500" />
+                                  <span>Up to {room.max_occupancy} guests</span>
+                                </div>
+                              </div>
+
+                              {/* Description - Truncated */}
+                              {room.description && (
+                                <p className={`text-gray-600 ${isCenter ? 'text-sm sm:text-base' : 'text-xs sm:text-sm'} line-clamp-2`}>
+                                  {room.description.length > (isCenter ? 120 : 80) 
+                                    ? `${room.description.substring(0, isCenter ? 120 : 80)}...` 
+                                    : room.description}
+                                </p>
+                              )}
+
+                              {/* Amenities - Show first 3 */}
+                              {room.amenities && room.amenities.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                  {room.amenities.slice(0, isCenter ? 4 : 3).map((amenity: string, idx: number) => (
+                                    <span 
+                                      key={idx}
+                                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-golden-50 text-golden-700 border border-golden-200"
+                                    >
+                                      {amenity}
+                                    </span>
+                                  ))}
+                                  {room.amenities.length > (isCenter ? 4 : 3) && (
+                                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs bg-gray-100 text-gray-600 border border-gray-200">
+                                      +{room.amenities.length - (isCenter ? 4 : 3)} more
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* View Details Button - Only for center card */}
+                              {isCenter && (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.3 }}
+                                  className="pt-2"
+                                >
+                                  <Link
+                                    to={room.slug ? `/room/${room.slug}` : '#'}
+                                    className="inline-flex items-center gap-2 text-golden-500 hover:text-golden-600 font-medium text-sm transition-colors duration-200"
+                                  >
+                                    <span>View Details</span>
+                                    <ArrowRightIcon className="w-4 h-4" />
+                                  </Link>
+                                </motion.div>
+                              )}
+                            </motion.div>
                           </motion.div>
                         </motion.div>
                       </motion.div>
