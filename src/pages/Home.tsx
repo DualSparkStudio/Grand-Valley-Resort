@@ -2,13 +2,11 @@ import {
     ArrowRightIcon,
     CalendarIcon,
     CheckCircleIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
     MapPinIcon,
     StarIcon,
     UsersIcon,
 } from '@heroicons/react/24/outline'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
@@ -49,8 +47,6 @@ interface Attraction {
 }
 
 const Home: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  
   const [rooms, setRooms] = useState<Room[]>([])
   const [roomsLoading, setRoomsLoading] = useState(true)
   const [features, setFeatures] = useState<Feature[]>([])
@@ -118,34 +114,8 @@ const Home: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyPress)
   }, [galleryModal.isOpen])
 
-  // Hero slides using local images from public/images folder
-  const heroSlides = [
-    {
-      image: '/images/Exterior (Front).PNG',
-      title: 'Welcome to Grand Valley Resort',
-      subtitle: 'A Hilltop Heaven in Mahabaleshwar',
-      description: 'Experience luxury, comfort, and unforgettable moments in the heart of nature'
-    },
-    {
-      image: '/images/Exterior (back).PNG',
-      title: 'Luxury Accommodations',
-      subtitle: 'Premium rooms and suites designed for your comfort',
-      description: 'From valley-view suites to private balconies, find your perfect stay'
-    },
-    {
-      image: '/images/exteror (night).jpg',
-      title: 'Exclusive Amenities',
-      subtitle: 'World-class facilities and personalized service',
-      description: 'Infinity pool, restaurant, and more await your arrival'
-    }
-  ]
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
+  // Hero image - single static image
+  const heroImage = '/images/Exterior (Front).PNG'
 
   // Load rooms from API
   useEffect(() => {
@@ -302,221 +272,166 @@ const Home: React.FC = () => {
         url="https://grandvalleyresort.com"
       />
       <div className="bg-cream-beige">
-        {/* Hero Carousel - Stunning Animated Design */}
-        <div className="relative h-[300px] sm:h-[400px] lg:h-[80vh] overflow-hidden">
-          <AnimatePresence mode="wait">
-            {heroSlides.map((slide, index) => (
-              index === currentSlide && (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <div className="relative w-full h-full">
-                    {/* Animated Background Image */}
-                    <motion.img
-                      src={slide.image}
-                      alt={slide.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      initial={{ scale: 1.1, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 1.2, ease: "easeOut" }}
-                      style={{
-                        objectFit: 'cover',
-                        objectPosition: 'center center',
-                        filter: 'none',
-                        WebkitFilter: 'none',
-                        imageRendering: 'auto',
-                        willChange: 'opacity, transform',
-                        maxHeight: '100%'
-                      }}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      fetchpriority={index === 0 ? 'high' : 'auto'}
-                      decoding="async"
-                    />
-                    
-                    {/* Animated Gradient Overlay */}
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/60 sm:from-black/40 sm:via-transparent sm:to-black/50"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.2 }}
-                    />
-                    
-                    {/* Floating Particles Effect */}
-                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                      {[...Array(6)].map((_, i) => {
-                        const width = typeof window !== 'undefined' ? window.innerWidth : 1920
-                        const height = typeof window !== 'undefined' ? window.innerHeight : 1080
-                        return (
-                          <motion.div
-                            key={i}
-                            className="absolute w-2 h-2 bg-golden-400/30 rounded-full"
-                            initial={{
-                              x: Math.random() * width,
-                              y: Math.random() * height,
-                              opacity: 0,
-                            }}
-                            animate={{
-                              y: [null, Math.random() * height],
-                              opacity: [0, 0.5, 0],
-                            }}
-                            transition={{
-                              duration: 8 + Math.random() * 4,
-                              repeat: Infinity,
-                              delay: Math.random() * 2,
-                              ease: "linear"
-                            }}
-                          />
-                        )
-                      })}
+        {/* Hero Section - Consistent Across All Views */}
+        <div className="relative h-screen max-h-[100vh] overflow-hidden flex flex-col">
+          <div className="relative flex-1 w-full">
+            {/* Background Image with Dark Overlay */}
+            <img
+              src={heroImage}
+              alt="Grand Valley Resort"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center center',
+                filter: 'brightness(0.7) saturate(0.8)',
+                WebkitFilter: 'brightness(0.7) saturate(0.8)',
+              }}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+            
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/40"></div>
+            
+            {/* Content Container - Consistent Layout All Views */}
+            <div className="relative h-full flex flex-col px-4 pt-20 pb-4">
+              <div className="w-full max-w-5xl mx-auto flex flex-col flex-1 justify-between">
+                {/* Top Section: Heading - Same on All Views */}
+                <div className="text-center mb-4">
+                  <motion.h1
+                    className="text-5xl font-serif font-bold text-golden-400 leading-tight tracking-tight"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  >
+                    <span className="inline-block mr-2">ENJOY A</span>
+                    <span className="inline-block mr-2">LUXURY</span>
+                    <span className="inline-block">EXPERIENCE</span>
+                  </motion.h1>
+                </div>
+                
+                {/* Middle Section: Booking Form - Same on All Views */}
+                <div className="mb-4">
+                  <motion.div
+                    className="bg-white rounded-xl p-3 shadow-lg max-w-4xl mx-auto"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                  >
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      {/* Guest Select */}
+                      <div className="flex-1 min-w-[80px]">
+                        <select className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900">
+                          <option>Guest</option>
+                          <option>1 Guest</option>
+                          <option>2 Guests</option>
+                          <option>3 Guests</option>
+                          <option>4+ Guests</option>
+                        </select>
+                      </div>
+                      
+                      {/* Room Select */}
+                      <div className="flex-1 min-w-[80px]">
+                        <select className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900">
+                          <option>Room</option>
+                          <option>1 Room</option>
+                          <option>2 Rooms</option>
+                          <option>3 Rooms</option>
+                        </select>
+                      </div>
+                      
+                      {/* Check In */}
+                      <div className="flex-1 min-w-[100px]">
+                        <input 
+                          type="date" 
+                          className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900"
+                        />
+                      </div>
+                      
+                      {/* Check Out */}
+                      <div className="flex-1 min-w-[100px]">
+                        <input 
+                          type="date" 
+                          className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md focus:ring-1 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900"
+                        />
+                      </div>
+                      
+                      {/* Book Now Button - Matching Navbar Style */}
+                      <div className="flex-1 min-w-[110px]">
+                        <Link
+                          to="/rooms"
+                          className="w-full flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
+                        >
+                          <span>Book Now</span>
+                        </Link>
+                      </div>
                     </div>
+                  </motion.div>
+                </div>
+                
+                {/* Bottom Section: Image Gallery - Center Cards Larger */}
+                <div className="mt-auto">
+                  <div className="flex items-end justify-center gap-2 max-w-5xl mx-auto">
+                    {/* Gallery Image 1 - Smaller (Left) */}
+                    <motion.div
+                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[20%]"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                    >
+                      <img
+                        src={heroImage}
+                        alt="Resort Interior"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                    </motion.div>
                     
-                    {/* Content Card - Bottom on Mobile, Right on Desktop */}
-                    <div className="absolute inset-0 flex items-end justify-center sm:items-center sm:justify-end">
-                      <motion.div 
-                        className="w-[90%] sm:w-[38%] lg:w-[32%] flex items-center justify-center p-3 sm:p-4 lg:pr-12 lg:pl-6 pb-4 sm:py-5 lg:py-6"
-                        initial={{ opacity: 0, x: 50, y: 30 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      >
-                        <div className="w-full max-w-[280px] sm:max-w-sm">
-                          {/* Compact Glass Card - Smaller on Mobile */}
-                          <motion.div 
-                            className="bg-gradient-to-br from-dark-blue-900/98 via-dark-blue-800/96 to-dark-blue-900/98 backdrop-blur-xl rounded-xl sm:rounded-2xl lg:rounded-3xl p-3 sm:p-6 lg:p-7 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] border border-golden-500/50 relative overflow-hidden"
-                            initial={{ scale: 0.9, opacity: 0, rotateY: -15 }}
-                            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-                          >
-                            {/* Animated Golden Top Accent */}
-                            <motion.div 
-                              className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-golden-400 to-transparent"
-                              initial={{ scaleX: 0 }}
-                              animate={{ scaleX: 1 }}
-                              transition={{ duration: 1, delay: 0.8 }}
-                            />
-                            
-                            {/* Animated Background Glow Effects */}
-                            <motion.div 
-                              className="absolute -top-16 -right-16 w-32 h-32 bg-golden-500/20 rounded-full blur-3xl"
-                              animate={{
-                                scale: [1, 1.2, 1],
-                                opacity: [0.3, 0.5, 0.3],
-                              }}
-                              transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                              }}
-                            />
-                            <motion.div 
-                              className="absolute -bottom-12 -left-12 w-24 h-24 bg-golden-500/15 rounded-full blur-2xl"
-                              animate={{
-                                scale: [1, 1.3, 1],
-                                opacity: [0.2, 0.4, 0.2],
-                              }}
-                              transition={{
-                                duration: 5,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                delay: 1
-                              }}
-                            />
-                            
-                            {/* Content with Mobile-Optimized Compact Styling */}
-                            <div className="relative z-10">
-                              {/* Animated Heading - Much Smaller on Mobile */}
-                              <motion.h1
-                                className="text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-5 lg:mb-6 text-golden-400 font-serif leading-tight tracking-tight"
-                                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ duration: 0.8, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-                              >
-                                {slide.title}
-                              </motion.h1>
-                              
-                              {/* Animated Elegant Divider - Smaller on Mobile */}
-                              <motion.div 
-                                className="w-10 sm:w-16 lg:w-20 h-0.5 bg-gradient-to-r from-golden-500 via-golden-400 to-transparent mb-3 sm:mb-6 lg:mb-7"
-                                initial={{ scaleX: 0 }}
-                                animate={{ scaleX: 1 }}
-                                transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
-                              />
-                              
-                              {/* Animated Compact CTA Button - Smaller, No Background */}
-                              <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                              >
-                                <Link
-                                  to="/rooms"
-                                  className="group relative inline-flex items-center justify-center px-2.5 py-1 sm:px-4 sm:py-2 lg:px-5 lg:py-2.5 bg-transparent border-2 border-golden-400 text-golden-400 font-semibold text-xs sm:text-sm lg:text-base rounded-lg sm:rounded-lg lg:rounded-xl hover:bg-golden-400/10 transition-all duration-300 overflow-hidden"
-                                >
-                                  {/* Button Shine Effect */}
-                                  <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-golden-400/20 to-transparent"
-                                    initial={{ x: '-100%' }}
-                                    whileHover={{ x: '100%' }}
-                                    transition={{ duration: 0.6 }}
-                                  />
-                                  
-                                  {/* Button Content */}
-                                  <span className="relative z-10 font-semibold tracking-wide">Book Now</span>
-                                  <motion.div
-                                    className="relative z-10 ml-1.5 sm:ml-2"
-                                    whileHover={{ x: 3 }}
-                                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                                  >
-                                    <ArrowRightIcon className="h-3 w-3 sm:h-4 sm:w-4 lg:h-4 lg:w-4" />
-                                  </motion.div>
-                                </Link>
-                              </motion.div>
-                            </div>
-                          </motion.div>
-                        </div>
-                      </motion.div>
-                    </div>
+                    {/* Gallery Image 2 - Larger (Middle Left) with White Border */}
+                    <motion.div
+                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[23%] border-2 border-white"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.7 }}
+                    >
+                      <img
+                        src="/images/Exterior (back).PNG"
+                        alt="Resort Living Room"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                    </motion.div>
+                    
+                    {/* Gallery Image 3 - Larger (Middle Right) with White Border */}
+                    <motion.div
+                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[23%] border-2 border-white"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.8 }}
+                    >
+                      <img
+                        src="/images/exteror (night).jpg"
+                        alt="Resort Outdoor"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                    </motion.div>
+                    
+                    {/* Gallery Image 4 - Smaller (Right) */}
+                    <motion.div
+                      className="relative overflow-hidden rounded-lg aspect-[3/4] shadow-md w-[20%]"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.9 }}
+                    >
+                      <img
+                        src={heroImage}
+                        alt="Resort View"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                    </motion.div>
                   </div>
-                </motion.div>
-              )
-            ))}
-          </AnimatePresence>
-          
-          {/* Elegant Navigation Arrows - Hidden on mobile & tablet, visible on desktop only */}
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-            className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2 z-30 bg-gradient-to-r from-golden-500 to-golden-600 hover:from-golden-600 hover:to-golden-700 backdrop-blur-sm rounded-full p-3.5 transition-all duration-300 hover:scale-110 group shadow-2xl border border-golden-400/30"
-            aria-label="Previous slide"
-          >
-            <ChevronLeftIcon className="h-6 w-6 text-white drop-shadow-lg" />
-          </button>
-          <button
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-            className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 z-30 bg-gradient-to-r from-golden-500 to-golden-600 hover:from-golden-600 hover:to-golden-700 backdrop-blur-sm rounded-full p-3.5 transition-all duration-300 hover:scale-110 group shadow-2xl border border-golden-400/30"
-            aria-label="Next slide"
-          >
-            <ChevronRightIcon className="h-6 w-6 text-white drop-shadow-lg" />
-          </button>
-          
-          {/* Simple Dot Indicators - Hidden on mobile & tablet, visible on desktop */}
-          <div className="hidden lg:flex absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-30 items-center gap-2">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`transition-all duration-300 rounded-full ${
-                  index === currentSlide 
-                    ? 'w-2.5 h-2.5 bg-golden-400 shadow-lg' 
-                    : 'w-2 h-2 bg-white/60 hover:bg-white/80 hover:scale-110'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
