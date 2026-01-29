@@ -592,21 +592,79 @@ const Home: React.FC = () => {
                     return (
                       <motion.div
                         key={room.id}
-                        className={`relative ${isCenter ? 'flex-1 max-w-md lg:max-w-lg' : 'flex-1 max-w-xs opacity-75'} transition-all duration-500 cursor-pointer`}
-                        onClick={() => setCurrentRoomIndex(index)}
+                        className={`relative ${isCenter ? 'flex-1 max-w-md lg:max-w-lg' : 'flex-1 max-w-xs'} cursor-pointer`}
+                        onMouseEnter={() => setCurrentRoomIndex(index)}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        whileInView={{ opacity: isCenter ? 1 : 0.75, scale: isCenter ? 1 : 0.9, y: 0 }}
+                        whileInView={{ opacity: 1, scale: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        whileHover={{ scale: isCenter ? 1.02 : 0.95 }}
+                        animate={{
+                          opacity: isCenter ? 1 : 0.75,
+                          scale: isCenter ? 1 : 0.95,
+                          zIndex: isCenter ? 10 : 1
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                          mass: 0.8,
+                          opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+                          scale: { 
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 25
+                          }
+                        }}
+                        whileHover={{
+                          scale: isCenter ? 1.02 : 0.97,
+                          transition: { 
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 20
+                          }
+                        }}
+                        layout
                       >
-                        <div className="relative rounded-2xl overflow-hidden shadow-lg bg-white">
+                        <motion.div 
+                          className="relative rounded-2xl overflow-hidden shadow-lg bg-white"
+                          animate={{
+                            boxShadow: isCenter 
+                              ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                              : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+                          }}
+                          transition={{ 
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 30
+                          }}
+                        >
                           {/* Image */}
-                          <div className={`relative ${isCenter ? 'h-80 lg:h-96' : 'h-64'} overflow-hidden`}>
-                            <img
+                          <motion.div 
+                            className={`relative overflow-hidden ${isCenter ? 'h-80 lg:h-96' : 'h-64'}`}
+                            animate={{
+                              scale: 1
+                            }}
+                            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+                          >
+                            <motion.img
                               src={imageUrl}
                               alt={room.name}
-                              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                              className="w-full h-full object-cover"
+                              animate={{
+                                scale: isCenter ? 1.05 : 1
+                              }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 30
+                              }}
+                              whileHover={{
+                                scale: isCenter ? 1.1 : 1.05,
+                                transition: { 
+                                  type: "spring",
+                                  stiffness: 400,
+                                  damping: 25
+                                }
+                              }}
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 target.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
@@ -623,27 +681,45 @@ const Home: React.FC = () => {
                                 Unavailable
                               </div>
                             )}
-                          </div>
+                          </motion.div>
 
                           {/* Content */}
-                          <div className={`p-4 sm:p-6 ${isCenter ? 'lg:p-8' : ''}`}>
-                            <h3 className={`font-semibold text-gray-900 mb-2 ${isCenter ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg sm:text-xl'}`}>
+                          <motion.div
+                            className={isCenter ? "p-6 sm:p-8" : "p-4 sm:p-6"}
+                            animate={{
+                              scale: 1
+                            }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                          >
+                            <motion.h3
+                              className={`font-semibold text-gray-900 mb-2 ${isCenter ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg sm:text-xl'}`}
+                              animate={{
+                                opacity: 1
+                              }}
+                              transition={{ duration: 0.5, ease: "easeOut" }}
+                            >
                               {room.name}
-                            </h3>
+                            </motion.h3>
                             
                             {/* Details - Only show for center card */}
                             {isCenter && (
                               <motion.div
                                 className="text-gray-600 text-sm sm:text-base mb-4"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ 
+                                  type: "spring",
+                                  stiffness: 400,
+                                  damping: 25,
+                                  delay: 0.15
+                                }}
                               >
                                 {roomSize} / {bedrooms} / {room.amenities && room.amenities.length > 0 ? 'pet friendly' : ''}
                               </motion.div>
                             )}
-                          </div>
-                        </div>
+                          </motion.div>
+                        </motion.div>
                       </motion.div>
                     );
                   })}
