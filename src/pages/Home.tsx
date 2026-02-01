@@ -355,7 +355,7 @@ const Home: React.FC = () => {
                         />
                         {!checkInDate && (
                           <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
-                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">📅 Check In</span>
+                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check In</span>
                           </div>
                         )}
                       </div>
@@ -371,7 +371,7 @@ const Home: React.FC = () => {
                         />
                         {!checkOutDate && (
                           <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
-                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">📅 Check Out</span>
+                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check Out</span>
                           </div>
                         )}
                       </div>
