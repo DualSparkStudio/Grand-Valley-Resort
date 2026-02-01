@@ -343,8 +343,7 @@ const Home: React.FC = () => {
                       </div>
                       
                       {/* Check In */}
-                      <div className="flex-1 min-w-0 flex flex-col">
-                        <label className="text-[8px] sm:text-[10px] text-gray-600 font-medium mb-0.5 sm:mb-1 leading-none">Check In</label>
+                      <div className="flex-1 min-w-0">
                         <input 
                           type="date" 
                           placeholder="Check In"
@@ -353,8 +352,7 @@ const Home: React.FC = () => {
                       </div>
                       
                       {/* Check Out */}
-                      <div className="flex-1 min-w-0 flex flex-col">
-                        <label className="text-[8px] sm:text-[10px] text-gray-600 font-medium mb-0.5 sm:mb-1 leading-none">Check Out</label>
+                      <div className="flex-1 min-w-0">
                         <input 
                           type="date" 
                           placeholder="Check Out"
