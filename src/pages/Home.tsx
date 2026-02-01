@@ -7,7 +7,7 @@ import {
     UsersIcon,
 } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
@@ -61,6 +61,9 @@ const Home: React.FC = () => {
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0)
   const [checkInDate, setCheckInDate] = useState('')
   const [checkOutDate, setCheckOutDate] = useState('')
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   // Gallery modal state
   const [galleryModal, setGalleryModal] = useState<{
@@ -205,6 +208,21 @@ const Home: React.FC = () => {
     
     loadAttractions()
   }, [])
+
+  // Auto-scroll carousel on mobile when currentRoomIndex changes
+  useEffect(() => {
+    if (carouselRef.current && window.innerWidth < 640) {
+      const roomCards = carouselRef.current.querySelectorAll('[data-room-index]')
+      const activeCard = roomCards[currentRoomIndex] as HTMLElement
+      if (activeCard) {
+        activeCard.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        })
+      }
+    }
+  }, [currentRoomIndex])
 
   // Testimonials are now handled by the ReviewsSection component
 
@@ -590,7 +608,30 @@ const Home: React.FC = () => {
             ) : rooms.length > 0 ? (
               <div className="relative">
                 {/* Carousel Container */}
-                <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 overflow-hidden">
+                <div 
+                  ref={carouselRef}
+                  className="flex items-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide pb-4 sm:pb-0 sm:justify-center sm:overflow-hidden"
+                  style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                    WebkitOverflowScrolling: 'touch'
+                  }}
+                  onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+                  onTouchMove={(e) => setTouchEnd(e.targetTouches[0].clientX)}
+                  onTouchEnd={() => {
+                    if (!touchStart || !touchEnd) return
+                    const distance = touchStart - touchEnd
+                    const isLeftSwipe = distance > 50
+                    const isRightSwipe = distance < -50
+                    
+                    if (isLeftSwipe && currentRoomIndex < rooms.slice(0, 3).length - 1) {
+                      setCurrentRoomIndex(currentRoomIndex + 1)
+                    }
+                    if (isRightSwipe && currentRoomIndex > 0) {
+                      setCurrentRoomIndex(currentRoomIndex - 1)
+                    }
+                  }}
+                >
                   {rooms.slice(0, 3).map((room, index) => {
                     const isCenter = index === currentRoomIndex;
                     const getMainImage = () => {
@@ -608,8 +649,18 @@ const Home: React.FC = () => {
                     return (
                       <motion.div
                         key={room.id}
-                        className={`relative ${isCenter ? 'flex-1 max-w-md lg:max-w-lg' : 'flex-1 max-w-xs'} cursor-pointer`}
-                        onMouseEnter={() => setCurrentRoomIndex(index)}
+                        data-room-index={index}
+                        className={`relative flex-shrink-0 ${isCenter ? 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-md lg:max-w-lg' : 'w-[75%] sm:w-auto sm:flex-1 sm:max-w-xs'} cursor-pointer snap-center`}
+                        onMouseEnter={() => {
+                          if (window.innerWidth >= 640) {
+                            setCurrentRoomIndex(index)
+                          }
+                        }}
+                        onClick={() => {
+                          if (window.innerWidth < 640) {
+                            setCurrentRoomIndex(index)
+                          }
+                        }}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         whileInView={{ opacity: 1, scale: 1, y: 0 }}
                         viewport={{ once: true }}

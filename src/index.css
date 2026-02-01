@@ -450,6 +450,16 @@ html {
   background: var(--golden-light);
 }
 
+/* Hide scrollbar for carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Mobile optimizations */
 @media (max-width: 640px) {
   /* Reduce motion for mobile users who prefer it */
