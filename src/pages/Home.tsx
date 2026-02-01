@@ -312,18 +312,19 @@ const Home: React.FC = () => {
                   </motion.h1>
                 </div>
                 
-                {/* Middle Section: Booking Form - 280x45 mobile */}
+                {/* Middle Section: Booking Form - Responsive for Mobile */}
                 <div className="mb-2 sm:mb-4">
                   <motion.div
-                    className="bg-white rounded-lg sm:rounded-xl py-0.5 px-1.5 sm:p-3 shadow-lg max-w-[280px] sm:max-w-4xl mx-auto"
+                    className="bg-white rounded-lg sm:rounded-xl py-3 px-3 sm:p-3 shadow-lg max-w-[90%] sm:max-w-4xl mx-auto"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                   >
-                    <div className="flex items-stretch justify-center gap-1 sm:gap-2">
+                    {/* Mobile: Vertical Stack, Desktop: Horizontal */}
+                    <div className="flex flex-col sm:flex-row items-stretch justify-center gap-2 sm:gap-2">
                       {/* Guest Select */}
                       <div className="flex-1 min-w-0">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                        <select className="w-full h-10 sm:h-5 px-3 sm:px-2 py-2 sm:py-0 text-sm sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
                           <option value="">Guest</option>
                           <option value="1">1 Guest</option>
                           <option value="2">2 Guests</option>
@@ -334,7 +335,7 @@ const Home: React.FC = () => {
                       
                       {/* Room Select */}
                       <div className="flex-1 min-w-0">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                        <select className="w-full h-10 sm:h-5 px-3 sm:px-2 py-2 sm:py-0 text-sm sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
                           <option value="">Room</option>
                           <option value="1">1 Room</option>
                           <option value="2">2 Rooms</option>
@@ -347,7 +348,7 @@ const Home: React.FC = () => {
                         <input 
                           type="date" 
                           placeholder="Check In"
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
+                          className="w-full h-10 sm:h-5 px-3 sm:px-2 py-2 sm:py-0 text-sm sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
                         />
                       </div>
                       
@@ -356,7 +357,7 @@ const Home: React.FC = () => {
                         <input 
                           type="date" 
                           placeholder="Check Out"
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
+                          className="w-full h-10 sm:h-5 px-3 sm:px-2 py-2 sm:py-0 text-sm sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
                         />
                       </div>
                       
@@ -364,7 +365,7 @@ const Home: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <Link
                           to="/rooms"
-                          className="w-full h-[18px] sm:h-5 flex items-center justify-center px-1.5 sm:px-3 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-[10px] sm:text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
+                          className="w-full h-10 sm:h-5 flex items-center justify-center px-3 sm:px-3 py-2 sm:py-0 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-sm sm:text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
                         >
                           <span>Book Now</span>
                         </Link>
