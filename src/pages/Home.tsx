@@ -59,6 +59,8 @@ const Home: React.FC = () => {
   })
   const [expandedAmenities, setExpandedAmenities] = useState<{ [key: string]: boolean }>({})
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0)
+  const [checkInDate, setCheckInDate] = useState('')
+  const [checkOutDate, setCheckOutDate] = useState('')
 
   // Gallery modal state
   const [galleryModal, setGalleryModal] = useState<{
@@ -343,21 +345,35 @@ const Home: React.FC = () => {
                       </div>
                       
                       {/* Check In */}
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 relative">
                         <input 
                           type="date" 
-                          placeholder="Check In"
+                          value={checkInDate}
+                          onChange={(e) => setCheckInDate(e.target.value)}
                           className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
+                          style={{ color: checkInDate ? 'inherit' : 'transparent' }}
                         />
+                        {!checkInDate && (
+                          <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
+                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">📅 Check In</span>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Check Out */}
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 relative">
                         <input 
                           type="date" 
-                          placeholder="Check Out"
+                          value={checkOutDate}
+                          onChange={(e) => setCheckOutDate(e.target.value)}
                           className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
+                          style={{ color: checkOutDate ? 'inherit' : 'transparent' }}
                         />
+                        {!checkOutDate && (
+                          <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
+                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">📅 Check Out</span>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Book Now Button - Matching Navbar Style */}
