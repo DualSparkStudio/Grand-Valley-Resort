@@ -151,18 +151,18 @@ const Features: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-md p-6 h-full group hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-start gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-green-100 border border-blue-200 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-golden-100 to-dark-blue-100 border border-golden-200 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
                         {facility.icon}
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 group-hover:text-golden-600 transition-colors">
                         {facility.title}
                       </h3>
                       <ul className="space-y-3">
                         {facility.items.map((item, i) => (
                           <li key={i} className="flex items-center text-gray-700 group-hover:text-gray-900 transition-colors">
-                            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-3 flex-shrink-0 group-hover:scale-150 transition-transform" />
+                            <div className="w-1.5 h-1.5 bg-golden-500 rounded-full mr-3 flex-shrink-0 group-hover:scale-150 transition-transform" />
                             <span className="text-sm sm:text-base">{item}</span>
                           </li>
                         ))}
@@ -230,7 +230,7 @@ const Features: React.FC = () => {
                     {/* Featured Badge */}
                     {amenity.featured && (
                       <div className="absolute top-6 right-6">
-                        <div className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-blue-600 text-xs font-semibold uppercase tracking-wider">
+                        <div className="px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-golden-600 text-xs font-semibold uppercase tracking-wider">
                           Featured
                         </div>
                       </div>
@@ -239,7 +239,7 @@ const Features: React.FC = () => {
 
                   {/* Content */}
                   <div className="p-6 lg:p-8">
-                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 group-hover:text-golden-600 transition-colors">
                       {amenity.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
@@ -299,7 +299,7 @@ const Features: React.FC = () => {
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
                   Pure Veg Restaurant
                 </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-green-600 mb-8" />
+                <div className="w-24 h-1 bg-gradient-to-r from-dark-blue-800 to-golden-500 mb-8" />
               </div>
               
               <div className="space-y-5 text-gray-700 leading-relaxed text-base lg:text-lg">
@@ -319,7 +319,7 @@ const Features: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 pt-6">
                 {['Fresh Ingredients', 'Authentic Recipes', 'Scenic Views', 'Comfort Food'].map((feature, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                    <div className="w-2 h-2 bg-golden-500 rounded-full" />
                     <span className="text-gray-700 text-sm">{feature}</span>
                   </div>
                 ))}
@@ -376,7 +376,7 @@ const Features: React.FC = () => {
 
                     {/* Price Badge */}
                     <div className="absolute bottom-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-blue-600 text-xs font-semibold uppercase tracking-wider">
+                      <div className="px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-golden-600 text-xs font-semibold uppercase tracking-wider">
                         {amenity.price}
                       </div>
                     </div>
@@ -384,7 +384,7 @@ const Features: React.FC = () => {
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 group-hover:text-golden-600 transition-colors">
                       {amenity.title}
                     </h3>
                     <p className="text-gray-600 text-sm lg:text-base leading-relaxed">

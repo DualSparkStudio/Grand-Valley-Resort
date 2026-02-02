@@ -104,7 +104,7 @@ const Policy: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative h-64 bg-gradient-to-r from-blue-800 to-green-800">
+      <section className="relative h-64 bg-gradient-to-r from-dark-blue-800 to-golden-500">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 flex items-center justify-center h-full">
           <div className="text-center text-white">
@@ -123,7 +123,7 @@ const Policy: React.FC = () => {
             {policies.map((policy, index) => (
               <div key={index} className="bg-white rounded-2xl shadow-lg p-8">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-800 to-green-800 rounded-lg flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-dark-blue-800 to-golden-500 rounded-lg flex items-center justify-center mr-4">
                     <policy.icon className="h-6 w-6 text-white" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">{policy.title}</h2>
@@ -131,7 +131,7 @@ const Policy: React.FC = () => {
                 
                 <div className="space-y-6">
                   {policy.content.map((item, itemIndex) => (
-                    <div key={itemIndex} className="border-l-4 border-blue-200 pl-6">
+                    <div key={itemIndex} className="border-l-4 border-golden-300 pl-6">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         {item.subtitle}
                       </h3>
@@ -146,7 +146,7 @@ const Policy: React.FC = () => {
           </div>
 
           {/* Contact Information */}
-          <div className="mt-12 bg-blue-50 rounded-2xl p-8 text-center">
+          <div className="mt-12 bg-golden-50 rounded-2xl p-8 text-center">
             <h3 className="text-xl font-bold text-gray-900 mb-4">
               Questions About Our Policies?
             </h3>
@@ -157,7 +157,7 @@ const Policy: React.FC = () => {
             <div className="flex justify-center">
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium rounded-lg hover:opacity-90 transition-colors duration-200"
               >
                 Contact Us
               </a>
