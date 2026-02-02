@@ -852,24 +852,6 @@ const Home: React.FC = () => {
                     );
                   })}
                 </div>
-
-                {/* Carousel Indicators */}
-                {rooms.length > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-8">
-                    {rooms.slice(0, 3).map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentRoomIndex(index)}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          index === currentRoomIndex
-                            ? 'w-8 bg-golden-500'
-                            : 'w-1.5 bg-gray-300 hover:bg-gray-400'
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                )}
               </div>
             ) : (
               <div className="text-center py-12">
