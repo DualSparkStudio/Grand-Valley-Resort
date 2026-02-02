@@ -297,14 +297,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
           
           <div className="mt-8 pt-8 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600">
-              <div className="flex items-center gap-4 mb-2 sm:mb-0">
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-gray-600">
+              <div className="flex flex-wrap justify-center sm:justify-start sm:items-center gap-x-4 gap-y-2">
                 <span>© 2025 Grand Valley Resort. All rights reserved.</span>
                 <span className="text-golden-500 hover:text-golden-600 font-medium transition-colors duration-200">
                   <a href="/policy">Privacy Policy & Terms</a>
                 </span>
               </div>
-              <p>
+              <p className="text-center sm:text-right">
                 Designed & Developed by{' '}
                 <a
                   href="https://dualsparkstudio.com/"
