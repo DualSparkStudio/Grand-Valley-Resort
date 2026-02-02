@@ -159,12 +159,12 @@ const Contact: React.FC = () => {
       />
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative h-96 bg-gradient-to-r from-forest-800 to-forest-600">
-          <div className="absolute inset-0 bg-black/30"></div>
+        <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-dark-blue-800 to-golden-500">
+          <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="text-center text-white">
-              <h1 className="text-5xl font-bold mb-4">Contact Us</h1>
-              <p className="text-xl max-w-2xl mx-auto">
+            <div className="text-center text-white px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Contact Us</h1>
+              <p className="text-lg sm:text-xl max-w-2xl mx-auto">
                 We're here to help make your stay at Grand Valley Resort perfect. Get in touch with us anytime.
               </p>
             </div>
@@ -177,7 +177,7 @@ const Contact: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
               {contactInfo.map((info, index) => (
                 <div key={index} className="text-center flex flex-col items-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-800 to-green-800 rounded-full mb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-dark-blue-800 to-golden-500 rounded-full mb-4">
                     <info.icon className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{info.title}</h3>
@@ -204,7 +204,7 @@ const Contact: React.FC = () => {
               {/* Contact Form */}
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-800 to-green-800 rounded-lg flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-dark-blue-800 to-golden-500 rounded-lg flex items-center justify-center mr-4">
                     <ChatBubbleLeftRightIcon className="h-6 w-6 text-white" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">Send us a Message</h2>
@@ -378,7 +378,7 @@ const Contact: React.FC = () => {
         <FAQ />
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-forest-800 to-forest-600">
+        <section className="py-20 bg-gradient-to-r from-dark-blue-800 to-golden-500">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl font-bold text-white mb-6">
               Ready to Experience Resort Booking System?
@@ -388,7 +388,7 @@ const Contact: React.FC = () => {
             </p>
             <a
               href="/rooms"
-              className="inline-block bg-white text-forest-800 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+              className="inline-block bg-white text-dark-blue-800 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300"
             >
               Book Your Stay
             </a>

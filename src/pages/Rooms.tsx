@@ -100,8 +100,8 @@ const Rooms: React.FC = () => {
       />
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-blue-800 to-green-800">
-          <div className="absolute inset-0 bg-black/30"></div>
+        <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-dark-blue-800 to-golden-500">
+          <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative z-10 flex items-center justify-center h-full">
             <div className="text-center text-white px-4 sm:px-6 lg:px-8">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Our Luxury Rooms</h1>
