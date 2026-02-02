@@ -42,12 +42,12 @@ const About: React.FC = () => {
       />
       <div className="min-h-screen bg-gray-50">
         {/* Welcome Hero Section */}
-        <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-dark-blue-800 to-golden-500">
+        <section className="relative min-h-[280px] sm:min-h-[320px] lg:min-h-[400px] py-8 sm:py-12 lg:py-16 bg-gradient-to-r from-dark-blue-800 to-golden-500">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Welcome to Grand Valley Resort</h1>
-              <p className="text-lg sm:text-xl max-w-2xl mx-auto">
+            <div className="text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+              <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4">Welcome to Grand Valley Resort</h1>
+              <p className="text-sm sm:text-base lg:text-xl max-w-2xl mx-auto leading-relaxed">
                 Grand Valley Resort is a destination that blends comfort, nature, and modern amenities. 
                 Located near Bhilar on Kawand-Bhilar Road, our resort offers a perfect escape from the 
                 hustle and bustle of city life, surrounded by the natural beauty of the Sahyadri Range.
@@ -59,13 +59,13 @@ const About: React.FC = () => {
         {/* About Us Section */}
         <section className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                   About Us
                 </h2>
                 
-                <div className="space-y-6 text-gray-700 leading-relaxed">
+                <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base text-justify">
                   <p>
                     Grand Valley Resort represents a philosophy where luxury meets nature. Nestled in 
                     the heart of Mahabaleshwar, our resort offers an escape that combines modern comfort 
@@ -103,8 +103,8 @@ const About: React.FC = () => {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="relative rounded-lg overflow-hidden shadow-lg">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="relative rounded-lg overflow-hidden shadow-lg order-2 lg:order-1">
                 <img
                   src="/images/Exterior (back).PNG"
                   alt="Grand Valley Resort - Back View"
@@ -112,8 +112,8 @@ const About: React.FC = () => {
                 />
               </div>
               
-              <div>
-                <div className="space-y-6 text-gray-700 leading-relaxed">
+              <div className="order-1 lg:order-2">
+                <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base text-justify">
                   <p>
                     Grand Valley Resort emerged as a nature-inspired hideaway in the breathtaking Sahyadri 
                     Range. What started as a vision to create a perfect blend of luxury and natural beauty 

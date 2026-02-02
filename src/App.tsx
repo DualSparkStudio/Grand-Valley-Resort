@@ -37,6 +37,7 @@ import Register from './pages/Register';
 import RoomDetail from './pages/RoomDetail';
 import Rooms from './pages/Rooms';
 import TouristAttractions from './pages/TouristAttractions';
+import Gallery from './pages/Gallery';
 
 // Component to handle pathname logging
 const AppContent: React.FC = () => {
@@ -80,6 +81,7 @@ const AppContent: React.FC = () => {
         <Route path="room/:slug" element={<RoomDetail />} />
         <Route path="features" element={<Features />} />
         <Route path="about" element={<About />} />
+        <Route path="gallery" element={<Gallery />} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />

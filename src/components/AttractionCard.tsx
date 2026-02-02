@@ -122,7 +122,7 @@ const AttractionCard: React.FC<AttractionCardProps> = ({
           <h3 className="text-xl font-bold text-gray-900 flex-1">{name}</h3>
           {/* Prominent Distance Badge */}
           <div className="ml-3 flex-shrink-0">
-            <div className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-3 py-1.5 rounded-lg shadow-md">
+            <div className="bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white px-3 py-1.5 rounded-lg shadow-md">
               <div className="flex items-center">
                 <MapPinIcon className="h-4 w-4 mr-1" />
                 <span className="text-sm font-bold whitespace-nowrap">{distance}</span>
@@ -139,7 +139,7 @@ const AttractionCard: React.FC<AttractionCardProps> = ({
           {needsTruncation && (
             <button
               onClick={toggleExpanded}
-              className="text-blue-600 hover:text-blue-700 text-sm font-medium hover:underline mt-1 transition-colors"
+              className="text-golden-500 hover:text-golden-600 text-sm font-medium hover:underline mt-1 transition-colors"
             >
               {isExpanded ? 'Show less' : 'Read more'}
             </button>
@@ -150,7 +150,7 @@ const AttractionCard: React.FC<AttractionCardProps> = ({
         <div className="mb-4 bg-gray-50 rounded-lg p-3">
           <div className="space-y-2">
             <div className="flex items-center text-sm text-gray-700">
-              <ClockIcon className="h-4 w-4 mr-2 text-blue-600" />
+              <ClockIcon className="h-4 w-4 mr-2 text-golden-500" />
               <span className="font-medium">{travel_time} drive</span>
             </div>
             <div className="flex items-center text-sm text-gray-700">
@@ -167,7 +167,7 @@ const AttractionCard: React.FC<AttractionCardProps> = ({
             {highlights.map((highlight, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
+                className="px-2 py-1 bg-golden-50 text-golden-700 text-xs rounded-full border border-golden-200"
               >
                 {highlight}
               </span>
@@ -178,7 +178,7 @@ const AttractionCard: React.FC<AttractionCardProps> = ({
         {/* Action Button */}
         <button
           onClick={onImageClick}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          className="w-full bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white py-2 px-4 rounded-lg hover:from-dark-blue-900 hover:to-golden-600 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg"
         >
           View Gallery
         </button>

@@ -3,6 +3,7 @@ import {
     CalendarIcon,
     CheckCircleIcon,
     MapPinIcon,
+    PhotoIcon,
     StarIcon,
     UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -860,6 +861,121 @@ const Home: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Gallery Preview Section */}
+        <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="text-center mb-8 sm:mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <svg className="w-8 h-4 text-golden-500" fill="currentColor" viewBox="0 0 24 4">
+                  <path d="M0 2c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/>
+                </svg>
+                <span className="text-golden-500 text-sm sm:text-base font-medium tracking-wider">
+                  PHOTO GALLERY
+                </span>
+                <svg className="w-8 h-4 text-golden-500" fill="currentColor" viewBox="0 0 24 4">
+                  <path d="M0 2c2 0 4-2 6-2s4 2 6 2 4-2 6-2 4 2 6 2"/>
+                </svg>
+              </div>
+              <motion.h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                Glimpse of Grand Valley
+              </motion.h2>
+              <motion.p
+                className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                Explore the beauty and serenity of Grand Valley Resort through our gallery
+              </motion.p>
+            </div>
+
+            {/* Gallery Grid */}
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              {/* Large Featured Image */}
+              <div className="col-span-2 row-span-2 relative group overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src="/images/Exterior (Front).PNG"
+                  alt="Resort Front View"
+                  className="w-full h-full min-h-[200px] sm:min-h-[300px] lg:min-h-[400px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-white font-semibold text-lg sm:text-xl">Resort Front View</h3>
+                </div>
+              </div>
+
+              {/* Smaller Images */}
+              <div className="relative group overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src="/images/Exterior (back).PNG"
+                  alt="Resort Back View"
+                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="relative group overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src="/images/exteror (night).jpg"
+                  alt="Night Ambiance"
+                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="relative group overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
+                  alt="Luxury Interior"
+                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+
+              <div className="relative group overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+                  alt="Mountain View"
+                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            </motion.div>
+
+            {/* View More Button */}
+            <motion.div
+              className="text-center mt-8 sm:mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+              >
+                <PhotoIcon className="h-5 w-5" />
+                View Full Gallery
+                <ArrowRightIcon className="h-5 w-5" />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
 
         {/* Tourist Attractions Section */}
         {attractions.length > 0 && (

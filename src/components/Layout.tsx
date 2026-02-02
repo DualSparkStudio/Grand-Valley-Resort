@@ -4,6 +4,7 @@ import {
     EnvelopeIcon,
     HomeIcon,
     MapPinIcon,
+    PhotoIcon,
     SparklesIcon,
     UserGroupIcon,
     XMarkIcon
@@ -58,6 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Home', href: '/', icon: HomeIcon },
     { name: 'Rooms', href: '/rooms', icon: BuildingOfficeIcon },
     { name: 'Attractions', href: '/attractions', icon: MapPinIcon },
+    { name: 'Gallery', href: '/gallery', icon: PhotoIcon },
     { name: 'Features', href: '/features', icon: SparklesIcon },
     { name: 'About', href: '/about', icon: UserGroupIcon },
     { name: 'Contact', href: '/contact', icon: EnvelopeIcon },
@@ -214,7 +216,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
                 Quick Links
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-2 list-disc list-inside">
                 <li>
                   <Link to="/rooms" className="text-gray-600 hover:text-golden-500 transition-colors">
                     Rooms & Suites
@@ -223,6 +225,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li>
                   <Link to="/attractions" className="text-gray-600 hover:text-golden-500 transition-colors">
                     Local Attractions
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/gallery" className="text-gray-600 hover:text-golden-500 transition-colors">
+                    Photo Gallery
                   </Link>
                 </li>
                 <li>
@@ -242,7 +249,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4">
                 Contact
               </h3>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-gray-600 list-disc list-inside">
                 {adminInfo.address && (
                   <li className="whitespace-pre-line">{adminInfo.address}</li>
                 )}
@@ -300,6 +307,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-gray-600">
               <div className="flex flex-wrap justify-center sm:justify-start sm:items-center gap-x-4 gap-y-2">
                 <span>© 2025 Grand Valley Resort. All rights reserved.</span>
+                <span className="text-gray-400">•</span>
                 <span className="text-golden-500 hover:text-golden-600 font-medium transition-colors duration-200">
                   <a href="/policy">Privacy Policy & Terms</a>
                 </span>
