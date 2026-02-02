@@ -64,7 +64,7 @@
   
   html {
     font-family: 'Poppins', system-ui, sans-serif;
-    scroll-behavior: smooth;
+    /* scroll-behavior is handled by Lenis for smooth scrolling */
   }
 
   body {
@@ -504,10 +504,8 @@ html {
   }
 }
 
-/* Add smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth scroll behavior is handled by Lenis */
+/* Lenis provides better performance and control than CSS scroll-behavior */
 
 /* Add missing CSS classes for booking forms */
 .input-field {
