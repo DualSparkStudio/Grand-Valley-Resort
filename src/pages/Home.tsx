@@ -1021,7 +1021,7 @@ const Home: React.FC = () => {
         <FAQ />
 
         {/* CTA Section */}
-        <div className="py-12 sm:py-16 lg:py-20 bg-cream-beige">
+        <div className="py-12 sm:py-16 lg:py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-forest mb-4">Ready to Experience Resort Booking System?</h2>
             <p className="text-lg sm:text-xl text-sage mb-6 sm:mb-8 max-w-3xl mx-auto">
