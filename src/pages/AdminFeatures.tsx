@@ -12,13 +12,12 @@ import { supabase } from '../lib/supabase';
 
 interface Feature {
   id?: number;
-  name: string;
+  title: string;
   description: string;
-  icon_name: string;
-  category: string;
+  icon: string;
+  category?: string;
   display_order: number;
   is_active: boolean;
-  is_featured: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -31,13 +30,12 @@ const AdminFeatures: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const [formData, setFormData] = useState<Feature>({
-    name: '',
+    title: '',
     description: '',
-    icon_name: 'StarIcon',
+    icon: 'star',
     category: 'general',
     display_order: 0,
-    is_active: true,
-    is_featured: false
+    is_active: true
   });
 
   const categories = [
@@ -137,13 +135,12 @@ const AdminFeatures: React.FC = () => {
   const handleEdit = (feature: Feature) => {
     setEditingFeature(feature);
     setFormData({
-      name: feature.name,
+      title: feature.title,
       description: feature.description,
-      icon_name: feature.icon_name,
-      category: feature.category,
+      icon: feature.icon,
+      category: feature.category || 'general',
       display_order: feature.display_order,
-      is_active: feature.is_active,
-      is_featured: feature.is_featured
+      is_active: feature.is_active
     });
     setShowModal(true);
   };
@@ -176,13 +173,12 @@ const AdminFeatures: React.FC = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      title: '',
       description: '',
-      icon_name: 'StarIcon',
+      icon: 'star',
       category: 'general',
       display_order: 0,
-      is_active: true,
-      is_featured: false
+      is_active: true
     });
   };
 
@@ -295,11 +291,11 @@ const AdminFeatures: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      {React.createElement(getIconComponent(feature.icon_name), { className: "h-6 w-6 text-blue-600" })}
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
+                      {feature.icon || '✨'}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{feature.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
                       <span className={`${getCategoryColor(feature.category)} px-2 py-1 rounded-full text-xs font-semibold`}>
                         {feature.category}
                       </span>
@@ -385,8 +381,8 @@ const AdminFeatures: React.FC = () => {
                   <input
                     type="text"
                     required
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    value={formData.title}
+                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="e.g., Easy Booking"
                   />
@@ -412,8 +408,8 @@ const AdminFeatures: React.FC = () => {
                     Icon *
                   </label>
                   <select
-                    value={formData.icon_name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, icon_name: e.target.value }))}
+                    value={formData.icon}
+                    onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   >
                     {iconOptions.map(icon => (
