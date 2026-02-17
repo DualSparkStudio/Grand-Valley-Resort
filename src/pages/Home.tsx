@@ -499,12 +499,12 @@ const Home: React.FC = () => {
 
                 {/* Main Heading */}
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold text-gray-900 leading-tight">
-                  Enjoy Summer In The Lap Of Luxury
+                  Where Comfort Meets Nature
                 </h2>
 
                 {/* Description */}
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                  Welcome to Grand Valley Resort – your trusted resort booking partner. We make it easy to find and book the perfect stay, whether for business or vacation. Enjoy a seamless experience with handpicked accommodations, great deals, and 24/7 support.
+                  Grand Valley Resort is described as a destination where comfort meets nature, blending a relaxed, natural environment with good basic amenities. It's located near Bhilar on the Kawand-Bhilar Road, surrounded by greenery — ideal if you want a quieter, more scenic retreat away from the busiest parts of Mahabaleshwar.
                 </p>
 
                 {/* Explore More Button */}

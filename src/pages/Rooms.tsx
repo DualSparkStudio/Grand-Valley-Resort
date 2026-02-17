@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import HouseRules from '../components/HouseRules'
 import RoomUnavailableModal from '../components/RoomUnavailableModal'
+import LogoLoader from '../components/LogoLoader'
 import SEO from '../components/SEO'
 import type { Room } from '../lib/supabase'
 import { api } from '../lib/supabase'
@@ -76,8 +77,8 @@ const Rooms: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-800"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <LogoLoader size="lg" text="Loading Rooms..." />
       </div>
     )
   }
