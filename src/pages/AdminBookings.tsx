@@ -185,8 +185,12 @@ const AdminBookings: React.FC = () => {
   }
 
   const openModal = (booking: CombinedBooking) => {
+    console.log('Opening modal with booking:', booking);
+    console.log('Original booking:', booking.originalBooking);
+    
     setSelectedBooking(booking)
     if (booking.originalBooking) {
+      console.log('Setting form data from original booking');
       setFormData({
         first_name: booking.originalBooking.first_name,
         last_name: booking.originalBooking.last_name,
@@ -200,6 +204,8 @@ const AdminBookings: React.FC = () => {
         special_requests: booking.originalBooking.special_requests || '',
         total_amount: booking.originalBooking.total_amount
       })
+    } else {
+      console.error('No originalBooking found!');
     }
     setIsModalOpen(true)
   }
