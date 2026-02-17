@@ -189,6 +189,7 @@ const AdminBookings: React.FC = () => {
     console.log('Original booking:', booking.originalBooking);
     
     setSelectedBooking(booking)
+    
     if (booking.originalBooking) {
       console.log('Setting form data from original booking');
       setFormData({
@@ -207,7 +208,11 @@ const AdminBookings: React.FC = () => {
     } else {
       console.error('No originalBooking found!');
     }
-    setIsModalOpen(true)
+    
+    // Open modal after a small delay to ensure state is updated
+    setTimeout(() => {
+      setIsModalOpen(true)
+    }, 0)
   }
 
   const closeModal = () => {
@@ -640,7 +645,9 @@ const AdminBookings: React.FC = () => {
               <div className="p-6">
                 {selectedBooking.source === 'Website' ? (
                   /* Edit Mode */
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <>
+                    {console.log('Rendering modal with formData:', formData)}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                       <input
@@ -761,6 +768,7 @@ const AdminBookings: React.FC = () => {
                       />
                     </div>
                   </div>
+                  </>
                 ) : (
                   /* View Mode */
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
