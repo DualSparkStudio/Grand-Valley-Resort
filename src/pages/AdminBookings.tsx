@@ -639,6 +639,8 @@ const AdminBookings: React.FC = () => {
                 {selectedBooking.source === 'Website' ? (
                   /* Edit Mode */
                   <div key={selectedBooking.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {console.log('Edit mode - selectedBooking:', selectedBooking)}
+                    {console.log('originalBooking:', selectedBooking.originalBooking)}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                       <input
