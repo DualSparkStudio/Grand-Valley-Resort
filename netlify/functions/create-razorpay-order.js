@@ -7,6 +7,11 @@ const razorpay = new Razorpay({
 
 export const handler = async (event, context) => {
   // Debug environment variables
+  console.log('Environment check:', {
+    hasKeyId: !!process.env.RAZORPAY_KEY_ID,
+    hasKeySecret: !!process.env.RAZORPAY_KEY_SECRET,
+    keyIdPrefix: process.env.RAZORPAY_KEY_ID?.substring(0, 8)
+  });
   
   // Enable CORS
   const headers = {
@@ -89,12 +94,16 @@ export const handler = async (event, context) => {
       }),
     };
   } catch (error) {
-    // Sanitize error messages to prevent information leakage
+    // Log the actual error for debugging
+    console.error('Razorpay order creation error:', error);
+    
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         error: 'Failed to create order',
+        message: error.message,
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
       }),
     };
   }
