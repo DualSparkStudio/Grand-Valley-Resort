@@ -71,6 +71,25 @@ const AdminBookings: React.FC = () => {
     filterBookings()
   }, [combinedBookings, searchTerm, statusFilter, sourceFilter])
 
+  // Sync formData when selectedBooking changes
+  useEffect(() => {
+    if (selectedBooking?.originalBooking) {
+      setFormData({
+        first_name: selectedBooking.originalBooking.first_name,
+        last_name: selectedBooking.originalBooking.last_name,
+        email: selectedBooking.originalBooking.email,
+        phone: selectedBooking.originalBooking.phone,
+        check_in_date: selectedBooking.originalBooking.check_in_date,
+        check_out_date: selectedBooking.originalBooking.check_out_date,
+        num_guests: selectedBooking.originalBooking.num_guests,
+        booking_status: selectedBooking.originalBooking.booking_status,
+        payment_status: selectedBooking.originalBooking.payment_status,
+        special_requests: selectedBooking.originalBooking.special_requests || '',
+        total_amount: selectedBooking.originalBooking.total_amount
+      })
+    }
+  }, [selectedBooking])
+
   const loadData = async () => {
     try {
       setLoading(true)
@@ -185,34 +204,8 @@ const AdminBookings: React.FC = () => {
   }
 
   const openModal = (booking: CombinedBooking) => {
-    console.log('Opening modal with booking:', booking);
-    console.log('Original booking:', booking.originalBooking);
-    
     setSelectedBooking(booking)
-    
-    if (booking.originalBooking) {
-      console.log('Setting form data from original booking');
-      setFormData({
-        first_name: booking.originalBooking.first_name,
-        last_name: booking.originalBooking.last_name,
-        email: booking.originalBooking.email,
-        phone: booking.originalBooking.phone,
-        check_in_date: booking.originalBooking.check_in_date,
-        check_out_date: booking.originalBooking.check_out_date,
-        num_guests: booking.originalBooking.num_guests,
-        booking_status: booking.originalBooking.booking_status,
-        payment_status: booking.originalBooking.payment_status,
-        special_requests: booking.originalBooking.special_requests || '',
-        total_amount: booking.originalBooking.total_amount
-      })
-    } else {
-      console.error('No originalBooking found!');
-    }
-    
-    // Open modal after a small delay to ensure state is updated
-    setTimeout(() => {
-      setIsModalOpen(true)
-    }, 0)
+    setIsModalOpen(true)
   }
 
   const closeModal = () => {
@@ -645,9 +638,7 @@ const AdminBookings: React.FC = () => {
               <div className="p-6">
                 {selectedBooking.source === 'Website' ? (
                   /* Edit Mode */
-                  <>
-                    {console.log('Rendering modal with formData:', formData)}
-                    <div key={selectedBooking.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div key={selectedBooking.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                       <input
@@ -768,7 +759,6 @@ const AdminBookings: React.FC = () => {
                       />
                     </div>
                   </div>
-                  </>
                 ) : (
                   /* View Mode */
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
