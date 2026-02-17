@@ -10,12 +10,10 @@ import SmoothScroll from './components/SmoothScroll';
 import { AuthProvider } from './contexts/AuthContext';
 import { MaintenanceProvider, useMaintenance } from './contexts/MaintenanceContext';
 import About from './pages/About';
-import AdminAttractions from './pages/AdminAttractions';
 import AdminBookings from './pages/AdminBookings';
 import AdminCalendar from './pages/AdminCalendar';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminFAQ from './pages/AdminFAQ';
-import AdminFeatures from './pages/AdminFeatures';
 import AdminHouseRules from './pages/AdminHouseRules';
 import AdminMaintenance from './pages/AdminMaintenance';
 import AdminProfile from './pages/AdminProfile';
@@ -103,8 +101,6 @@ const AppContent: React.FC = () => {
         <Route path="calendar" element={<AdminCalendar />} />
         <Route path="reviews" element={<AdminReviews />} />
         <Route path="profile" element={<AdminProfile />} />
-        <Route path="attractions" element={<AdminAttractions />} />
-        <Route path="features" element={<AdminFeatures />} />
         <Route path="faq" element={<AdminFAQ />} />
         <Route path="house-rules" element={<AdminHouseRules />} />
         <Route path="maintenance" element={<AdminMaintenance />} />

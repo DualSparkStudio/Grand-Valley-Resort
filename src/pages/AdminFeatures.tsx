@@ -302,9 +302,6 @@ const AdminFeatures: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {feature.is_featured && (
-                      <StarIcon className="h-5 w-5 text-yellow-500" />
-                    )}
                     {feature.is_active ? (
                       <CheckCircleIcon className="h-5 w-5 text-green-500" />
                     ) : (
@@ -459,19 +456,6 @@ const AdminFeatures: React.FC = () => {
                   />
                   <label htmlFor="is_active" className="ml-2 block text-sm text-gray-900">
                     Active
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="is_featured"
-                    checked={formData.is_featured}
-                    onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="is_featured" className="ml-2 block text-sm text-gray-900">
-                    Featured (Show on Home Page)
                   </label>
                 </div>
               </div>

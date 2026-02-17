@@ -2,7 +2,6 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AttractionCard from '../components/AttractionCard';
-import { supabase } from '../lib/supabase';
 
 interface Attraction {
   id: number;
@@ -21,7 +20,6 @@ interface Attraction {
 
 const TouristAttractions: React.FC = () => {
 
-  const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Gallery modal state
@@ -37,27 +35,8 @@ const TouristAttractions: React.FC = () => {
     currentIndex: 0
   })
 
-
-
-  // Fetch attractions from database
-  useEffect(() => {
-    fetchAttractions();
-  }, []);
-
-  const fetchAttractions = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('attractions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching attractions:', error);
-        // Use demo data if API fails
-        // NOTE: These are placeholder images. Please replace with actual photos of each attraction
-        // You can upload real images via the Admin panel or replace these URLs with actual image URLs
-        setAttractions([
+  // Hardcoded attractions data
+  const attractions: Attraction[] = [
           {
             id: 1,
             name: 'Pratapgad Fort',
@@ -438,37 +417,12 @@ const TouristAttractions: React.FC = () => {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           }
-        ]);
-        return;
-      }
+        ];
 
-      // Map database data to the expected format
-      const mappedAttractions = (data || []).map((attraction: any) => ({
-        id: attraction.id,
-        name: attraction.name,
-        description: attraction.description || '',
-        images: attraction.images && attraction.images.length > 0 
-          ? attraction.images 
-          : attraction.image_url 
-            ? [attraction.image_url] 
-            : ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-        distance: attraction.distance 
-          ? `${attraction.distance} from resort` 
-          : 'N/A',
-        travel_time: attraction.travel_time || 'N/A',
-        type: attraction.category || 'Attraction',
-        highlights: attraction.highlights || [],
-        best_time: attraction.best_time || 'Year Round',
-        category: (attraction.category || '').toLowerCase(),
-        created_at: attraction.created_at || new Date().toISOString(),
-        updated_at: attraction.updated_at || new Date().toISOString()
-      }));
-      setAttractions(mappedAttractions);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setLoading(false), 500);
+  }, []);
 
   // Gallery functions
   const openGallery = (images: string[], title: string) => {
