@@ -43,6 +43,7 @@ const AdminBookings: React.FC = () => {
   const [selectedBookings, setSelectedBookings] = useState<string[]>([])
   const [selectAll, setSelectAll] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
   const [selectedBooking, setSelectedBooking] = useState<CombinedBooking | null>(null)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
@@ -203,8 +204,9 @@ const AdminBookings: React.FC = () => {
     setFilteredBookings(filtered)
   }
 
-  const openModal = (booking: CombinedBooking) => {
+  const openModal = (booking: CombinedBooking, editMode: boolean = false) => {
     setSelectedBooking(booking)
+    setIsEditMode(editMode)
     setIsModalOpen(true)
   }
 
@@ -585,7 +587,7 @@ const AdminBookings: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
                           <button
-                            onClick={() => openModal(booking)}
+                            onClick={() => openModal(booking, false)}
                             className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100 transition-colors duration-200"
                             title="View Details"
                           >
@@ -594,7 +596,7 @@ const AdminBookings: React.FC = () => {
                           {booking.source === 'Website' && booking.originalBooking && (
                             <>
                               <button
-                                onClick={() => openModal(booking)}
+                                onClick={() => openModal(booking, true)}
                                 className="text-green-600 hover:text-green-900 p-1 rounded-full hover:bg-green-100 transition-colors duration-200"
                                 title="Edit Booking"
                               >
@@ -625,7 +627,7 @@ const AdminBookings: React.FC = () => {
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedBooking.source === 'Website' ? 'Edit Booking' : 'Booking Details'}
+                  {isEditMode ? 'Edit Booking' : 'Booking Details'}
                 </h3>
                 <button
                   onClick={closeModal}
@@ -636,7 +638,7 @@ const AdminBookings: React.FC = () => {
               </div>
               
               <div className="p-6">
-                {selectedBooking.source === 'Website' ? (
+                {isEditMode ? (
                   /* Edit Mode - Force remount with key */
                   <form key={`edit-${selectedBooking.id}-${selectedBooking.originalBooking?.id}`} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -761,10 +763,11 @@ const AdminBookings: React.FC = () => {
                   </form>
                 ) : (
                   /* View Mode */
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Customer Information</h4>
-                      <div className="space-y-2 text-sm">
+                      <div className="space-y-2 text-sm text-gray-900">
                         <p><span className="font-medium">Name:</span> {selectedBooking.guestName}</p>
                         <p><span className="font-medium">Email:</span> {selectedBooking.email || 'N/A'}</p>
                         <p><span className="font-medium">Phone:</span> {selectedBooking.phone || 'N/A'}</p>
@@ -773,7 +776,7 @@ const AdminBookings: React.FC = () => {
                     
                     <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Booking Information</h4>
-                      <div className="space-y-2 text-sm">
+                      <div className="space-y-2 text-sm text-gray-900">
                         <p><span className="font-medium">Room:</span> {selectedBooking.roomName}</p>
                         <p><span className="font-medium">Check-in:</span> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
                         <p><span className="font-medium">Check-out:</span> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
@@ -782,8 +785,9 @@ const AdminBookings: React.FC = () => {
                         <p><span className="font-medium">Booking Date:</span> {selectedBooking.bookingDate ? new Date(selectedBooking.bookingDate).toLocaleDateString() + ' ' + new Date(selectedBooking.bookingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A'}</p>
                       </div>
                     </div>
+                    </div>
                     
-                    <div className="md:col-span-2">
+                    <div>
                       <h4 className="text-sm font-medium text-gray-900 mb-3">Status & Payment</h4>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
@@ -814,7 +818,7 @@ const AdminBookings: React.FC = () => {
                     </div>
                     
                     {selectedBooking.special_requests && (
-                      <div className="md:col-span-2">
+                      <div>
                         <h4 className="text-sm font-medium text-gray-900 mb-3">Special Requests</h4>
                         <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">{selectedBooking.special_requests}</p>
                       </div>
