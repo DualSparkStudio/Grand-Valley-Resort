@@ -1,10 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import GlassCard from '../components/GlassCard'
 import PremiumImage from '../components/PremiumImage'
 import TextReveal from '../components/TextReveal'
+import { supabase } from '../lib/supabase'
+
+interface Feature {
+  id: number
+  title: string
+  description: string
+  icon: string
+  category: string
+  is_active: boolean
+  display_order: number
+}
 
 const Features: React.FC = () => {
+  const [features, setFeatures] = useState<Feature[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchFeatures()
+  }, [])
+
+  const fetchFeatures = async () => {
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('features')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true })
+
+      if (error) throw error
+      setFeatures(data || [])
+    } catch (error) {
+      console.error('Error fetching features:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Group features by category
+  const groupedFeatures = features.reduce((acc, feature) => {
+    const category = feature.category || 'general'
+    if (!acc[category]) {
+      acc[category] = []
+    }
+    acc[category].push(feature)
+    return acc
+  }, {} as Record<string, Feature[]>)
+
   const facilities = [
     {
       title: 'COMFORT & CONVENIENCE',
@@ -135,6 +181,52 @@ const Features: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Database Features Section */}
+      {!loading && features.length > 0 && (
+        <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Our Features & Amenities
+              </h2>
+              <p className="text-lg text-gray-600">
+                Everything you need for a comfortable and memorable stay
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={containerVariants}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            >
+              {features.map((feature) => (
+                <motion.div key={feature.id} variants={itemVariants}>
+                  <div className="bg-white rounded-lg shadow-md p-6 h-full hover:shadow-xl transition-all duration-300 group">
+                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
+                      {feature.icon || '✨'}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-golden-600 transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Facilities Grid */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
