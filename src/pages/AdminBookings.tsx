@@ -643,7 +643,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                       <input
                         type="text"
-                        value={formData.first_name}
+                        value={selectedBooking.originalBooking?.first_name || ''}
                         onChange={(e) => setFormData({...formData, first_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -653,7 +653,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                       <input
                         type="text"
-                        value={formData.last_name}
+                        value={selectedBooking.originalBooking?.last_name || ''}
                         onChange={(e) => setFormData({...formData, last_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -663,7 +663,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                       <input
                         type="email"
-                        value={formData.email}
+                        value={selectedBooking.originalBooking?.email || ''}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -673,7 +673,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                       <input
                         type="tel"
-                        value={formData.phone}
+                        value={selectedBooking.originalBooking?.phone || ''}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -683,7 +683,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Check-in Date</label>
                       <input
                         type="date"
-                        value={formData.check_in_date}
+                        value={selectedBooking.originalBooking?.check_in_date || ''}
                         onChange={(e) => setFormData({...formData, check_in_date: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -693,7 +693,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Check-out Date</label>
                       <input
                         type="date"
-                        value={formData.check_out_date}
+                        value={selectedBooking.originalBooking?.check_out_date || ''}
                         onChange={(e) => setFormData({...formData, check_out_date: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -704,7 +704,7 @@ const AdminBookings: React.FC = () => {
                       <input
                         type="number"
                         min="1"
-                        value={formData.num_guests}
+                        value={selectedBooking.originalBooking?.num_guests || 1}
                         onChange={(e) => setFormData({...formData, num_guests: parseInt(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -714,7 +714,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount (₹)</label>
                       <input
                         type="number"
-                        value={formData.total_amount}
+                        value={selectedBooking.originalBooking?.total_amount || 0}
                         onChange={(e) => setFormData({...formData, total_amount: parseInt(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -723,7 +723,7 @@ const AdminBookings: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Booking Status</label>
                       <select
-                        value={formData.booking_status}
+                        value={selectedBooking.originalBooking?.booking_status || 'pending'}
                         onChange={(e) => setFormData({...formData, booking_status: e.target.value as any})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       >
@@ -737,7 +737,7 @@ const AdminBookings: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
                       <select
-                        value={formData.payment_status}
+                        value={selectedBooking.originalBooking?.payment_status || 'pending'}
                         onChange={(e) => setFormData({...formData, payment_status: e.target.value as any})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       >
@@ -752,7 +752,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
                       <textarea
                         rows={3}
-                        value={formData.special_requests}
+                        value={selectedBooking.originalBooking?.special_requests || ''}
                         onChange={(e) => setFormData({...formData, special_requests: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Any special requests or notes..."
