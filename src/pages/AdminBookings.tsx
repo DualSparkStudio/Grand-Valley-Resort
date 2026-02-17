@@ -643,6 +643,7 @@ const AdminBookings: React.FC = () => {
                     {console.log('originalBooking:', selectedBooking.originalBooking)}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                      {console.log('First name value:', selectedBooking.originalBooking?.first_name)}
                       <input
                         type="text"
                         value={selectedBooking.originalBooking?.first_name || ''}
