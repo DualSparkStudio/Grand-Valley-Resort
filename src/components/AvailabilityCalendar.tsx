@@ -578,7 +578,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
 
   return (
     <div className="calendar">
-      <style jsx>{`
+      <style>{`
         .calendar {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           border: 1px solid #e5e7eb;
@@ -652,6 +652,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
           transition: background-color 0.2s;
           font-size: 14px;
           font-weight: 400;
+          color: #222222;
         }
         
         .calendar-day:last-child {

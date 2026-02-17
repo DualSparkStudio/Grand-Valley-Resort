@@ -1,13 +1,6 @@
 import Razorpay from 'razorpay';
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
-
 export const handler = async (event, context) => {
-  // Debug environment variables
-  
   // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -25,6 +18,25 @@ export const handler = async (event, context) => {
   }
 
   try {
+    // Check if credentials exist
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      console.error('Missing Razorpay credentials');
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: 'Razorpay credentials not configured',
+        }),
+      };
+    }
+
+    // Initialize Razorpay inside the handler
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+
+    console.log('Razorpay initialized with key:', process.env.RAZORPAY_KEY_ID?.substring(0, 15));
     if (event.httpMethod !== 'POST') {
       return {
         statusCode: 405,
@@ -89,12 +101,16 @@ export const handler = async (event, context) => {
       }),
     };
   } catch (error) {
-    // Sanitize error messages to prevent information leakage
+    // Log the actual error for debugging
+    console.error('Razorpay order creation error:', error);
+    
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         error: 'Failed to create order',
+        message: error.message,
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
       }),
     };
   }
