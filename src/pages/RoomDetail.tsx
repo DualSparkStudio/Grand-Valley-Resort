@@ -29,7 +29,6 @@ const RoomDetail: React.FC = () => {
   const [numGuests, setNumGuests] = useState(1)
   const [availableRooms, setAvailableRooms] = useState<any[]>([])
   const [showCalendar, setShowCalendar] = useState(false)
-  const [datesSelectedFromCalendar, setDatesSelectedFromCalendar] = useState(false)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [dateError, setDateError] = useState<string>('')
@@ -191,15 +190,10 @@ const RoomDetail: React.FC = () => {
     
     // Only close calendar and mark as selected from calendar when both dates are selected
     if (startDate && endDate) {
-      setDatesSelectedFromCalendar(true)
       setShowCalendar(false) // Close calendar only after both dates are selected
       // Explicitly trigger availability check
       setTimeout(() => checkAvailability(), 100)
     }
-  }
-
-  const handleManualDateChange = () => {
-    setDatesSelectedFromCalendar(false)
   }
 
   const clearDates = () => {
@@ -207,7 +201,6 @@ const RoomDetail: React.FC = () => {
       checkIn: '',
       checkOut: ''
     })
-    setDatesSelectedFromCalendar(false)
     setAvailableRooms([])
     setDateError('') // Clear any error messages
   }
@@ -568,55 +561,6 @@ const RoomDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* Date Selection - Only show if not selected from calendar */}
-              {!datesSelectedFromCalendar && (
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Check-in Date
-                    </label>
-                    <input
-                      type="date"
-                      value={selectedDates.checkIn}
-                      onChange={(e) => {
-                        setDateError('') // Clear any existing errors
-                        setSelectedDates(prev => ({ ...prev, checkIn: e.target.value }))
-                        handleManualDateChange()
-                      }}
-                      min={new Date().toISOString().split('T')[0]}
-                      disabled={!room?.is_active}
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 ${dateError ? 'border-red-500' : 'border-gray-300'}`}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Check-out Date
-                    </label>
-                    <input
-                      type="date"
-                      value={selectedDates.checkOut}
-                      onChange={(e) => {
-                        const checkOutDate = e.target.value
-                        
-                        // Validate that check-out is not the same as check-in
-                        if (checkOutDate === selectedDates.checkIn) {
-                          setDateError('Check-out date cannot be the same as check-in date. Please select a different date.')
-                          return // Don't update the date
-                        }
-                        
-                        setDateError('') // Clear error if validation passes
-                        setSelectedDates(prev => ({ ...prev, checkOut: checkOutDate }))
-                        handleManualDateChange()
-                      }}
-                      min={selectedDates.checkIn ? new Date(new Date(selectedDates.checkIn).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
-                      disabled={!room?.is_active}
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 ${dateError ? 'border-red-500' : 'border-gray-300'}`}
-                    />
-                  </div>
-                </div>
-              )}
-
               {/* Selected Dates Display */}
               {selectedDates.checkIn && selectedDates.checkOut && (
                 <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -648,10 +592,10 @@ const RoomDetail: React.FC = () => {
                       value={numGuests}
                       onChange={e => setNumGuests(Number(e.target.value))}
                       disabled={!room?.is_active}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                     >
                   {Array.from({ length: room.max_occupancy || 3 }, (_, i) => i + 1).map(num => (
-                    <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
+                    <option key={num} value={num} className="text-gray-900">{num} {num === 1 ? 'Guest' : 'Guests'}</option>
                   ))}
                 </select>
                 {/* Show occupancy pricing info */}
