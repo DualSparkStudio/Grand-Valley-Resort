@@ -647,7 +647,7 @@ const AdminBookings: React.FC = () => {
                   /* Edit Mode */
                   <>
                     {console.log('Rendering modal with formData:', formData)}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div key={selectedBooking.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                       <input
