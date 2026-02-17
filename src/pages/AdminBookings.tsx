@@ -637,16 +637,13 @@ const AdminBookings: React.FC = () => {
               
               <div className="p-6">
                 {selectedBooking.source === 'Website' ? (
-                  /* Edit Mode */
-                  <div key={selectedBooking.id} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {console.log('Edit mode - selectedBooking:', selectedBooking)}
-                    {console.log('originalBooking:', selectedBooking.originalBooking)}
+                  /* Edit Mode - Force remount with key */
+                  <form key={`edit-${selectedBooking.id}-${selectedBooking.originalBooking?.id}`} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                      {console.log('First name value:', selectedBooking.originalBooking?.first_name)}
                       <input
                         type="text"
-                        value={selectedBooking.originalBooking?.first_name || ''}
+                        defaultValue={selectedBooking.originalBooking?.first_name || ''}
                         onChange={(e) => setFormData({...formData, first_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -656,7 +653,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                       <input
                         type="text"
-                        value={selectedBooking.originalBooking?.last_name || ''}
+                        defaultValue={selectedBooking.originalBooking?.last_name || ''}
                         onChange={(e) => setFormData({...formData, last_name: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -666,7 +663,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                       <input
                         type="email"
-                        value={selectedBooking.originalBooking?.email || ''}
+                        defaultValue={selectedBooking.originalBooking?.email || ''}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -676,7 +673,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                       <input
                         type="tel"
-                        value={selectedBooking.originalBooking?.phone || ''}
+                        defaultValue={selectedBooking.originalBooking?.phone || ''}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -686,7 +683,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Check-in Date</label>
                       <input
                         type="date"
-                        value={selectedBooking.originalBooking?.check_in_date || ''}
+                        defaultValue={selectedBooking.originalBooking?.check_in_date || ''}
                         onChange={(e) => setFormData({...formData, check_in_date: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -696,7 +693,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Check-out Date</label>
                       <input
                         type="date"
-                        value={selectedBooking.originalBooking?.check_out_date || ''}
+                        defaultValue={selectedBooking.originalBooking?.check_out_date || ''}
                         onChange={(e) => setFormData({...formData, check_out_date: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -707,7 +704,7 @@ const AdminBookings: React.FC = () => {
                       <input
                         type="number"
                         min="1"
-                        value={selectedBooking.originalBooking?.num_guests || 1}
+                        defaultValue={selectedBooking.originalBooking?.num_guests || 1}
                         onChange={(e) => setFormData({...formData, num_guests: parseInt(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -717,7 +714,7 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount (₹)</label>
                       <input
                         type="number"
-                        value={selectedBooking.originalBooking?.total_amount || 0}
+                        defaultValue={selectedBooking.originalBooking?.total_amount || 0}
                         onChange={(e) => setFormData({...formData, total_amount: parseInt(e.target.value)})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
@@ -726,7 +723,7 @@ const AdminBookings: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Booking Status</label>
                       <select
-                        value={selectedBooking.originalBooking?.booking_status || 'pending'}
+                        defaultValue={selectedBooking.originalBooking?.booking_status || 'pending'}
                         onChange={(e) => setFormData({...formData, booking_status: e.target.value as any})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       >
@@ -740,7 +737,7 @@ const AdminBookings: React.FC = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
                       <select
-                        value={selectedBooking.originalBooking?.payment_status || 'pending'}
+                        defaultValue={selectedBooking.originalBooking?.payment_status || 'pending'}
                         onChange={(e) => setFormData({...formData, payment_status: e.target.value as any})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                       >
@@ -755,13 +752,13 @@ const AdminBookings: React.FC = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
                       <textarea
                         rows={3}
-                        value={selectedBooking.originalBooking?.special_requests || ''}
+                        defaultValue={selectedBooking.originalBooking?.special_requests || ''}
                         onChange={(e) => setFormData({...formData, special_requests: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Any special requests or notes..."
                       />
                     </div>
-                  </div>
+                  </form>
                 ) : (
                   /* View Mode */
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
