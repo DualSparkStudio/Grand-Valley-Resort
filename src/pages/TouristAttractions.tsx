@@ -452,13 +452,13 @@ const TouristAttractions: React.FC = () => {
           : attraction.image_url 
             ? [attraction.image_url] 
             : ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-        distance: attraction.distance_from_resort 
-          ? `${attraction.distance_from_resort} km from resort` 
+        distance: attraction.distance 
+          ? `${attraction.distance} from resort` 
           : 'N/A',
-        travel_time: attraction.estimated_time || 'N/A',
+        travel_time: attraction.travel_time || 'N/A',
         type: attraction.category || 'Attraction',
-        highlights: [], // You may want to add a highlights field to the database
-        best_time: 'Year Round', // You may want to add this to the database
+        highlights: attraction.highlights || [],
+        best_time: attraction.best_time || 'Year Round',
         category: (attraction.category || '').toLowerCase(),
         created_at: attraction.created_at || new Date().toISOString(),
         updated_at: attraction.updated_at || new Date().toISOString()
