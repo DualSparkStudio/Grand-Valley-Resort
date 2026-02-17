@@ -67,18 +67,10 @@ const About: React.FC = () => {
                 
                 <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base text-justify">
                   <p>
-                    Grand Valley Resort represents a philosophy where luxury meets nature. Nestled in 
-                    the heart of Mahabaleshwar, our resort offers an escape that combines modern comfort 
-                    with the serene beauty of the Sahyadri mountains.
+                    Welcome to Grand Valley Resort, your serene retreat nestled in the lush valleys of Mahabaleshwar — a place where nature's calm meets thoughtful comfort. Perched at At-Kaswand, Bhilar on Kawand-Bhilar Road, our resort offers a refreshing escape from the everyday, inviting you to unwind in an environment designed for relaxation and rejuvenation amidst scenic Western Ghats beauty.
                   </p>
                   <p>
-                    We believe in creating memorable experiences for our guests, where every moment is 
-                    designed to provide comfort, relaxation, and a connection with nature. Our commitment 
-                    is to ensure that your stay with us becomes a cherished memory.
-                  </p>
-                  <p>
-                    Whether you're seeking a romantic getaway, a family vacation, or a peaceful retreat, 
-                    Grand Valley Resort provides the perfect setting for an unforgettable stay.
+                    At Grand Valley Resort, we believe that every stay should feel like a personal journey into peace and comfort. Our philosophy is simple: luxury with nature — a space where guests can reconnect with the outdoors without giving up the conveniences of modern living. From cool breezes and green vistas to cozy interiors and attentive service, every element is crafted to make your stay memorable.
                   </p>
                 </div>
               </div>
@@ -115,19 +107,10 @@ const About: React.FC = () => {
               <div className="order-1 lg:order-2">
                 <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-sm sm:text-base text-justify">
                   <p>
-                    Grand Valley Resort emerged as a nature-inspired hideaway in the breathtaking Sahyadri 
-                    Range. What started as a vision to create a perfect blend of luxury and natural beauty 
-                    has grown into a beloved destination for travelers seeking tranquility and comfort.
+                    Set against the rolling hills of the Sahyadri Range near Mahabaleshwar and Panchgani, Grand Valley Resort emerged as a nature-inspired hideaway where comfort harmonizes with breathtaking landscapes. Situated in the scenic Bhilar region, this retreat was conceived to offer travellers an escape from urban life — a place where cool mountain air, panoramic valley views, and serene surroundings become part of every stay.
                   </p>
                   <p>
-                    Our journey began with a simple belief: that the best hospitality comes from combining 
-                    modern amenities with the untouched beauty of nature. Located in Mahabaleshwar, we offer 
-                    our guests the gift of mountain air, panoramic valley views, and moments of pure relaxation.
-                  </p>
-                  <p>
-                    Over the years, Grand Valley Resort has become a popular destination for those who appreciate 
-                    the finer things in life while staying connected to nature. We continue to evolve, always 
-                    keeping our guests' comfort and satisfaction at the heart of everything we do.
+                    Over the years, Grand Valley has grown into a favourite destination for couples, families, and nature lovers — a place where every sunrise over the hills and every quiet evening in the gardens adds a chapter to a visitor's story.
                   </p>
                 </div>
               </div>

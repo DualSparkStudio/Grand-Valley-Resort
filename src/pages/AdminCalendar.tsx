@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast'
 import EnhancedCalendar from '../components/EnhancedCalendar'
 import type { Booking, Room } from '../lib/supabase'
 import { api } from '../lib/supabase'
+import LogoLoader from '../components/LogoLoader'
 
 const AdminCalendar: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -223,10 +224,7 @@ const AdminCalendar: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading calendar...</p>
-        </div>
+        <LogoLoader size="lg" text="Loading calendar..." />
       </div>
     )
   }

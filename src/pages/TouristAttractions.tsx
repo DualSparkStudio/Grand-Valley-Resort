@@ -2,7 +2,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AttractionCard from '../components/AttractionCard';
-import { supabase } from '../lib/supabase';
+import LogoLoader from '../components/LogoLoader';
 
 interface Attraction {
   id: number;
@@ -21,7 +21,6 @@ interface Attraction {
 
 const TouristAttractions: React.FC = () => {
 
-  const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Gallery modal state
@@ -37,27 +36,8 @@ const TouristAttractions: React.FC = () => {
     currentIndex: 0
   })
 
-
-
-  // Fetch attractions from database
-  useEffect(() => {
-    fetchAttractions();
-  }, []);
-
-  const fetchAttractions = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('attractions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching attractions:', error);
-        // Use demo data if API fails
-        // NOTE: These are placeholder images. Please replace with actual photos of each attraction
-        // You can upload real images via the Admin panel or replace these URLs with actual image URLs
-        setAttractions([
+  // Hardcoded attractions data
+  const attractions: Attraction[] = [
           {
             id: 1,
             name: 'Pratapgad Fort',
@@ -68,8 +48,8 @@ const TouristAttractions: React.FC = () => {
               'https://www.hoteldreamland.com/wp-content/uploads/2019/07/Pratapgad-Fort-2.jpg',
               'https://media.assettype.com/outlooktraveller/import/outlooktraveller/public/uploads/articles/travelnews/2017/03/Pratapgad-featured.jpg?w=1200&h=675&auto=format%2Ccompress&fit=max&enlarge=true'
             ],
-            distance: '24 km from resort',
-            travel_time: '45 minutes',
+            distance: '38 km from resort',
+            travel_time: '1 hour 24 minutes',
             type: 'Historic Fort',
             highlights: ['Historic', 'Panoramic Views', 'Architecture', 'Photography', 'Cultural Heritage'],
             best_time: 'October to March',
@@ -87,8 +67,8 @@ const TouristAttractions: React.FC = () => {
               'https://static.wixstatic.com/media/ffb7e9_b262a318aa834fefa5a983167f8014be~mv2.png/v1/fill/w_840,h_480,al_c,lg_1,q_90/ffb7e9_b262a318aa834fefa5a983167f8014be~mv2.png',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSH7zuf66Iqqj-7SKenu-zoPsekNuaPaWcwiQ&s'
             ],
-            distance: '12 km from resort',
-            travel_time: '25 minutes',
+            distance: '16 km from resort',
+            travel_time: '30 minutes',
             type: 'Lake',
             highlights: ['Boating', 'Scenic Views', 'Recreation', 'Photography', 'Family Fun'],
             best_time: 'Year Round',
@@ -106,7 +86,7 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNsdhL8366vuEnZEw5UdOqguDOTnSd6jXjsw&s',
               'https://www.mapro.com/cdn/shop/files/WhatsApp_Image_2023-03-05_at_9.53.11_AM.jpg?v=1677993015&width=1500'
             ],
-            distance: '8 km from resort',
+            distance: '7 km from resort',
             travel_time: '15 minutes',
             type: 'Garden & Food Park',
             highlights: ['Strawberries', 'Local Food', 'Garden Views', 'Family Fun', 'Shopping'],
@@ -125,8 +105,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJMNuVNO6C5SNbapk39cKMQtXu-y-ypjtLsg&s',
               'https://mahabaleshwartourism.in/images/places-to-visit/headers/lingmala-waterfall-mahabaleshwar-tourism-entry-fee-timings-holidays-reviews-header.jpg'
             ],
-            distance: '18 km from resort',
-            travel_time: '35 minutes',
+            distance: '12 km from resort',
+            travel_time: '21 minutes',
             type: 'Waterfall',
             highlights: ['Natural Beauty', 'Photography', 'Trekking', 'Scenic Views', 'Nature Walk'],
             best_time: 'July to September',
@@ -144,8 +124,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGu9ekoITdbxj0ARoZM-vbgWpjIh5fOKprnQ&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUxTefn9zHIScekm8l7vYNZ4ucyUokrFq8Og&s'
             ],
-            distance: '10 km from resort',
-            travel_time: '20 minutes',
+            distance: '23 km from resort',
+            travel_time: '50 minutes',
             type: 'Viewpoint',
             highlights: ['Sunrise', 'Sunset', 'Panoramic Views', 'Photography', 'Nature'],
             best_time: 'October to May',
@@ -163,8 +143,8 @@ const TouristAttractions: React.FC = () => {
               'https://mahabaleshwartourism.in/images/places-to-visit/headers/kates-point-mahabaleshwar-header-mahabaleshwar-tourism.jpg.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg03-Cz3VEjO_Tv8yXZa1wlP1kV9I8ePlRgg&s'
             ],
-            distance: '11 km from resort',
-            travel_time: '22 minutes',
+            distance: '13 km from resort',
+            travel_time: '32 minutes',
             type: 'Viewpoint',
             highlights: ['Valley Views', 'Photography', 'Sunset', 'Nature', 'Scenic Beauty'],
             best_time: 'Year Round',
@@ -182,8 +162,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTql8Z0fgI2m1as2p1YEGM7bFi9P-6m9nfr6A&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzIiKPLgb6nQ158yYgA5kAttYAgPxQHfiaVw&s'
             ],
-            distance: '13 km from resort',
-            travel_time: '28 minutes',
+            distance: '26 km from resort',
+            travel_time: '55 minutes',
             type: 'Viewpoint',
             highlights: ['Sunrise', 'Valley Views', 'Photography', 'Nature', 'Trekking'],
             best_time: 'October to May',
@@ -201,8 +181,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3-6o07pN0r300glz9Jf2foeqWCOY5MT73tg&s',
               'https://hblimg.mmtcdn.com/content/hubble/img/new_dest_imagemar/mmt/activities/m_Panchgani_2_l_800_1200.jpg'
             ],
-            distance: '20 km from resort',
-            travel_time: '40 minutes',
+            distance: '9 km from resort',
+            travel_time: '20 minutes',
             type: 'Hill Station',
             highlights: ['Strawberry Farms', 'Viewpoints', 'Shopping', 'Food', 'Nature'],
             best_time: 'Year Round',
@@ -220,8 +200,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIc9wNd8MSAoBe464vX3GuFvYKJbq6UYnHgg&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnQUWPU6wUPUWqguaq7A0WsnATWd1-0UanAw&s'
             ],
-            distance: '14 km from resort',
-            travel_time: '30 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Temple',
             highlights: ['Religious', 'Architecture', 'Spiritual', 'Photography', 'Cultural'],
             best_time: 'Year Round',
@@ -239,8 +219,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjCye6oZnf3ZSN0JYdWJKC76fRKVltBs2zsg&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr4OIb55xpFicXFiYkdiRzs4qb_rMuWgijlQ&s'
             ],
-            distance: '15 km from resort',
-            travel_time: '32 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Viewpoint',
             highlights: ['Sunrise', 'Sunset', 'Panoramic Views', 'Photography', 'Trekking'],
             best_time: 'October to May',
@@ -258,8 +238,8 @@ const TouristAttractions: React.FC = () => {
               'https://mahabaleshwartourism.in/images//tourist-places/mumbai-point-sunset-point-mahabaleshwar/mumbai-point-sunset-point-mahabaleshwar-tourism-one-day-city-tour.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMqLudx1Z9nq8M7GIS7TyryM7mKEJI1Oy-hw&s'
             ],
-            distance: '12 km from resort',
-            travel_time: '25 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Sunset Point',
             highlights: ['Sunset', 'Photography', 'Valley Views', 'Nature', 'Scenic Beauty'],
             best_time: 'Year Round',
@@ -277,8 +257,8 @@ const TouristAttractions: React.FC = () => {
               'https://res.cloudinary.com/kmadmin/image/upload/v1727355822/kiomoi/Wilson_Point_0803.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-KgqBdbHHA_iX04x4l-cP0VojV4l7k-Rhxw&s'
             ],
-            distance: '16 km from resort',
-            travel_time: '35 minutes',
+            distance: '19 km from resort',
+            travel_time: '40 minutes',
             type: 'Sunrise Point',
             highlights: ['Sunrise', '360° Views', 'Photography', 'Nature', 'Trekking'],
             best_time: 'October to May',
@@ -296,8 +276,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ3eWXdQUmnumwUR2XlBLtP39Wq8GjkxGQuQ&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmTasw5jBneGOVN2CdDIm18t57K-WQvy5drQ&s'
             ],
-            distance: '22 km from resort',
-            travel_time: '45 minutes',
+            distance: '11 km from resort',
+            travel_time: '25 minutes',
             type: 'Plateau',
             highlights: ['Horse Riding', 'Paragliding', 'Photography', 'Adventure', 'Scenic Views'],
             best_time: 'Year Round',
@@ -315,8 +295,8 @@ const TouristAttractions: React.FC = () => {
               'https://www.stone-shelter.com/places-to-visit-mahabaleshwar/rajpuri-caves-mahabaleshwar.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa-aAaxMSZkDIdvmRePBxFDxAEVF6Q-nP3Yg&s'
             ],
-            distance: '26 km from resort',
-            travel_time: '50 minutes',
+            distance: '15 km from resort',
+            travel_time: '35 minutes',
             type: 'Caves',
             highlights: ['Religious', 'Natural Pools', 'Spiritual', 'Photography', 'Adventure'],
             best_time: 'Year Round',
@@ -334,8 +314,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5GSMgMIP7B6wK_e-gdwqViCFb1yAr--LZZg&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNXbQD9hIF9-jOJ2Sb3JCtnhj68FOg3oU9zA&s'
             ],
-            distance: '30 km from resort',
-            travel_time: '55 minutes',
+            distance: '44 km from resort',
+            travel_time: '1 hour 20 minutes',
             type: 'Village & Lake',
             highlights: ['Boating', 'Water Sports', 'Scenic Views', 'Photography', 'Nature'],
             best_time: 'Year Round',
@@ -353,8 +333,8 @@ const TouristAttractions: React.FC = () => {
               'https://mahabaleshwartourism.in/images//tourist-places/chinamans-falls-mahabaleshwar/chinamans-falls-mahabaleshwar-photo-gallery-mahabaleshwar-tourism.jpg.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRALtfDcfN9_NZs6ijwlQQ7efe7GRsNXtebmA&s'
             ],
-            distance: '19 km from resort',
-            travel_time: '38 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Waterfall',
             highlights: ['Natural Beauty', 'Photography', 'Trekking', 'Nature Walk', 'Scenic Views'],
             best_time: 'July to September',
@@ -372,8 +352,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9tt7Z5t3BUcO21iKAgMg-qhRrvBtSprYEMg&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5mgn8cXkLEyr5eSQockCdXstv3JX-LoWUGA&s'
             ],
-            distance: '17 km from resort',
-            travel_time: '35 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Waterfall',
             highlights: ['Natural Beauty', 'Swimming', 'Photography', 'Nature', 'Monsoon'],
             best_time: 'July to September',
@@ -410,8 +390,8 @@ const TouristAttractions: React.FC = () => {
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzyA9A_kEU7ZRgiLNP91e2Uqcf2X8xEgc1Ag&s',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSH-tlOK-_XN1E591zWMxxkOf2mNJuF_8D7Gw&s'
             ],
-            distance: '11 km from resort',
-            travel_time: '23 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Viewpoint',
             highlights: ['Rock Formation', 'Photography', 'Valley Views', 'Nature', 'Unique'],
             best_time: 'Year Round',
@@ -429,8 +409,8 @@ const TouristAttractions: React.FC = () => {
               'https://mahabaleshwartourism.in/images/places-to-visit/headers/mumbai-point-sunset-point-mahabaleshwar-tourism-header.jpg',
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbxLl9EsxLmUqTSZO67rCsyuX4EzEP4DNioQ&s'
             ],
-            distance: '12 km from resort',
-            travel_time: '25 minutes',
+            distance: '20 km from resort',
+            travel_time: '40 minutes',
             type: 'Sunset Point',
             highlights: ['Sunset', 'Photography', 'Mountain Views', 'Nature', 'Scenic Beauty'],
             best_time: 'Year Round',
@@ -438,37 +418,12 @@ const TouristAttractions: React.FC = () => {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           }
-        ]);
-        return;
-      }
+        ];
 
-      // Map database data to the expected format
-      const mappedAttractions = (data || []).map((attraction: any) => ({
-        id: attraction.id,
-        name: attraction.name,
-        description: attraction.description || '',
-        images: attraction.images && attraction.images.length > 0 
-          ? attraction.images 
-          : attraction.image_url 
-            ? [attraction.image_url] 
-            : ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'],
-        distance: attraction.distance 
-          ? `${attraction.distance} from resort` 
-          : 'N/A',
-        travel_time: attraction.travel_time || 'N/A',
-        type: attraction.category || 'Attraction',
-        highlights: attraction.highlights || [],
-        best_time: attraction.best_time || 'Year Round',
-        category: (attraction.category || '').toLowerCase(),
-        created_at: attraction.created_at || new Date().toISOString(),
-        updated_at: attraction.updated_at || new Date().toISOString()
-      }));
-      setAttractions(mappedAttractions);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setLoading(false), 500);
+  }, []);
 
   // Gallery functions
   const openGallery = (images: string[], title: string) => {
@@ -540,8 +495,8 @@ const TouristAttractions: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-800"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <LogoLoader size="lg" text="Loading Attractions..." />
       </div>
     );
   }

@@ -30,8 +30,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
     { name: 'Rooms', href: '/admin/rooms', icon: BuildingOfficeIcon },
     { name: 'Bookings', href: '/admin/bookings', icon: CalendarIcon },
     { name: 'Calendar', href: '/admin/calendar', icon: CalendarIcon },
-    { name: 'Attractions', href: '/admin/attractions', icon: MapPinIcon },
-    { name: 'Features', href: '/admin/features', icon: SparklesIcon },
     { name: 'Reviews', href: '/admin/reviews', icon: StarIcon },
     { name: 'FAQ', href: '/admin/faq', icon: QuestionMarkCircleIcon },
     { name: 'House Rules', href: '/admin/house-rules', icon: DocumentTextIcon },
