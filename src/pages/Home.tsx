@@ -679,7 +679,7 @@ const Home: React.FC = () => {
                     const isLeftSwipe = distance > 50
                     const isRightSwipe = distance < -50
                     
-                    if (isLeftSwipe && currentRoomIndex < rooms.slice(0, 3).length - 1) {
+                    if (isLeftSwipe && currentRoomIndex < rooms.length - 1) {
                       setCurrentRoomIndex(currentRoomIndex + 1)
                     }
                     if (isRightSwipe && currentRoomIndex > 0) {
@@ -687,7 +687,7 @@ const Home: React.FC = () => {
                     }
                   }}
                 >
-                  {rooms.slice(0, 3).map((room, index) => {
+                  {rooms.map((room, index) => {
                     const isCenter = index === currentRoomIndex;
                     const getMainImage = () => {
                       if (room.images && room.images.length > 0) {
@@ -705,7 +705,7 @@ const Home: React.FC = () => {
                       <motion.div
                         key={room.id}
                         data-room-index={index}
-                        className={`relative flex-shrink-0 ${isCenter ? 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-md lg:max-w-lg' : 'w-[75%] sm:w-auto sm:flex-1 sm:max-w-xs'} cursor-pointer snap-center`}
+                        className={`relative flex-shrink-0 ${isCenter ? 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-md lg:max-w-lg' : 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-xs'} cursor-pointer snap-center`}
                         onMouseEnter={() => {
                           if (window.innerWidth >= 640) {
                             setCurrentRoomIndex(index)
@@ -761,7 +761,7 @@ const Home: React.FC = () => {
                         >
                           {/* Image */}
                           <motion.div 
-                            className={`relative overflow-hidden ${isCenter ? 'h-80 lg:h-96' : 'h-64'}`}
+                            className="relative overflow-hidden h-64 sm:h-72"
                             animate={{
                               scale: 1
                             }}
