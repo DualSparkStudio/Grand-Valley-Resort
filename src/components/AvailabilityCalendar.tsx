@@ -19,6 +19,7 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [roomName, setRoomName] = useState<string>('')
+  const [roomQuantity, setRoomQuantity] = useState<number>(1)
   const [selectionMode, setSelectionMode] = useState<'none' | 'start' | 'end'>('none')
 
   useEffect(() => {
@@ -57,10 +58,12 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         api.getRooms() // Get all rooms to find the room name
       ])
       
-      // Find the room name
+      // Find the room name and quantity
       const room = roomsData?.find(r => r.id === roomId)
       const currentRoomName = room ? room.name : 'Unknown Room'
+      const currentRoomQuantity = room?.quantity || 1
       setRoomName(currentRoomName)
+      setRoomQuantity(currentRoomQuantity)
       
       // Filter bookings for this room only (only website bookings)
       const roomBookings = bookingsData?.filter(booking => {
@@ -399,6 +402,7 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
           selectedStartDate={selectedStartDate}
           selectedEndDate={selectedEndDate}
           calendarData={events}
+          roomQuantity={roomQuantity}
         />
       </div>
       
@@ -413,6 +417,7 @@ interface CalendarComponentProps {
   selectedStartDate?: string
   selectedEndDate?: string
   calendarData: any[]
+  roomQuantity: number
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({
@@ -420,7 +425,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   onDateSelect,
   selectedStartDate,
   selectedEndDate,
-  calendarData
+  calendarData,
+  roomQuantity
 }) => {
   // Initialize calendar to selected date's month, or current month if no selection
   const getInitialDate = () => {
@@ -492,9 +498,13 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
     return result
   }
 
-  // Helper function to check if date is booked
+  // Helper function to check if date is fully booked (all rooms booked)
   const isDateBooked = (dateStr: string) => {
-    const result = calendarData.some(event => {
+    // If roomQuantity not loaded yet, default to 1
+    const quantity = roomQuantity || 1
+    
+    // Count how many bookings overlap with this date
+    const bookingsOnDate = calendarData.filter(event => {
       if (event.extendedProps?.type === 'booking') {
         const startDate = new Date(event.start)
         const endDate = new Date(event.end)
@@ -502,13 +512,15 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
         
         // For bookings, exclude the checkout date
         const isBooked = checkDate >= startDate && checkDate < endDate
-        if (isBooked) {
-        }
         return isBooked
       }
       return false
     })
-    return result
+    
+    // Date is only "booked" (blocked) if number of bookings >= room quantity
+    const isFullyBooked = bookingsOnDate.length >= quantity
+    
+    return isFullyBooked
   }
 
   // Helper function to check if date is selected

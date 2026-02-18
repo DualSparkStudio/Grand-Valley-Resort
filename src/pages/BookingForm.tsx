@@ -455,6 +455,37 @@ const BookingForm: React.FC = () => {
 
     try {
       
+      // Check if we're on localhost - bypass Razorpay for testing
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      
+      if (isLocalhost) {
+        // Localhost bypass - create booking directly without payment
+        toast.loading('Creating booking (localhost mode)...', { id: 'payment-prep' })
+        
+        // Simulate payment success with mock data
+        const mockPaymentResponse = {
+          razorpay_payment_id: `mock_payment_${Date.now()}`,
+          razorpay_order_id: `mock_order_${Date.now()}`,
+          razorpay_signature: 'mock_signature'
+        }
+        
+        const mockOrderData = {
+          order: {
+            id: `mock_order_${Date.now()}`,
+            amount: totalAmount,
+            currency: 'INR'
+          }
+        }
+        
+        // Wait a moment to simulate processing
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Process the booking
+        await handlePaymentSuccess(mockPaymentResponse, mockOrderData)
+        return
+      }
+      
+      // Production flow - use Razorpay
       // Show loading message for user
       toast.loading('Preparing payment gateway...', { id: 'payment-prep' })
       
@@ -904,8 +935,10 @@ const BookingForm: React.FC = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Email"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        placeholder="your.email@example.com"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        title="Please enter a valid email address"
                   />
                 </div>
                   </div>
@@ -922,8 +955,11 @@ const BookingForm: React.FC = () => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Phone Number"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        placeholder="10-digit mobile number"
+                        pattern="[0-9]{10}"
+                        title="Please enter a valid 10-digit mobile number"
+                        maxLength={10}
                   />
                 </div>
                   </div>

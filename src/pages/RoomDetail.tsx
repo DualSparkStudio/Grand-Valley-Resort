@@ -32,6 +32,7 @@ const RoomDetail: React.FC = () => {
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [dateError, setDateError] = useState<string>('')
+  const [availabilityMessage, setAvailabilityMessage] = useState<{text: string, type: 'success' | 'error'} | null>(null)
   const [showUnavailableModal, setShowUnavailableModal] = useState(false)
 
   useEffect(() => {
@@ -87,22 +88,43 @@ const RoomDetail: React.FC = () => {
       
       
       if (availability.available) {
-        // Room is available, set it as available
+        // Room is available, show how many rooms are available
+        const availableRooms = availability.availableRooms || 1
         setAvailableRooms([{ id: room.id, room_number: room?.room_number || '1' }])
+        // Show success message in green
+        if (availableRooms > 1) {
+          setAvailabilityMessage({
+            text: `${availableRooms} rooms available for these dates`,
+            type: 'success'
+          })
+        } else {
+          setAvailabilityMessage({
+            text: 'Room available for selected dates',
+            type: 'success'
+          })
+        }
+        setDateError('') // Clear any error
       } else {
-        // Room is not available - show specific reason
+        // Room is not available - show error message in red
         setAvailableRooms([])
         
-        // Show user-friendly error message based on conflict type
-        if (availability.reason === 'same_day_checkin_checkout') {
-          setDateError('Check-out date cannot be the same as check-in date. Please select different dates.')
-        } else if (availability.reason === 'blocked_date_conflict') {
-          setDateError('Selected dates include blocked dates. Please choose different dates.')
-        } else if (availability.reason === 'website_booking_conflict') {
-          setDateError('Selected dates are already booked. Please choose different dates.')
+        if (availability.availableRooms === 0) {
+          setAvailabilityMessage({
+            text: 'All rooms of this type are booked for the selected dates',
+            type: 'error'
+          })
+        } else if (availability.availableRooms && availability.availableRooms > 0) {
+          setAvailabilityMessage({
+            text: `Only ${availability.availableRooms} room(s) available for these dates`,
+            type: 'error'
+          })
         } else {
-          setDateError('Selected dates are not available. Please choose different dates.')
+          setAvailabilityMessage({
+            text: 'Selected dates are not available. Please choose different dates.',
+            type: 'error'
+          })
         }
+        setDateError('') // Clear old error
       }
     } catch (error) {
       // For demo purposes, set some available rooms if API fails
@@ -176,6 +198,7 @@ const RoomDetail: React.FC = () => {
   const handleDateSelect = (startDate: string, endDate: string) => {
     // Clear any existing errors when new dates are selected
     setDateError('')
+    setAvailabilityMessage(null)
     
     // Validate that check-out is not the same as check-in
     if (startDate && endDate && startDate === endDate) {
@@ -203,6 +226,7 @@ const RoomDetail: React.FC = () => {
     })
     setAvailableRooms([])
     setDateError('') // Clear any error messages
+    setAvailabilityMessage(null) // Clear availability message
   }
 
   // Image gallery functions
@@ -487,6 +511,36 @@ const RoomDetail: React.FC = () => {
                     <div className="ml-3">
                       <h4 className="text-sm font-semibold text-red-900 mb-1">Room Currently Unavailable</h4>
                       <p className="text-sm text-red-800">This room is temporarily unavailable for booking. Please contact us for more information or check back later.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Availability Message - Green for success, Red for error */}
+              {availabilityMessage && (
+                <div className={`mb-4 p-3 rounded-lg border ${
+                  availabilityMessage.type === 'success' 
+                    ? 'bg-green-50 border-green-200' 
+                    : 'bg-red-50 border-red-200'
+                }`}>
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0">
+                      {availabilityMessage.type === 'success' ? (
+                        <CheckCircleIcon className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="ml-3">
+                      <p className={`text-sm font-medium ${
+                        availabilityMessage.type === 'success' 
+                          ? 'text-green-800' 
+                          : 'text-red-800'
+                      }`}>
+                        {availabilityMessage.text}
+                      </p>
                     </div>
                   </div>
                 </div>

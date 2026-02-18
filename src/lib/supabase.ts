@@ -40,12 +40,13 @@ export interface RoomImage {
 
 export interface Room {
   id: number
-  room_number: string
+  room_number?: string // Optional - for backward compatibility
   name: string
   slug?: string // Add slug field for SEO-friendly URLs
   description: string
   price_per_night: number // Base price (for backward compatibility)
   max_occupancy: number
+  quantity: number // Number of rooms available for this room type
   amenities?: string[]
   image_url: string
   images?: string[] // Array of image URLs
@@ -700,38 +701,89 @@ export const api = {
 
   async checkRoomAvailability(roomId: number, checkIn: string, checkOut: string) {
     try {
-      // Get all events for the room
-      const events = await this.getCalendarEvents(roomId)
-      
+      // First get the room to check its quantity
+      const room = await this.getRoom(roomId)
+      if (!room) {
+        return {
+          available: false,
+          conflictingEvents: [],
+          totalEvents: 0,
+          error: 'Room not found',
+          availableRooms: 0
+        }
+      }
+
+      // Get all bookings for this room type on the requested dates
+      const { data: bookings, error: bookingsError } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('room_id', roomId)
+        .in('booking_status', ['confirmed', 'pending'])
+        .or(`check_in_date.lte.${checkOut},check_out_date.gte.${checkIn}`)
+
+      if (bookingsError) {
+        throw bookingsError
+      }
+
+      // Count how many bookings overlap with the requested dates
       const checkInDate = new Date(checkIn)
       const checkOutDate = new Date(checkOut)
       
-      // Check for conflicts
-      const conflictingEvents = events.filter((event: any) => {
-        const eventStart = new Date(event.check_in_date)
-        const eventEnd = new Date(event.check_out_date)
+      const overlappingBookings = bookings?.filter(booking => {
+        const bookingStart = new Date(booking.check_in_date)
+        const bookingEnd = new Date(booking.check_out_date)
         
-        // Check if there's any overlap
+        // Check for overlap
         return (
-          (eventStart <= checkInDate && eventEnd > checkInDate) ||
-          (eventStart < checkOutDate && eventEnd >= checkOutDate) ||
-          (eventStart >= checkInDate && eventEnd <= checkOutDate)
+          (bookingStart <= checkInDate && bookingEnd > checkInDate) ||
+          (bookingStart < checkOutDate && bookingEnd >= checkOutDate) ||
+          (bookingStart >= checkInDate && bookingEnd <= checkOutDate)
         )
-      })
+      }) || []
+
+      // Get blocked dates
+      const { data: blockedDates, error: blockedError } = await supabase
+        .from('blocked_dates')
+        .select('*')
+        .eq('room_id', roomId)
+
+      if (blockedError) {
+        // Continue without blocked dates
+      }
+
+      const overlappingBlockedDates = blockedDates?.filter(blocked => {
+        const blockedStart = new Date(blocked.start_date)
+        const blockedEnd = new Date(blocked.end_date)
+        
+        return (
+          (blockedStart <= checkInDate && blockedEnd > checkInDate) ||
+          (blockedStart < checkOutDate && blockedEnd >= checkOutDate) ||
+          (blockedStart >= checkInDate && blockedEnd <= checkOutDate)
+        )
+      }) || []
+
+      // Calculate available rooms
+      const bookedCount = overlappingBookings.length
+      const roomQuantity = room.quantity || 1
+      const availableRooms = roomQuantity - bookedCount
       
-      // Filter out only blocking events (confirmed bookings and blocked dates)
-      const blockingEvents = conflictingEvents.filter((event: any) => 
-        event.booking_status === 'confirmed' || event.type === 'blocked'
-      )
+      // Room is available if there are still rooms left AND no blocked dates
+      const isAvailable = availableRooms > 0 && overlappingBlockedDates.length === 0
       
       return {
-        available: blockingEvents.length === 0,
-        conflictingEvents: blockingEvents,
-        totalEvents: events.length
+        available: isAvailable,
+        availableRooms: availableRooms,
+        bookedCount: bookedCount,
+        roomQuantity: roomQuantity,
+        conflictingEvents: [...overlappingBookings, ...overlappingBlockedDates],
+        totalEvents: (bookings?.length || 0) + (blockedDates?.length || 0)
       }
     } catch (error) {
       return {
         available: false,
+        availableRooms: 0,
+        bookedCount: 0,
+        roomQuantity: 0,
         conflictingEvents: [],
         totalEvents: 0,
         error: error
