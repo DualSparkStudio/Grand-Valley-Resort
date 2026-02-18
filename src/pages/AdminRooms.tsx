@@ -20,6 +20,7 @@ const AdminRooms: React.FC = () => {
     amenities: '',
     image_url: '',
     images: [''], // Add images array like attractions
+    video_url: '', // Add video URL field
     is_active: true,
     extra_guest_price: '',
     accommodation_details: '',
@@ -115,6 +116,7 @@ const AdminRooms: React.FC = () => {
           amenities: '', 
           image_url: '', 
           images: [''], // Reset images array
+          video_url: '', // Reset video URL
           is_active: true, 
           extra_guest_price: '', 
           accommodation_details: '',
@@ -259,6 +261,7 @@ const AdminRooms: React.FC = () => {
         amenities: roomTypeForm.amenities.split('\n').filter(item => item.trim()),
         image_url: validImages[0], // Use first image as main image
         images: validImages, // Store all images
+        video_url: roomTypeForm.video_url.trim() || undefined, // Add video URL
         is_active: roomTypeForm.is_active,
         is_available: true, // Set room as available when creating
         extra_guest_price: roomTypeForm.extra_guest_price ? parseFloat(roomTypeForm.extra_guest_price) : 0,
@@ -364,6 +367,7 @@ const AdminRooms: React.FC = () => {
           accommodation_details: roomType.accommodation_details || '',
           image_url: roomType.image_url || '',
           images: Array.isArray(roomType.images) && roomType.images.length > 0 ? roomType.images : [''],
+          video_url: roomType.video_url || '', // Add video URL
           floor: safeToString(roomType.floor),
           price_double_occupancy: safeToString(roomType.price_double_occupancy),
           price_triple_occupancy: safeToString(roomType.price_triple_occupancy),
@@ -389,6 +393,7 @@ const AdminRooms: React.FC = () => {
           accommodation_details: '',
           image_url: '', 
           images: [''],
+          video_url: '', // Add video URL
           floor: '',
           price_double_occupancy: '',
           price_triple_occupancy: '',
@@ -1022,6 +1027,39 @@ const AdminRooms: React.FC = () => {
                       <div className="text-center mt-2 text-xs text-gray-500">
                         Click any image to view full size
                       </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Video URL Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Room Video URL (Optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={roomTypeForm.video_url}
+                    onChange={(e) => setRoomTypeForm({ ...roomTypeForm, video_url: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    placeholder="https://res.cloudinary.com/your-cloud/video/upload/..."
+                    disabled={roomTypeModalMode === 'view'}
+                  />
+                  <p className="text-xs text-gray-500">
+                    Upload your video to Cloudinary and paste the URL here. Supports MP4, WebM formats.
+                  </p>
+                  {roomTypeForm.video_url && (
+                    <div className="mt-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Video Preview:</label>
+                      <video
+                        src={roomTypeForm.video_url}
+                        controls
+                        className="w-full max-h-64 rounded-lg"
+                        onError={(e) => {
+                          console.error('Video failed to load');
+                        }}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
                     </div>
                   )}
                 </div>

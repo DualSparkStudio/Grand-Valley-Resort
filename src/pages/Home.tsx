@@ -535,7 +535,7 @@ const Home: React.FC = () => {
               <div className="relative">
                 <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden">
                   <img
-                    src="/images/Exterior (Front).PNG"
+                    src="https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431283/5_frweiz.png"
                     alt="Grand Valley Resort"
                     className="w-full h-full object-cover"
                   />

@@ -50,6 +50,7 @@ export interface Room {
   amenities?: string[]
   image_url: string
   images?: string[] // Array of image URLs
+  video_url?: string // Cloudinary video URL
   is_active: boolean
   extra_guest_price?: number // Deprecated - use occupancy pricing instead
   accommodation_details?: string
