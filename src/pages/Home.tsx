@@ -343,24 +343,30 @@ const Home: React.FC = () => {
                   >
                     <div className="flex items-stretch justify-center gap-1 sm:gap-2">
                       {/* Guest Select */}
-                      <div className="flex-1 min-w-0">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                      <div className="flex-1 min-w-0 relative">
+                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5">
                           <option value="">Guest</option>
                           <option value="1">1 Guest</option>
                           <option value="2">2 Guests</option>
                           <option value="3">3 Guests</option>
                           <option value="4">4+ Guests</option>
                         </select>
+                        <svg className="absolute right-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                       
                       {/* Room Select */}
-                      <div className="flex-1 min-w-0">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium">
+                      <div className="flex-1 min-w-0 relative">
+                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5">
                           <option value="">Room</option>
                           <option value="1">1 Room</option>
                           <option value="2">2 Rooms</option>
                           <option value="3">3 Rooms</option>
                         </select>
+                        <svg className="absolute right-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
                       
                       {/* Check In */}
@@ -369,12 +375,35 @@ const Home: React.FC = () => {
                           type="date" 
                           value={checkInDate}
                           onChange={(e) => setCheckInDate(e.target.value)}
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
-                          style={{ color: checkInDate ? 'inherit' : 'transparent' }}
+                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
+                          style={{ 
+                            color: 'transparent',
+                            colorScheme: 'light'
+                          }}
                         />
-                        {!checkInDate && (
-                          <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
-                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check In</span>
+                        {checkInDate ? (
+                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
+                            <div className="flex flex-col leading-[0.6rem] sm:leading-tight">
+                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium whitespace-nowrap">
+                                {new Date(checkInDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }).replace('/', '-')}
+                              </span>
+                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium">
+                                {new Date(checkInDate + 'T00:00:00').getFullYear()}
+                              </span>
+                            </div>
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
+                            <div className="flex flex-col leading-tight">
+                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check</span>
+                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">In</span>
+                            </div>
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                           </div>
                         )}
                       </div>
@@ -385,12 +414,35 @@ const Home: React.FC = () => {
                           type="date" 
                           value={checkOutDate}
                           onChange={(e) => setCheckOutDate(e.target.value)}
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer text-gray-900 font-medium"
-                          style={{ color: checkOutDate ? 'inherit' : 'transparent' }}
+                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
+                          style={{ 
+                            color: 'transparent',
+                            colorScheme: 'light'
+                          }}
                         />
-                        {!checkOutDate && (
-                          <div className="absolute inset-0 flex items-center justify-start pointer-events-none px-1 sm:px-2">
-                            <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check Out</span>
+                        {checkOutDate ? (
+                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
+                            <div className="flex flex-col leading-[0.6rem] sm:leading-tight">
+                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium whitespace-nowrap">
+                                {new Date(checkOutDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }).replace('/', '-')}
+                              </span>
+                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium">
+                                {new Date(checkOutDate + 'T00:00:00').getFullYear()}
+                              </span>
+                            </div>
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
+                            <div className="flex flex-col leading-tight">
+                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check</span>
+                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Out</span>
+                            </div>
+                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                           </div>
                         )}
                       </div>
