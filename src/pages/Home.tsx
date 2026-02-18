@@ -375,6 +375,7 @@ const Home: React.FC = () => {
                           type="date" 
                           value={checkInDate}
                           onChange={(e) => setCheckInDate(e.target.value)}
+                          min={new Date().toISOString().split('T')[0]}
                           className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
                           style={{ 
                             color: 'transparent',
@@ -414,6 +415,7 @@ const Home: React.FC = () => {
                           type="date" 
                           value={checkOutDate}
                           onChange={(e) => setCheckOutDate(e.target.value)}
+                          min={checkInDate || new Date().toISOString().split('T')[0]}
                           className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
                           style={{ 
                             color: 'transparent',
