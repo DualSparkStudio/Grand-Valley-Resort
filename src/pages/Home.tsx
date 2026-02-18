@@ -952,64 +952,7 @@ const Home: React.FC = () => {
               </motion.p>
             </div>
 
-            {/* Gallery Grid */}
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              {/* Large Featured Image */}
-              <div className="col-span-2 row-span-2 relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/Exterior (Front).PNG"
-                  alt="Resort Front View"
-                  className="w-full h-full min-h-[200px] sm:min-h-[300px] lg:min-h-[400px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-white font-semibold text-lg sm:text-xl">Resort Front View</h3>
-                </div>
-              </div>
-
-              {/* Smaller Images */}
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/Exterior (back).PNG"
-                  alt="Resort Back View"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/exteror (night).jpg"
-                  alt="Night Ambiance"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
-                  alt="Luxury Interior"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
-                  alt="Mountain View"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            </motion.div>
+            {/* Gallery Grid - Removed hardcoded images */}
 
             {/* View More Button */}
             <motion.div

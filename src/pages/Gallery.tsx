@@ -23,8 +23,7 @@ const Gallery: React.FC = () => {
     { id: 'all', name: 'All' },
     { id: 'exterior', name: 'Exterior' },
     { id: 'rooms', name: 'Rooms' },
-    { id: 'amenities', name: 'Amenities' },
-    { id: 'surroundings', name: 'Surroundings' }
+    { id: 'restaurant', name: 'Restaurant' }
   ]
 
   useEffect(() => {
@@ -72,14 +71,15 @@ const Gallery: React.FC = () => {
         // Continue with static images if API fails
       }
 
-      // Add some amenity/surrounding images
+      // Add restaurant images from Cloudinary
       const additionalImages: GalleryImage[] = [
-        { id: 200, src: 'https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?w=800', title: 'Swimming Pool', category: 'amenities' },
-        { id: 201, src: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800', title: 'Luxury Room Interior', category: 'rooms' },
-        { id: 202, src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800', title: 'Mountain View', category: 'surroundings' },
-        { id: 203, src: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800', title: 'Valley Panorama', category: 'surroundings' },
-        { id: 204, src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800', title: 'Dining Area', category: 'amenities' },
-        { id: 205, src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800', title: 'Restaurant', category: 'amenities' },
+        { id: 200, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431184/6_krjt40.png', title: 'Restaurant Main View', category: 'restaurant' },
+        { id: 201, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431183/9_lgexk2.png', title: 'Restaurant Interior', category: 'restaurant' },
+        { id: 202, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431182/7_exj2bu.png', title: 'Dining Area', category: 'restaurant' },
+        { id: 203, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/5_vop9je.png', title: 'Restaurant Ambiance', category: 'restaurant' },
+        { id: 204, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/4_loalg6.png', title: 'Restaurant Seating', category: 'restaurant' },
+        { id: 205, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/3_apyy7q.png', title: 'Restaurant View', category: 'restaurant' },
+        { id: 206, src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/1_hlb5eu.png', title: 'Restaurant Exterior', category: 'restaurant' },
       ]
 
       setImages([...staticImages, ...additionalImages])
@@ -148,7 +148,7 @@ const Gallery: React.FC = () => {
     <>
       <SEO 
         title="Photo Gallery - Grand Valley Resort"
-        description="Explore stunning photos of Grand Valley Resort - luxury rooms, beautiful surroundings, and world-class amenities in Mahabaleshwar."
+        description="Explore stunning photos of Grand Valley Resort - luxury rooms, beautiful exterior views, and our restaurant in Mahabaleshwar."
         keywords="Grand Valley Resort gallery, resort photos, Mahabaleshwar resort images, luxury resort gallery"
         url="https://grandvalleyresort.com/gallery"
       />

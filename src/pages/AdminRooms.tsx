@@ -296,16 +296,23 @@ const AdminRooms: React.FC = () => {
   };
 
   const handleDeleteRoom = async (roomId: number) => {
-    if (!window.confirm('Are you sure you want to delete this room type? This action cannot be undone.')) {
+    const room = roomTypes.find(r => r.id === roomId);
+    const roomName = room?.name || 'this room';
+    
+    if (!window.confirm(`Are you sure you want to delete "${roomName}"?\n\nThis will:\n- Delete the room permanently\n- Remove all blocked dates for this room\n- This action cannot be undone\n\nNote: Rooms with existing bookings cannot be deleted.`)) {
       return;
     }
 
     try {
+      const loadingToast = toast.loading('Deleting room...');
       await api.deleteRoom(roomId);
-      toast.success('Room type deleted successfully!');
+      toast.dismiss(loadingToast);
+      toast.success(`${roomName} deleted successfully!`);
       await loadData();
     } catch (error) {
-      toast.error(`Failed to delete room type: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Delete room error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      toast.error(`Failed to delete room: ${errorMessage}`);
     }
   };
 
