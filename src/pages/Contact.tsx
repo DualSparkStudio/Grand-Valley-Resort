@@ -312,9 +312,56 @@ const Contact: React.FC = () => {
                       </>
                     )}
                   </button>
-                  
-
                 </form>
+
+                {/* Additional Information */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">What to Expect</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-sm text-gray-600">We respond to all inquiries within 24 hours</p>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-sm text-gray-600">Our team is available 7 days a week</p>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-sm text-gray-600">For urgent matters, call us directly</p>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                        <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <p className="ml-3 text-sm text-gray-600">Your information is kept secure and private</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Methods */}
+                <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-golden-50 rounded-lg">
+                  <p className="text-sm text-gray-700 text-center">
+                    <span className="font-semibold">Prefer to talk?</span> Call us at{' '}
+                    <a href={`tel:${adminContactInfo.phone}`} className="text-dark-blue-800 font-semibold hover:underline">
+                      {adminContactInfo.phone}
+                    </a>
+                  </p>
+                </div>
               </div>
 
               {/* Map & Additional Info */}

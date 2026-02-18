@@ -8,24 +8,28 @@ const Features: React.FC = () => {
   const facilities = [
     {
       title: 'COMFORT & CONVENIENCE',
+      description: 'At Grand Valley Resort, every detail is designed to ensure a comfortable, hassle-free, and relaxing stay for our guests.',
       items: ['FREE WIFI', 'FREE PARKING', 'AC ROOMS', 'BALCONY WITH VALLEY VIEW'],
       icon: '🏨',
       gradient: 'from-blue-500/20 to-cyan-500/20'
     },
     {
       title: 'LIVING & COMMON AREAS',
+      description: 'Grand Valley Resort areas are thoughtfully designed to offer comfort, warmth, and a welcoming atmosphere where guests can relax, connect, and unwind.',
       items: ['LAWN & OUTDOOR SEATING AREA'],
       icon: '🌳',
       gradient: 'from-green-500/20 to-emerald-500/20'
     },
     {
       title: 'RECREATION & LEISURE',
+      description: 'Grand Valley Resort offers the perfect balance of comfort, nature, and memorable experiences.',
       items: ['SWIMMING POOL', 'VALLEY VIEW', 'RELAXATION AREA', 'INDOOR ACTIVITIES'],
       icon: '🏊',
       gradient: 'from-cyan-500/20 to-blue-500/20'
     },
     {
       title: 'DESTINATION WEDDING',
+      description: 'Our resort offers the perfect setting for destination weddings, with breathtaking views of Sahyadri mountains as your backdrop.',
       items: ['Breathtaking views of the Sahyadri mountains', 'Perfect setting for your dream wedding'],
       icon: '💒',
       gradient: 'from-pink-500/20 to-rose-500/20'
@@ -35,28 +39,28 @@ const Features: React.FC = () => {
   const amenities = [
     {
       title: 'INFINITY SWIMMING POOL',
-      description: 'Experience the beauty of our infinity pool that offers stunning scenic views. The visual effect of water blending into the horizon creates a mesmerizing experience.',
+      description: 'The resort features a scenic infinity swimming pool where you can relax and enjoy a refreshing swim while taking in unobstructed views of the surrounding hills and valley landscapes. The pool\'s edge creates a visual effect of water blending into the horizon, making it a peaceful retreat.',
       image: 'https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?w=800',
       icon: '🏊',
       featured: true
     },
     {
       title: 'DESTINATION WEDDING',
-      description: 'Plan your dream wedding amidst the lush greenery of Mahabaleshwar. We offer beautiful outdoor spaces and natural backdrops that make your special day unforgettable.',
+      description: 'Plan your dream destination wedding amidst the scenic hills and lush greenery of Mahabaleshwar at Grand Valley Resort. The resort offers beautiful outdoor lawn spaces and natural backdrops ideal for wedding ceremonies, receptions and pre-wedding functions, making your special day unforgettable in the tranquil hill-station setting.',
       image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800',
       icon: '💒',
       featured: true
     },
     {
       title: 'INDOOR GAMES',
-      description: 'Grand Valley Resort Bhilar Annex offers indoor games and entertainment options for all ages. Enjoy quality time with family and friends.',
+      description: 'Grand Valley Resort Bhilar Annex, guests can enjoy indoor games and entertainment options as part of their stay. Typically, indoor game facilities at hill station resorts include fun, laid-back activities perfect for all ages.',
       image: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800',
       icon: '🎮',
       featured: false
     },
     {
-      title: 'PURE VEG RESTAURANT',
-      description: 'Our in-house vegetarian restaurant offers fresh, flavorful Indian classics and comfort food. Enjoy delicious meals prepared with fresh, vegetarian ingredients in a scenic setting surrounded by hills and greenery.',
+      title: 'PURE VEG FOOD',
+      description: 'The resort\'s in-house pure vegetarian restaurant offers guests fresh, flavorful vegetarian meals throughout the day. It focuses on a variety of delicious veg dishes, from local Indian classics to wholesome comfort food, prepared with quality ingredients — ideal for families, couples and those who prefer vegetarian cuisine while enjoying the hills of Mahabaleshwar.',
       image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800',
       icon: '🍽️',
       featured: false
@@ -66,23 +70,30 @@ const Features: React.FC = () => {
   const specialAmenities = [
     {
       title: 'Candle Light Dinner',
-      description: 'Enjoy an unforgettable candlelight dinner for couples. Available at additional cost.',
+      description: 'Make your evening unforgettable with our special candlelight dinner for couples. (Available at an additional cost)',
       image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
       icon: '🕯️',
       price: 'Premium'
     },
     {
       title: 'Breakfast by the Pool',
-      description: 'Experience a luxurious floating breakfast by the poolside. Available at additional charge.',
+      description: 'Enjoy a luxurious floating breakfast by the poolside. (Available at an additional charge)',
       image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800',
       icon: '🍳',
       price: 'Premium'
     },
     {
       title: 'Room Decoration',
-      description: 'Beautiful bedroom decoration for your special night. Available at extra charge.',
+      description: 'We offer beautiful bedroom decoration for your special night. (Available at an extra charge)',
       image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800',
       icon: '🌹',
+      price: 'Premium'
+    },
+    {
+      title: 'Veg Food',
+      description: 'Craving something delicious? We also serve tasty, mouth-watering non-veg food!',
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+      icon: '🍗',
       price: 'Premium'
     }
   ]
@@ -156,9 +167,14 @@ const Features: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 group-hover:text-golden-600 transition-colors">
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 group-hover:text-golden-600 transition-colors">
                         {facility.title}
                       </h3>
+                      {facility.description && (
+                        <p className="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed">
+                          {facility.description}
+                        </p>
+                      )}
                       <ul className="space-y-3">
                         {facility.items.map((item, i) => (
                           <li key={i} className="flex items-center text-gray-700 group-hover:text-gray-900 transition-colors">
