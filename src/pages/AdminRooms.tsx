@@ -651,11 +651,18 @@ const AdminRooms: React.FC = () => {
                       name="name"
                       value={roomTypeForm.name}
                       onChange={handleRoomTypeFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
+                        fieldErrors.name 
+                          ? 'border-red-300 focus:ring-red-500' 
+                          : 'border-gray-300 focus:ring-blue-500'
+                      }`}
                       placeholder="e.g., Deluxe Suite, Premium Room"
                       required
-                                             disabled={roomTypeModalMode === 'view'}
+                      disabled={roomTypeModalMode === 'view'}
                     />
+                    {fieldErrors.name && (
+                      <p className="mt-1 text-xs text-red-600">This field is required</p>
+                    )}
                   </div>
 
                   <div>
@@ -683,11 +690,18 @@ const AdminRooms: React.FC = () => {
                         name="price_per_night"
                         value={roomTypeForm.price_per_night}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
+                          fieldErrors.price_per_night 
+                            ? 'border-red-300 focus:ring-red-500' 
+                            : 'border-gray-300 focus:ring-blue-500'
+                        }`}
                         placeholder="0"
                         disabled={roomTypeModalMode === 'view'}
                         required
                       />
+                      {fieldErrors.price_per_night && (
+                        <p className="mt-1 text-xs text-red-600">Valid price is required</p>
+                      )}
                     </div>
 
                     <div>
@@ -699,11 +713,18 @@ const AdminRooms: React.FC = () => {
                         name="max_occupancy"
                         value={roomTypeForm.max_occupancy}
                         onChange={handleRoomTypeFormChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
+                          fieldErrors.max_occupancy 
+                            ? 'border-red-300 focus:ring-red-500' 
+                            : 'border-gray-300 focus:ring-blue-500'
+                        }`}
                         placeholder="2"
                         disabled={roomTypeModalMode === 'view'}
                         required
                       />
+                      {fieldErrors.max_occupancy && (
+                        <p className="mt-1 text-xs text-red-600">Valid occupancy is required</p>
+                      )}
                     </div>
                   </div>
 
@@ -716,12 +737,19 @@ const AdminRooms: React.FC = () => {
                       name="quantity"
                       value={roomTypeForm.quantity}
                       onChange={handleRoomTypeFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
+                        fieldErrors.quantity 
+                          ? 'border-red-300 focus:ring-red-500' 
+                          : 'border-gray-300 focus:ring-blue-500'
+                      }`}
                       placeholder="1"
                       disabled={roomTypeModalMode === 'view'}
                       required
                       min="1"
                     />
+                    {fieldErrors.quantity && (
+                      <p className="mt-1 text-xs text-red-600">At least 1 room is required</p>
+                    )}
                     <p className="mt-1 text-xs text-gray-500">How many rooms of this type are available?</p>
                   </div>
 
