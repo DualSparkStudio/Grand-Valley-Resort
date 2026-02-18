@@ -1,7 +1,6 @@
 import {
     EyeIcon,
     MagnifyingGlassIcon,
-    PencilIcon,
     TrashIcon,
     UserIcon,
     XMarkIcon
@@ -45,19 +44,6 @@ const AdminBookings: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedBooking, setSelectedBooking] = useState<CombinedBooking | null>(null)
   const [loading, setLoading] = useState(true)
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    check_in_date: '',
-    check_out_date: '',
-    num_guests: 1,
-    booking_status: 'pending' as const,
-    payment_status: 'pending' as const,
-    special_requests: '',
-    total_amount: 0
-  })
 
   useEffect(() => {
     loadData()
@@ -70,25 +56,6 @@ const AdminBookings: React.FC = () => {
   useEffect(() => {
     filterBookings()
   }, [combinedBookings, searchTerm, statusFilter, sourceFilter])
-
-  // Sync formData when selectedBooking changes
-  useEffect(() => {
-    if (selectedBooking?.originalBooking) {
-      setFormData({
-        first_name: selectedBooking.originalBooking.first_name,
-        last_name: selectedBooking.originalBooking.last_name,
-        email: selectedBooking.originalBooking.email,
-        phone: selectedBooking.originalBooking.phone,
-        check_in_date: selectedBooking.originalBooking.check_in_date,
-        check_out_date: selectedBooking.originalBooking.check_out_date,
-        num_guests: selectedBooking.originalBooking.num_guests,
-        booking_status: selectedBooking.originalBooking.booking_status,
-        payment_status: selectedBooking.originalBooking.payment_status,
-        special_requests: selectedBooking.originalBooking.special_requests || '',
-        total_amount: selectedBooking.originalBooking.total_amount
-      })
-    }
-  }, [selectedBooking])
 
   const loadData = async () => {
     try {
@@ -211,86 +178,6 @@ const AdminBookings: React.FC = () => {
   const closeModal = () => {
     setIsModalOpen(false)
     setSelectedBooking(null)
-  }
-
-  const handleSave = async (updatedBooking: CombinedBooking) => {
-    try {
-      if (updatedBooking.source === 'Website' && updatedBooking.originalBooking?.id) {
-        // Store original booking status for comparison
-        const originalStatus = updatedBooking.originalBooking.booking_status
-        
-        // Create a new booking object with updated form data
-        const updatedBookingData = {
-          ...updatedBooking.originalBooking,
-          first_name: formData.first_name,
-          last_name: formData.last_name,
-          email: formData.email,
-          phone: formData.phone,
-          check_in_date: formData.check_in_date,
-          check_out_date: formData.check_out_date,
-          num_guests: formData.num_guests,
-          booking_status: formData.booking_status,
-          payment_status: formData.payment_status,
-          special_requests: formData.special_requests,
-          total_amount: formData.total_amount
-        }
-        
-        // Update the booking
-        const updatedBookingResult = await api.updateBooking(updatedBooking.originalBooking.id, updatedBookingData)
-        
-        // Check if status changed to confirmed and send email notification
-        if (originalStatus !== 'confirmed' && formData.booking_status === 'confirmed') {
-          
-          try {
-            // Find the room for this booking
-            const room = rooms.find(r => r.id === updatedBooking.originalBooking?.room_id)
-            if (room) {
-              const { EmailService } = await import('../lib/email-service')
-              const emailResult = await EmailService.sendBookingConfirmation(updatedBookingResult, room)
-              
-              if (emailResult.success) {
-                toast.success('Booking confirmed and notification emails sent!')
-              } else {
-                toast.error('Booking confirmed but email notification failed.')
-              }
-            } else {
-              toast.success('Booking updated successfully')
-            }
-          } catch (emailError) {
-            toast.error('Booking confirmed but email notification failed.')
-          }
-        } 
-        // Check if status changed to cancelled and send email notification
-        else if (originalStatus !== 'cancelled' && formData.booking_status === 'cancelled') {
-          
-          try {
-            // Find the room for this booking
-            const room = rooms.find(r => r.id === updatedBooking.originalBooking?.room_id)
-            if (room) {
-              const { EmailService } = await import('../lib/email-service')
-              const emailResult = await EmailService.sendBookingCancellation(updatedBookingResult, room)
-              
-              if (emailResult.success) {
-                toast.success('Booking cancelled and notification emails sent!')
-              } else {
-                toast.error('Booking cancelled but email notification failed.')
-              }
-            } else {
-              toast.success('Booking updated successfully')
-            }
-          } catch (emailError) {
-            toast.error('Booking cancelled but email notification failed.')
-          }
-        } else {
-          toast.success('Booking updated successfully')
-        }
-      }
-      setIsModalOpen(false)
-      setSelectedBooking(null)
-      loadData()
-    } catch (error) {
-      toast.error('Failed to update booking')
-    }
   }
 
   const handleDelete = async (bookingId: number) => {
@@ -592,22 +479,13 @@ const AdminBookings: React.FC = () => {
                             <EyeIcon className="h-4 w-4" />
                           </button>
                           {booking.source === 'Website' && booking.originalBooking && (
-                            <>
-                              <button
-                                onClick={() => openModal(booking)}
-                                className="text-green-600 hover:text-green-900 p-1 rounded-full hover:bg-green-100 transition-colors duration-200"
-                                title="Edit Booking"
-                              >
-                                <PencilIcon className="h-4 w-4" />
-                              </button>
-                              <button
-                                onClick={() => booking.originalBooking && handleDelete(booking.originalBooking.id)}
-                                className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-100 transition-colors duration-200"
-                                title="Delete Booking"
-                              >
-                                <TrashIcon className="h-4 w-4" />
-                              </button>
-                            </>
+                            <button
+                              onClick={() => booking.originalBooking && handleDelete(booking.originalBooking.id)}
+                              className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-100 transition-colors duration-200"
+                              title="Delete Booking"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </button>
                           )}
                         </div>
                       </td>
@@ -624,9 +502,7 @@ const AdminBookings: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedBooking.source === 'Website' ? 'Edit Booking' : 'Booking Details'}
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-900">Booking Details</h3>
                 <button
                   onClick={closeModal}
                   className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100"
@@ -636,191 +512,67 @@ const AdminBookings: React.FC = () => {
               </div>
               
               <div className="p-6">
-                {selectedBooking.source === 'Website' ? (
-                  /* Edit Mode - Force remount with key */
-                  <form key={`edit-${selectedBooking.id}-${selectedBooking.originalBooking?.id}`} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                      <input
-                        type="text"
-                        defaultValue={selectedBooking.originalBooking?.first_name || ''}
-                        onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                      <input
-                        type="text"
-                        defaultValue={selectedBooking.originalBooking?.last_name || ''}
-                        onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                      <input
-                        type="email"
-                        defaultValue={selectedBooking.originalBooking?.email || ''}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                      <input
-                        type="tel"
-                        defaultValue={selectedBooking.originalBooking?.phone || ''}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Check-in Date</label>
-                      <input
-                        type="date"
-                        defaultValue={selectedBooking.originalBooking?.check_in_date || ''}
-                        onChange={(e) => setFormData({...formData, check_in_date: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Check-out Date</label>
-                      <input
-                        type="date"
-                        defaultValue={selectedBooking.originalBooking?.check_out_date || ''}
-                        onChange={(e) => setFormData({...formData, check_out_date: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Number of Guests</label>
-                      <input
-                        type="number"
-                        min="1"
-                        defaultValue={selectedBooking.originalBooking?.num_guests || 1}
-                        onChange={(e) => setFormData({...formData, num_guests: parseInt(e.target.value)})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount (₹)</label>
-                      <input
-                        type="number"
-                        defaultValue={selectedBooking.originalBooking?.total_amount || 0}
-                        onChange={(e) => setFormData({...formData, total_amount: parseInt(e.target.value)})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Booking Status</label>
-                      <select
-                        defaultValue={selectedBooking.originalBooking?.booking_status || 'pending'}
-                        onChange={(e) => setFormData({...formData, booking_status: e.target.value as any})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="completed">Completed</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
-                      <select
-                        defaultValue={selectedBooking.originalBooking?.payment_status || 'pending'}
-                        onChange={(e) => setFormData({...formData, payment_status: e.target.value as any})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="paid">Paid</option>
-                        <option value="failed">Failed</option>
-                        <option value="refunded">Refunded</option>
-                      </select>
-                    </div>
-                    
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
-                      <textarea
-                        rows={3}
-                        defaultValue={selectedBooking.originalBooking?.special_requests || ''}
-                        onChange={(e) => setFormData({...formData, special_requests: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Any special requests or notes..."
-                      />
-                    </div>
-                  </form>
-                ) : (
-                  /* View Mode */
+                <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Customer Information</h4>
-                      <div className="space-y-2 text-sm">
-                        <p><span className="font-medium">Name:</span> {selectedBooking.guestName}</p>
-                        <p><span className="font-medium">Email:</span> {selectedBooking.email || 'N/A'}</p>
-                        <p><span className="font-medium">Phone:</span> {selectedBooking.phone || 'N/A'}</p>
-                      </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Customer Information</h4>
+                    <div className="space-y-2 text-sm text-gray-900">
+                      <p><span className="font-medium">Name:</span> {selectedBooking.guestName}</p>
+                      <p><span className="font-medium">Email:</span> {selectedBooking.email || 'N/A'}</p>
+                      <p><span className="font-medium">Phone:</span> {selectedBooking.phone || 'N/A'}</p>
                     </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Booking Information</h4>
-                      <div className="space-y-2 text-sm">
-                        <p><span className="font-medium">Room:</span> {selectedBooking.roomName}</p>
-                        <p><span className="font-medium">Check-in:</span> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
-                        <p><span className="font-medium">Check-out:</span> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
-                        <p><span className="font-medium">Guests:</span> {selectedBooking.numGuests || 1}</p>
-                        <p><span className="font-medium">Total Amount:</span> ₹{selectedBooking.totalAmount?.toLocaleString() || '0'}</p>
-                        <p><span className="font-medium">Booking Date:</span> {selectedBooking.bookingDate ? new Date(selectedBooking.bookingDate).toLocaleDateString() + ' ' + new Date(selectedBooking.bookingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A'}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="md:col-span-2">
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Status & Payment</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Booking Status:</span>
-                          <span className={getStatusBadge(selectedBooking.status)}>
-                            {selectedBooking.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Payment Status:</span>
-                          <span className={getPaymentStatusBadge(selectedBooking.paymentStatus)}>
-                            {selectedBooking.paymentStatus}
-                          </span>
-                        </div>
-                        {selectedBooking.payment_gateway && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium">Payment Gateway:</span>
-                            <span className="text-sm text-gray-600">{selectedBooking.payment_gateway}</span>
-                          </div>
-                        )}
-                        {selectedBooking.razorpay_payment_id && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium">Payment ID:</span>
-                            <span className="text-sm text-gray-600">{selectedBooking.razorpay_payment_id}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {selectedBooking.special_requests && (
-                      <div className="md:col-span-2">
-                        <h4 className="text-sm font-medium text-gray-900 mb-3">Special Requests</h4>
-                        <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">{selectedBooking.special_requests}</p>
-                      </div>
-                    )}
                   </div>
-                )}
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Booking Information</h4>
+                    <div className="space-y-2 text-sm text-gray-900">
+                      <p><span className="font-medium">Room:</span> {selectedBooking.roomName}</p>
+                      <p><span className="font-medium">Check-in:</span> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
+                      <p><span className="font-medium">Check-out:</span> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
+                      <p><span className="font-medium">Guests:</span> {selectedBooking.numGuests || 1}</p>
+                      <p><span className="font-medium">Total Amount:</span> ₹{selectedBooking.totalAmount?.toLocaleString() || '0'}</p>
+                      <p><span className="font-medium">Booking Date:</span> {selectedBooking.bookingDate ? new Date(selectedBooking.bookingDate).toLocaleDateString() + ' ' + new Date(selectedBooking.bookingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A'}</p>
+                    </div>
+                  </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Status & Payment</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">Booking Status:</span>
+                        <span className={getStatusBadge(selectedBooking.status)}>
+                          {selectedBooking.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">Payment Status:</span>
+                        <span className={getPaymentStatusBadge(selectedBooking.paymentStatus)}>
+                          {selectedBooking.paymentStatus}
+                        </span>
+                      </div>
+                      {selectedBooking.payment_gateway && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">Payment Gateway:</span>
+                          <span className="text-sm text-gray-600">{selectedBooking.payment_gateway}</span>
+                        </div>
+                      )}
+                      {selectedBooking.razorpay_payment_id && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">Payment ID:</span>
+                          <span className="text-sm text-gray-600">{selectedBooking.razorpay_payment_id}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {selectedBooking.special_requests && (
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-3">Special Requests</h4>
+                      <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">{selectedBooking.special_requests}</p>
+                    </div>
+                  )}
+                </div>
               </div>
               
               <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200">
@@ -828,16 +580,8 @@ const AdminBookings: React.FC = () => {
                   onClick={closeModal}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
-                  {selectedBooking.source === 'Website' ? 'Cancel' : 'Close'}
+                  Close
                 </button>
-                {selectedBooking.source === 'Website' && (
-                  <button
-                    onClick={() => handleSave(selectedBooking)}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                  >
-                    Save Changes
-                  </button>
-                )}
               </div>
             </div>
           </div>

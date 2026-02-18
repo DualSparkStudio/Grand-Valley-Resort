@@ -96,7 +96,7 @@ const BookingConfirmation: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Booking ID:</span>
-                  <span className="font-medium">#{booking.id}</span>
+                  <span className="font-medium text-gray-900">#{booking.id}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status:</span>
@@ -110,19 +110,19 @@ const BookingConfirmation: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Check-in:</span>
-                  <span className="font-medium">{new Date(booking.check_in_date).toLocaleDateString()}</span>
+                  <span className="font-medium text-gray-900">{new Date(booking.check_in_date).toLocaleDateString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Check-out:</span>
-                  <span className="font-medium">{new Date(booking.check_out_date).toLocaleDateString()}</span>
+                  <span className="font-medium text-gray-900">{new Date(booking.check_out_date).toLocaleDateString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Nights:</span>
-                  <span className="font-medium">{nights}</span>
+                  <span className="font-medium text-gray-900">{nights}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Guests:</span>
-                  <span className="font-medium">{booking.num_guests}</span>
+                  <span className="font-medium text-gray-900">{booking.num_guests}</span>
                 </div>
               </div>
             </div>
@@ -132,16 +132,16 @@ const BookingConfirmation: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Name:</span>
-                  <span className="font-medium">{booking.first_name} {booking.last_name}</span>
+                  <span className="font-medium text-gray-900">{booking.first_name} {booking.last_name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Email:</span>
-                  <span className="font-medium">{booking.email}</span>
+                  <span className="font-medium text-gray-900">{booking.email}</span>
                 </div>
                 {booking.phone && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Phone:</span>
-                    <span className="font-medium">{booking.phone}</span>
+                    <span className="font-medium text-gray-900">{booking.phone}</span>
                   </div>
                 )}
               </div>
@@ -172,11 +172,11 @@ const BookingConfirmation: React.FC = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Room Rate (per night):</span>
-                <span className="font-medium">₹{room?.price_per_night.toLocaleString()}</span>
+                <span className="font-medium text-gray-900">₹{room?.price_per_night.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Number of Nights:</span>
-                <span className="font-medium">{nights}</span>
+                <span className="font-medium text-gray-900">{nights}</span>
               </div>
               <div className="border-t pt-3">
                 <div className="flex justify-between">
