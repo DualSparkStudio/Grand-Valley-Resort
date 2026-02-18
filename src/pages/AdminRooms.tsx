@@ -425,18 +425,18 @@ const AdminRooms: React.FC = () => {
     <>
       <div>
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Room Type Management</h1>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Room Type Management</h1>
             <button
               onClick={() => openRoomTypeModal('add')}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
               Add New Room Type
             </button>
           </div>
 
           {/* Check-in/Check-out Times */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Check-in & Check-out Times</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -484,7 +484,8 @@ const AdminRooms: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Desktop Table View - Hidden on mobile */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -599,6 +600,89 @@ const AdminRooms: React.FC = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Card View - Visible only on mobile */}
+            <div className="md:hidden divide-y divide-gray-200">
+              {roomTypes.map((room) => (
+                <div key={room.id} className="p-4 hover:bg-gray-50">
+                  <div className="flex items-start space-x-3 mb-3">
+                    <img
+                      className="h-16 w-16 rounded-lg object-cover flex-shrink-0"
+                      src={room.image_url || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80'}
+                      alt={room.name}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80';
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-semibold text-gray-900 truncate">{room.name}</h3>
+                      <p className="text-sm text-gray-600 line-clamp-2">{room.description}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
+                    <div>
+                      <span className="text-gray-500">Price:</span>
+                      <span className="ml-1 font-semibold text-gray-900">₹{room.price_per_night.toLocaleString()}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Max Guests:</span>
+                      <span className="ml-1 font-semibold text-gray-900">{room.max_occupancy}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Rooms:</span>
+                      <span className="ml-1 font-semibold text-gray-900">{room.quantity}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Images:</span>
+                      <span className="ml-1 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+                        {room.images?.length || 1}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-3">
+                    <button
+                      onClick={() => handleToggleActive(room.id, room.is_active)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        room.is_active
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}
+                    >
+                      {room.is_active ? 'Active' : 'Inactive'}
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => openModal(room, 'view')}
+                      className="flex-1 min-w-[80px] px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => openModal(room, 'edit')}
+                      className="flex-1 min-w-[80px] px-3 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleToggleActive(room.id, room.is_active)}
+                      className="flex-1 min-w-[80px] px-3 py-2 bg-yellow-600 text-white text-sm rounded-md hover:bg-yellow-700"
+                    >
+                      {room.is_active ? 'Deactivate' : 'Activate'}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteRoom(room.id, room.name)}
+                      className="flex-1 min-w-[80px] px-3 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -606,12 +690,12 @@ const AdminRooms: React.FC = () => {
       {/* Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           onClick={closeModal}
         >
           <div
-            className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto"
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -1065,11 +1149,11 @@ const AdminRooms: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-end space-x-3">
+              <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
                 </button>
@@ -1079,7 +1163,7 @@ const AdminRooms: React.FC = () => {
                     onClick={() => {
                       setRoomTypeModalMode('edit');
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
                     Edit Room
                   </button>
@@ -1087,7 +1171,7 @@ const AdminRooms: React.FC = () => {
                 {roomTypeModalMode !== 'view' && (
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
                     {roomTypeModalMode === 'edit' ? 'Update Room' : 'Add Room'}
                   </button>
