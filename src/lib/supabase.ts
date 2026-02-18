@@ -40,12 +40,13 @@ export interface RoomImage {
 
 export interface Room {
   id: number
-  room_number: string
+  room_number?: string // Optional - for backward compatibility
   name: string
   slug?: string // Add slug field for SEO-friendly URLs
   description: string
   price_per_night: number // Base price (for backward compatibility)
   max_occupancy: number
+  quantity: number // Number of rooms available for this room type
   amenities?: string[]
   image_url: string
   images?: string[] // Array of image URLs

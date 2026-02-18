@@ -16,6 +16,7 @@ const AdminRooms: React.FC = () => {
     description: '',
     price_per_night: '',
     max_occupancy: '',
+    quantity: '1', // Number of rooms of this type
     amenities: '',
     image_url: '',
     images: [''], // Add images array like attractions
@@ -35,6 +36,7 @@ const AdminRooms: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string>('');
   const [roomTypes, setRoomTypes] = useState<Room[]>([]);
   const [uploadingImage, setUploadingImage] = useState<number | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     loadData();
@@ -91,7 +93,7 @@ const AdminRooms: React.FC = () => {
       const data = await api.getAllRooms();
       setRoomTypes(data || []);
     } catch (error) {
-      toast.error('Failed to load room data');
+      toast.error('Failed to load room type data');
       // Set empty array to prevent undefined errors
       setRoomTypes([]);
     } finally {
@@ -103,11 +105,13 @@ const AdminRooms: React.FC = () => {
     setIsModalOpen(false);
     setRoomTypeModalMode('add'); // Reset modal mode to default
     setSelectedRoomType(null);
+    setFieldErrors({}); // Clear field errors
         setRoomTypeForm({ 
           name: '', 
           description: '', 
           price_per_night: '', 
           max_occupancy: '', 
+          quantity: '1',
           amenities: '', 
           image_url: '', 
           images: [''], // Reset images array
@@ -191,35 +195,67 @@ const AdminRooms: React.FC = () => {
     e.preventDefault();
     
     try {
+      // Collect all validation errors
+      const errors: string[] = [];
+      const newFieldErrors: {[key: string]: boolean} = {};
+      
       // Validate required fields
       if (!roomTypeForm.name.trim()) {
-        toast.error('Room name is required');
-        return;
+        errors.push('Room type name is required');
+        newFieldErrors.name = true;
       }
       
       if (!roomTypeForm.price_per_night.trim()) {
-        toast.error('Price per night is required');
-        return;
+        errors.push('Price per night is required');
+        newFieldErrors.price_per_night = true;
+      } else if (parseFloat(roomTypeForm.price_per_night) <= 0) {
+        errors.push('Price per night must be greater than 0');
+        newFieldErrors.price_per_night = true;
       }
       
       if (!roomTypeForm.max_occupancy.trim()) {
-        toast.error('Max occupancy is required');
-        return;
+        errors.push('Max occupancy is required');
+        newFieldErrors.max_occupancy = true;
+      } else if (parseInt(roomTypeForm.max_occupancy) <= 0) {
+        errors.push('Max occupancy must be at least 1');
+        newFieldErrors.max_occupancy = true;
+      }
+
+      if (!roomTypeForm.quantity.trim()) {
+        errors.push('Number of rooms is required');
+        newFieldErrors.quantity = true;
+      } else if (parseInt(roomTypeForm.quantity) < 1) {
+        errors.push('Number of rooms must be at least 1');
+        newFieldErrors.quantity = true;
       }
 
       // Filter out empty image URLs and validate
       const validImages = roomTypeForm.images.filter(img => img.trim() && validateImageUrl(img));
       
       if (validImages.length === 0) {
-        toast.error('At least one valid image URL is required');
+        errors.push('At least one valid image URL is required');
+        newFieldErrors.images = true;
+      }
+
+      // If there are any errors, show them all and highlight fields
+      if (errors.length > 0) {
+        setFieldErrors(newFieldErrors);
+        // Show a summary error message
+        toast.error(`Please fix ${errors.length} error${errors.length > 1 ? 's' : ''} in the form`);
+        // Show individual errors
+        errors.forEach(error => toast.error(error, { duration: 4000 }));
         return;
       }
+
+      // Clear field errors if validation passes
+      setFieldErrors({});
 
       const roomData = {
         name: roomTypeForm.name.trim(),
         description: roomTypeForm.description.trim(),
         price_per_night: parseFloat(roomTypeForm.price_per_night),
         max_occupancy: parseInt(roomTypeForm.max_occupancy),
+        quantity: parseInt(roomTypeForm.quantity) || 1,
         amenities: roomTypeForm.amenities.split('\n').filter(item => item.trim()),
         image_url: validImages[0], // Use first image as main image
         images: validImages, // Store all images
@@ -228,7 +264,7 @@ const AdminRooms: React.FC = () => {
         extra_guest_price: roomTypeForm.extra_guest_price ? parseFloat(roomTypeForm.extra_guest_price) : 0,
         accommodation_details: roomTypeForm.accommodation_details.trim(),
         floor: roomTypeForm.floor ? parseInt(roomTypeForm.floor) : undefined,
-        room_number: `ROOM-${Date.now()}`, // Generate unique room number
+        room_number: roomTypeForm.name.replace(/\s+/g, '-').toUpperCase(), // Generate from name
         // Occupancy-based pricing
         price_double_occupancy: roomTypeForm.price_double_occupancy ? parseFloat(roomTypeForm.price_double_occupancy) : undefined,
         price_triple_occupancy: roomTypeForm.price_triple_occupancy ? parseFloat(roomTypeForm.price_triple_occupancy) : undefined,
@@ -238,20 +274,20 @@ const AdminRooms: React.FC = () => {
 
       if (roomTypeModalMode === 'edit' && selectedRoomType) {
         await api.updateRoom(selectedRoomType.id, roomData);
-        toast.success('Room updated successfully!');
+        toast.success('Room type updated successfully!');
       } else {
-        console.log('Creating room with data:', roomData);
+        console.log('Creating room type with data:', roomData);
         const result = await api.createRoom(roomData);
-        console.log('Room created successfully:', result);
-        toast.success('Room added successfully!');
+        console.log('Room type created successfully:', result);
+        toast.success('Room type added successfully!');
       }
 
       closeModal();
       await loadData();
     } catch (error) {
-      console.error('Error saving room:', error);
+      console.error('Error saving room type:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Failed to save room: ${errorMessage}`);
+      toast.error(`Failed to save room type: ${errorMessage}`);
       // Show more detailed error in console for debugging
       if (error && typeof error === 'object' && 'details' in error) {
         console.error('Error details:', error);
@@ -260,16 +296,16 @@ const AdminRooms: React.FC = () => {
   };
 
   const handleDeleteRoom = async (roomId: number) => {
-    if (!window.confirm('Are you sure you want to delete this room? This action cannot be undone.')) {
+    if (!window.confirm('Are you sure you want to delete this room type? This action cannot be undone.')) {
       return;
     }
 
     try {
       await api.deleteRoom(roomId);
-      toast.success('Room deleted successfully!');
+      toast.success('Room type deleted successfully!');
       await loadData();
     } catch (error) {
-      toast.error(`Failed to delete room: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Failed to delete room type: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -279,10 +315,10 @@ const AdminRooms: React.FC = () => {
         is_active: !currentStatus,
         is_available: !currentStatus 
       });
-      toast.success(`Room ${!currentStatus ? 'activated' : 'deactivated'} successfully!`);
+      toast.success(`Room type ${!currentStatus ? 'activated' : 'deactivated'} successfully!`);
       await loadData(); // Reload the data
     } catch (error) {
-      toast.error(`Failed to update room status: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Failed to update room type status: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -314,6 +350,7 @@ const AdminRooms: React.FC = () => {
           description: roomType.description || '',
           price_per_night: safeToString(roomType.price_per_night),
           max_occupancy: safeToString(roomType.max_occupancy),
+          quantity: safeToString(roomType.quantity) || '1',
           amenities: Array.isArray(roomType.amenities) ? roomType.amenities.join('\n') : '',
           is_active: roomType.is_active ?? true,
           extra_guest_price: safeToString(roomType.extra_guest_price),
@@ -338,6 +375,7 @@ const AdminRooms: React.FC = () => {
           description: '', 
           price_per_night: '', 
           max_occupancy: '', 
+          quantity: '1',
           amenities: '', 
           is_active: true, 
           extra_guest_price: '', 
@@ -359,7 +397,7 @@ const AdminRooms: React.FC = () => {
       }, 0);
       
     } catch (error) {
-      toast.error('Error opening room details. Please try again.');
+      toast.error('Error opening room type details. Please try again.');
     }
   };
 
@@ -376,12 +414,12 @@ const AdminRooms: React.FC = () => {
       <div>
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Room Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Room Type Management</h1>
             <button
               onClick={() => openRoomTypeModal('add')}
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Add New Room
+              Add New Room Type
             </button>
           </div>
 
@@ -439,7 +477,7 @@ const AdminRooms: React.FC = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Room
+                      Room Type
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Price/Night
@@ -448,7 +486,7 @@ const AdminRooms: React.FC = () => {
                       Max Occupancy
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Extra Guest Price
+                      Number of Rooms
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
@@ -488,7 +526,9 @@ const AdminRooms: React.FC = () => {
                         {room.max_occupancy} guests
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ₹{room.extra_guest_price?.toLocaleString() || '0'}
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          {room.quantity || 1} {(room.quantity || 1) === 1 ? 'room' : 'rooms'}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -570,13 +610,13 @@ const AdminRooms: React.FC = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-900">
                   {(() => {
-                    let title = 'Room Details'; // Default
+                    let title = 'Room Type Details'; // Default
                     if (roomTypeModalMode === 'add') {
-                      title = 'Add New Room';
+                      title = 'Add New Room Type';
                     } else if (roomTypeModalMode === 'edit') {
-                      title = 'Edit Room';
+                      title = 'Edit Room Type';
                     } else if (roomTypeModalMode === 'view') {
-                      title = 'View Room';
+                      title = 'View Room Type';
                     }
                     return title;
                   })()}
@@ -604,7 +644,7 @@ const AdminRooms: React.FC = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Room Name *
+                      Room Type Name *
                     </label>
                     <input
                       type="text"
@@ -612,7 +652,7 @@ const AdminRooms: React.FC = () => {
                       value={roomTypeForm.name}
                       onChange={handleRoomTypeFormChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                      placeholder="Enter room name"
+                      placeholder="e.g., Deluxe Suite, Premium Room"
                       required
                                              disabled={roomTypeModalMode === 'view'}
                     />
@@ -665,6 +705,24 @@ const AdminRooms: React.FC = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Number of Rooms *
+                    </label>
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={roomTypeForm.quantity}
+                      onChange={handleRoomTypeFormChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                      placeholder="1"
+                      disabled={roomTypeModalMode === 'view'}
+                      required
+                      min="1"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">How many rooms of this type are available?</p>
                   </div>
 
                   <div>
