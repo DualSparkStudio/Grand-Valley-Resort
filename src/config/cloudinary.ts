@@ -52,6 +52,29 @@ export const getResponsiveImages = (publicId: string) => {
 }
 
 /**
+ * Convert a Cloudinary URL to responsive srcSet
+ * Use this when you have a URL from admin panel
+ */
+export const makeResponsive = (cloudinaryUrl: string) => {
+  // Extract the public ID from the URL
+  const match = cloudinaryUrl.match(/\/upload\/(?:.*?\/)?(Grand%20Valley%20Resort\/.+)$/)
+  if (!match) return cloudinaryUrl
+  
+  const publicId = decodeURIComponent(match[1])
+  
+  return {
+    src: getCloudinaryImage(publicId, { width: 1200 }),
+    srcSet: `
+      ${getCloudinaryImage(publicId, { width: 400 })} 400w,
+      ${getCloudinaryImage(publicId, { width: 800 })} 800w,
+      ${getCloudinaryImage(publicId, { width: 1200 })} 1200w,
+      ${getCloudinaryImage(publicId, { width: 1920 })} 1920w
+    `,
+    sizes: '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px'
+  }
+}
+
+/**
  * Get thumbnail image
  */
 export const getThumbnail = (publicId: string, size: number = 300) => {
