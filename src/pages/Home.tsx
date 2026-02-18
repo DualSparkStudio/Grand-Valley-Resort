@@ -953,6 +953,52 @@ const Home: React.FC = () => {
             </div>
 
             {/* Gallery Grid - Removed hardcoded images */}
+            
+            {/* Gallery Grid */}
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              {/* Display room images dynamically */}
+              {rooms.slice(0, 5).map((room, index) => {
+                const getMainImage = () => {
+                  if (room.images && room.images.length > 0) {
+                    const firstValidImage = room.images.find((img: string) => img && img.trim())
+                    if (firstValidImage) return firstValidImage
+                  }
+                  return room.image_url || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                }
+                
+                const imageUrl = getMainImage();
+                const isLarge = index === 0;
+                
+                return (
+                  <div 
+                    key={room.id}
+                    className={`${isLarge ? 'col-span-2 row-span-2' : ''} relative group overflow-hidden rounded-xl shadow-lg`}
+                  >
+                    <img
+                      src={imageUrl}
+                      alt={room.name}
+                      className={`w-full h-full ${isLarge ? 'min-h-[200px] sm:min-h-[300px] lg:min-h-[400px]' : 'h-32 sm:h-40 lg:h-48'} object-cover transform group-hover:scale-110 transition-transform duration-700`}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {isLarge && (
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 className="text-white font-semibold text-lg sm:text-xl">{room.name}</h3>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </motion.div>
 
             {/* View More Button */}
             <motion.div
