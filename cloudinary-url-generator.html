@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudinary URL Generator - Grand Valley Resort</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .size-btn {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .size-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .size-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .result-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .result-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .result-url {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            word-break: break-all;
+            line-height: 1.6;
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        .copy-btn.copied {
+            background: #10b981;
+        }
+        .preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 16px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1565c0;
+        }
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Cloudinary URL Generator</h1>
+        <p class="subtitle">Grand Valley Resort - Generate optimized image URLs</p>
+
+        <div class="form-group">
+            <label>1. Select Room/Category</label>
+            <select id="folder" onchange="updateURL()">
+                <option value="">-- Select Folder --</option>
+                <option value="Grand Valley Resort/delux room">Delux Room</option>
+                <option value="Grand Valley Resort/Family room">Family Room</option>
+                <option value="Grand Valley Resort/Valley view room">Valley View Room</option>
+                <option value="Grand Valley Resort/Restaurants">Restaurants</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>2. Enter Image Name (e.g., image1.jpg, room-photo.jpg)</label>
+            <input type="text" id="imageName" placeholder="image1.jpg" oninput="updateURL()">
+        </div>
+
+        <div class="form-group">
+            <label>3. Select Image Size</label>
+            <div class="size-options">
+                <button class="size-btn" onclick="selectSize(400)">Mobile<br>400px</button>
+                <button class="size-btn" onclick="selectSize(800)">Tablet<br>800px</button>
+                <button class="size-btn active" onclick="selectSize(1200)">Desktop<br>1200px</button>
+                <button class="size-btn" onclick="selectSize(1920)">Large<br>1920px</button>
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="result-label">📋 Generated URL (Copy this to Admin Panel):</div>
+            <button class="copy-btn" onclick="copyURL()">Copy</button>
+            <div class="result-url" id="resultURL">
+                Select folder and enter image name to generate URL
+            </div>
+        </div>
+
+        <div class="preview" id="preview" style="display: none;">
+            <p style="margin-bottom: 10px; color: #666; font-size: 14px;">Preview:</p>
+            <img id="previewImg" src="" alt="Preview">
+        </div>
+
+        <div class="info-box">
+            <strong>💡 How to use:</strong>
+            1. Select your room type or category<br>
+            2. Enter the exact image filename from Cloudinary<br>
+            3. Choose the size (1200px recommended for rooms)<br>
+            4. Click "Copy" and paste in your Admin Panel
+        </div>
+    </div>
+
+    <script>
+        let selectedSize = 1200;
+
+        function selectSize(size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateURL();
+        }
+
+        function updateURL() {
+            const folder = document.getElementById('folder').value;
+            const imageName = document.getElementById('imageName').value.trim();
+            
+            if (!folder || !imageName) {
+                document.getElementById('resultURL').textContent = 'Select folder and enter image name to generate URL';
+                document.getElementById('preview').style.display = 'none';
+                return;
+            }
+
+            // Encode the path properly
+            const encodedPath = encodeURIComponent(folder + '/' + imageName).replace(/%2F/g, '/');
+            const url = `https://res.cloudinary.com/dvf39djml/image/upload/w_${selectedSize},f_auto,q_auto/${encodedPath}`;
+            
+            document.getElementById('resultURL').textContent = url;
+            
+            // Show preview
+            document.getElementById('preview').style.display = 'block';
+            document.getElementById('previewImg').src = url;
+        }
+
+        function copyURL() {
+            const url = document.getElementById('resultURL').textContent;
+            if (url === 'Select folder and enter image name to generate URL') {
+                alert('Please generate a URL first!');
+                return;
+            }
+
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
