@@ -127,8 +127,8 @@ const AdminCalendar: React.FC = () => {
         return
       }
 
-      // Check if blocking for both rooms
-      if (blockForm.room_id === 'both') {
+      // Check if blocking for all rooms
+      if (blockForm.room_id === 'all') {
         // Block dates for all rooms
         const blockPromises = rooms.map(room => {
           const blockDataWithSource = {
@@ -176,8 +176,8 @@ const AdminCalendar: React.FC = () => {
         return
       }
 
-      // Check if unblocking for both rooms
-      if (blockForm.room_id === 'both') {
+      // Check if unblocking for all rooms
+      if (blockForm.room_id === 'all') {
         // Find all blocked dates for the same date range across all rooms
         const blockedDatesToRemove = blockedDates.filter(blocked => 
           blocked.start_date === blockForm.start_date && 
@@ -310,7 +310,7 @@ const AdminCalendar: React.FC = () => {
                         disabled={loading || isUnblockMode}
                       >
                         <option value="">Select a room</option>
-                        {!isUnblockMode && <option value="both">🏠 Both Rooms</option>}
+                        {!isUnblockMode && <option value="all">🏠 All Rooms</option>}
                         {loading ? (
                           <option value="" disabled>Loading rooms...</option>
                         ) : rooms && rooms.length > 0 ? (
