@@ -314,27 +314,25 @@ const AdminBookings: React.FC = () => {
     <div>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Booking Management</h1>
-              <p className="text-gray-600 mt-1">Manage customer bookings and reservations</p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Booking Management</h1>
+              <p className="text-gray-600 mt-1 text-sm sm:text-base">Manage customer bookings and reservations</p>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-3">
               {selectedBookings.length > 0 && (
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={handleBulkDelete}
-                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors duration-200"
-                  >
-                    <TrashIcon className="h-4 w-4 mr-2" />
-                    Delete Selected ({selectedBookings.length})
-                  </button>
-                </div>
+                <button
+                  onClick={handleBulkDelete}
+                  className="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors duration-200"
+                >
+                  <TrashIcon className="h-4 w-4 mr-2" />
+                  Delete Selected ({selectedBookings.length})
+                </button>
               )}
               <button
                 onClick={loadData}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
+                className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 Refresh
               </button>
@@ -344,7 +342,7 @@ const AdminBookings: React.FC = () => {
 
         {/* Filters */}
         <div className="mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
@@ -387,7 +385,7 @@ const AdminBookings: React.FC = () => {
               />
             </div>
 
-            <div className="text-sm text-gray-600 flex items-center">
+            <div className="text-sm text-gray-600 flex items-center justify-center sm:justify-start">
               <span className="font-medium">{filteredBookings.length}</span> 
               <span className="ml-1">of {combinedBookings.length} bookings</span>
             </div>
@@ -396,7 +394,8 @@ const AdminBookings: React.FC = () => {
 
         {/* Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <table className="w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -523,14 +522,94 @@ const AdminBookings: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden divide-y divide-gray-200">
+            {filteredBookings.length === 0 ? (
+              <div className="px-6 py-12 text-center">
+                <UserIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings found</h3>
+                <p className="text-gray-500">No bookings match your current filters.</p>
+              </div>
+            ) : (
+              filteredBookings.map((booking) => (
+                <div key={booking.id} className="p-4 hover:bg-gray-50">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedBookings.includes(booking.id)}
+                        onChange={() => handleSelectBooking(booking.id)}
+                        className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-semibold text-gray-900 truncate">{booking.guestName}</h3>
+                        <p className="text-xs text-gray-500 mt-1">{booking.roomName}</p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2 ml-2">
+                      <button
+                        onClick={() => openModal(booking)}
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100"
+                      >
+                        <EyeIcon className="h-5 w-5" />
+                      </button>
+                      {booking.source === 'Website' && booking.originalBooking && (
+                        <button
+                          onClick={() => booking.originalBooking && handleDelete(booking.originalBooking.id)}
+                          className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-100"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Contact:</span>
+                      <span className="text-gray-900 text-right">{booking.email || booking.phone || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Check-in:</span>
+                      <span className="text-gray-900">{new Date(booking.checkInDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Check-out:</span>
+                      <span className="text-gray-900">{new Date(booking.checkOutDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Guests:</span>
+                      <span className="text-gray-900">{booking.numGuests}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Booked:</span>
+                      <span className="text-gray-900">{booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-500">Status:</span>
+                      <div className="flex flex-col items-end space-y-1">
+                        <span className={getStatusBadge(booking.status)}>{booking.status}</span>
+                        <span className={getPaymentStatusBadge(booking.paymentStatus)}>{booking.paymentStatus}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                      <span className="text-gray-700 font-medium">Amount:</span>
+                      <span className="text-lg font-bold text-gray-900">₹{booking.totalAmount?.toLocaleString() || '0'}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         {/* Modal */}
         {isModalOpen && selectedBooking && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Booking Details</h3>
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Booking Details</h3>
                 <button
                   onClick={closeModal}
                   className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100"
@@ -539,9 +618,9 @@ const AdminBookings: React.FC = () => {
                 </button>
               </div>
               
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <h4 className="text-sm font-medium text-gray-900 mb-3">Customer Information</h4>
                     <div className="space-y-2 text-sm text-gray-900">
@@ -616,7 +695,7 @@ const AdminBookings: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200">
+              <div className="flex justify-end gap-3 px-4 sm:px-6 py-4 border-t border-gray-200 sticky bottom-0 bg-white">
                 <button
                   onClick={closeModal}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"

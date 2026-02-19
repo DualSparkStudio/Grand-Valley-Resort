@@ -232,10 +232,10 @@ const AdminReviews: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Reviews Management</h1>
-          <p className="mt-2 text-gray-600">Manage guest reviews and testimonials</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Reviews Management</h1>
+          <p className="mt-2 text-sm sm:text-base text-gray-600">Manage guest reviews and testimonials</p>
           
           {/* Debug Info */}
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -280,22 +280,22 @@ const AdminReviews: React.FC = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Total Reviews</h3>
-            <p className="text-3xl font-bold text-blue-600">{reviews.length}</p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h3 className="text-sm sm:text-lg font-semibold text-gray-900">Total Reviews</h3>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-600">{reviews.length}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Featured</h3>
-            <p className="text-3xl font-bold text-green-600">{reviews.filter(r => r.is_featured).length}</p>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h3 className="text-sm sm:text-lg font-semibold text-gray-900">Featured</h3>
+            <p className="text-2xl sm:text-3xl font-bold text-green-600">{reviews.filter(r => r.is_featured).length}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Active</h3>
-            <p className="text-3xl font-bold text-purple-600">{reviews.filter(r => r.is_active).length}</p>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h3 className="text-sm sm:text-lg font-semibold text-gray-900">Active</h3>
+            <p className="text-2xl sm:text-3xl font-bold text-purple-600">{reviews.filter(r => r.is_active).length}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Avg Rating</h3>
-            <p className="text-3xl font-bold text-yellow-600">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h3 className="text-sm sm:text-lg font-semibold text-gray-900">Avg Rating</h3>
+            <p className="text-2xl sm:text-3xl font-bold text-yellow-600">
               {reviews.length > 0 
                 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
                 : '0.0'
@@ -305,18 +305,18 @@ const AdminReviews: React.FC = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex space-x-3">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-6">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => openModal('add')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center text-sm sm:text-base"
             >
               <PlusIcon className="h-5 w-5 mr-2" />
               Add Review
             </button>
             <button
               onClick={loadReviews}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center"
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center justify-center text-sm sm:text-base"
               disabled={loading}
             >
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -329,7 +329,9 @@ const AdminReviews: React.FC = () => {
 
         {/* Reviews Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guest</th>
@@ -420,6 +422,73 @@ const AdminReviews: React.FC = () => {
               )}
             </tbody>
           </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden divide-y divide-gray-200">
+            {reviews.length > 0 ? reviews.map((review) => (
+              <div key={review.id} className="p-4 hover:bg-gray-50">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-start space-x-3 flex-1 min-w-0">
+                    <UserIcon className="h-8 w-8 text-gray-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-gray-900 truncate">{review.guest_name}</h3>
+                      <div className="flex items-center mt-1">
+                        {renderStars(review.rating)}
+                        <span className="ml-2 text-xs text-gray-600">({review.rating})</span>
+                      </div>
+                      {review.is_featured && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex space-x-1 ml-2">
+                    <button
+                      onClick={() => openModal('view', review)}
+                      className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50"
+                    >
+                      <EyeIcon className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => openModal('edit', review)}
+                      className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                    >
+                      <PencilIcon className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(review)}
+                      className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                    >
+                      <TrashIcon className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 text-sm">
+                  <p className="text-gray-700 line-clamp-2">"{review.comment}"</p>
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${getSourceBadgeColor(review.source || 'website')}`}>
+                      {review.source || 'website'}
+                    </span>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                      review.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {review.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                    <span className="text-xs text-gray-500">{formatDate(review.created_at)}</span>
+                  </div>
+                </div>
+              </div>
+            )) : (
+              <div className="px-6 py-12 text-center text-gray-500">
+                <UserIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews found</h3>
+                <p className="text-gray-500">Add your first review to get started.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -434,21 +503,23 @@ const AdminReviews: React.FC = () => {
           }}
         >
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">
+            <div className="p-4 sm:p-6 sticky top-0 bg-white z-10 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg sm:text-xl font-semibold">
                   {modalMode === 'add' ? 'Add Review' : modalMode === 'edit' ? 'Edit Review' : 'View Review'}
                 </h3>
                 <button
                   onClick={closeModal}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
+            </div>
+            
+            <div className="p-4 sm:p-6">
               {modalMode === 'view' ? (
                 <div className="space-y-4">
                   <div>
@@ -550,17 +621,17 @@ const AdminReviews: React.FC = () => {
                     </label>
                   </div>
                   
-                  <div className="flex justify-end space-x-3 pt-4">
+                  <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
                     <button
                       type="button"
                       onClick={closeModal}
-                      className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 order-2 sm:order-1"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700"
+                      className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 order-1 sm:order-2"
                     >
                       {modalMode === 'add' ? 'Add Review' : 'Update Review'}
                     </button>
@@ -569,16 +640,16 @@ const AdminReviews: React.FC = () => {
               )}
               
               {modalMode === 'view' && (
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
                   <button
                     onClick={closeModal}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 order-2 sm:order-1"
                   >
                     Close
                   </button>
                   <button
                     onClick={() => openModal('edit', selectedReview!)}
-                    className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700"
+                    className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 order-1 sm:order-2"
                   >
                     Edit Review
                   </button>
