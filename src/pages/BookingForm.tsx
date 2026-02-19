@@ -811,74 +811,65 @@ const BookingForm: React.FC = () => {
           <div className="px-4 sm:px-6 py-6 sm:py-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Book {room.name}</h1>
             
-            {/* Room Details - Horizontal Layout */}
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Room Details</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 bg-gray-50 rounded-lg p-4 sm:p-6">
+            {/* Room Details - Compact Horizontal Layout */}
+            <div className="mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
                 {/* Room Image */}
-                <div className="md:col-span-1">
+                <div className="lg:col-span-4">
                   <img 
                     src={room.image_url} 
                     alt={room.name}
-                    className="w-full h-48 md:h-64 object-cover rounded-lg"
+                    className="w-full h-48 lg:h-full object-cover rounded-lg shadow-md"
                   />
                 </div>
                 
-                {/* Room Info */}
-                <div className="md:col-span-2">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{room.name}</h3>
-                  <p className="text-gray-600 mb-4">{room.description}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Pricing Info */}
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">Price per night (Couple):</span> ₹{room.price_per_night}
-                      </p>
-                      {room.accommodation_details && (
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Accommodation:</span> {room.accommodation_details}
-                        </p>
-                      )}
-                      {room.max_capacity && (
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Max Capacity:</span> {room.max_capacity} guests
-                        </p>
-                      )}
-                    </div>
+                {/* Room Info - Compact */}
+                <div className="lg:col-span-8 flex flex-col justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{room.name}</h2>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{room.description}</p>
                     
-                    {/* Check-in/Check-out Times */}
-                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <h4 className="text-sm font-medium text-blue-900 mb-2">Check-in & Check-out</h4>
-                      <div className="text-xs text-blue-800 space-y-1">
-                        <div className="flex items-center">
-                          <span className="font-medium">Check-in:</span>
-                          <span className="ml-2">{room?.check_in_time ? `${room.check_in_time} onwards` : '1:00 PM onwards'}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="font-medium">Check-out:</span>
-                          <span className="ml-2">{room?.check_out_time || '10:00 AM'}</span>
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                      {/* Price */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Price per night</p>
+                        <p className="text-lg font-bold text-blue-600">₹{room.price_per_night}</p>
+                        <p className="text-xs text-gray-500">for couple</p>
+                      </div>
+                      
+                      {/* Check-in/Check-out */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Check-in & Check-out</p>
+                        <p className="text-xs font-medium text-gray-700">In: {room?.check_in_time || '1:00 PM'}</p>
+                        <p className="text-xs font-medium text-gray-700">Out: {room?.check_out_time || '10:00 AM'}</p>
+                      </div>
+                      
+                      {/* Capacity */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Max Capacity</p>
+                        <p className="text-lg font-bold text-gray-900">{room.max_capacity || 4}</p>
+                        <p className="text-xs text-gray-500">guests</p>
                       </div>
                     </div>
                   </div>
-
-                  {/* Room Amenities */}
+                  
+                  {/* Amenities - Compact */}
                   {room.amenities && room.amenities.length > 0 && (
-                    <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                      <h4 className="text-sm font-medium text-green-900 mb-2">Room Amenities</h4>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {room.amenities.slice(0, 6).map((amenity: string, index: number) => (
-                          <div key={index} className="flex items-center text-xs text-green-800">
-                            <svg className="w-3 h-3 mr-1 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">Amenities</p>
+                      <div className="flex flex-wrap gap-2">
+                        {room.amenities.slice(0, 8).map((amenity: string, index: number) => (
+                          <span key={index} className="inline-flex items-center text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-200">
+                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>{amenity}</span>
-                          </div>
+                            {amenity}
+                          </span>
                         ))}
-                        {room.amenities.length > 6 && (
-                          <div className="text-xs text-green-700 font-medium">
-                            +{room.amenities.length - 6} more
-                          </div>
+                        {room.amenities.length > 8 && (
+                          <span className="inline-flex items-center text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                            +{room.amenities.length - 8} more
+                          </span>
                         )}
                       </div>
                     </div>
