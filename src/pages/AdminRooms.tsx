@@ -290,7 +290,6 @@ const AdminRooms: React.FC = () => {
       toast.dismiss(loadingToast);
       toast.success(`${roomName} deleted successfully!`);
       await loadData();
-<<<<<<< HEAD
     } catch (error: any) {
       console.error('Delete room error:', error);
       
@@ -312,12 +311,6 @@ const AdminRooms: React.FC = () => {
           duration: 4000
         });
       }
-=======
-    } catch (error) {
-      console.error('Delete room error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Failed to delete room: ${errorMessage}`);
->>>>>>> 079a1042c5fce31f388edbd991bac126fc949564
     }
   };
 
@@ -435,57 +428,6 @@ const AdminRooms: React.FC = () => {
             </button>
           </div>
 
-<<<<<<< HEAD
-=======
-          {/* Check-in/Check-out Times */}
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Check-in & Check-out Times</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-in Time
-                </label>
-                <input
-                  type="text"
-                  value={globalTimes.check_in_time}
-                  onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_in_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  placeholder="e.g., 1:00 PM"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-out Time
-                </label>
-                <input
-                  type="text"
-                  value={globalTimes.check_out_time}
-                  onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_out_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  placeholder="e.g., 10:00 AM"
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <button
-                onClick={async () => {
-                  try {
-                    // Save times to local storage or settings
-                    localStorage.setItem('globalCheckInTime', globalTimes.check_in_time);
-                    localStorage.setItem('globalCheckOutTime', globalTimes.check_out_time);
-                    toast.success('Check-in/out times saved!');
-                  } catch (error) {
-                    toast.error('Failed to save times');
-                  }
-                }}
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
-              >
-                Save Times
-              </button>
-            </div>
-          </div>
-
->>>>>>> 079a1042c5fce31f388edbd991bac126fc949564
           <div className="bg-white rounded-lg shadow overflow-hidden">
             {/* Desktop Table View - Hidden on mobile */}
             <div className="hidden md:block overflow-x-auto">
@@ -1191,3 +1133,4 @@ const AdminRooms: React.FC = () => {
 };
 
 export default AdminRooms; 
+
