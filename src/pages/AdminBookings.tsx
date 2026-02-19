@@ -396,7 +396,8 @@ const AdminBookings: React.FC = () => {
 
         {/* Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <table className="w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -522,6 +523,86 @@ const AdminBookings: React.FC = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden divide-y divide-gray-200">
+            {filteredBookings.length === 0 ? (
+              <div className="px-6 py-12 text-center">
+                <UserIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings found</h3>
+                <p className="text-gray-500">No bookings match your current filters.</p>
+              </div>
+            ) : (
+              filteredBookings.map((booking) => (
+                <div key={booking.id} className="p-4 hover:bg-gray-50">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedBookings.includes(booking.id)}
+                        onChange={() => handleSelectBooking(booking.id)}
+                        className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-semibold text-gray-900 truncate">{booking.guestName}</h3>
+                        <p className="text-xs text-gray-500 mt-1">{booking.roomName}</p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2 ml-2">
+                      <button
+                        onClick={() => openModal(booking)}
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded-full hover:bg-blue-100"
+                      >
+                        <EyeIcon className="h-5 w-5" />
+                      </button>
+                      {booking.source === 'Website' && booking.originalBooking && (
+                        <button
+                          onClick={() => booking.originalBooking && handleDelete(booking.originalBooking.id)}
+                          className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-100"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Contact:</span>
+                      <span className="text-gray-900 text-right">{booking.email || booking.phone || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Check-in:</span>
+                      <span className="text-gray-900">{new Date(booking.checkInDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Check-out:</span>
+                      <span className="text-gray-900">{new Date(booking.checkOutDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Guests:</span>
+                      <span className="text-gray-900">{booking.numGuests}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Booked:</span>
+                      <span className="text-gray-900">{booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString() : 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-500">Status:</span>
+                      <div className="flex flex-col items-end space-y-1">
+                        <span className={getStatusBadge(booking.status)}>{booking.status}</span>
+                        <span className={getPaymentStatusBadge(booking.paymentStatus)}>{booking.paymentStatus}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                      <span className="text-gray-700 font-medium">Amount:</span>
+                      <span className="text-lg font-bold text-gray-900">₹{booking.totalAmount?.toLocaleString() || '0'}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
