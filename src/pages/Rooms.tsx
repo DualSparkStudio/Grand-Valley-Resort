@@ -172,12 +172,7 @@ const Rooms: React.FC = () => {
                         <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">{room.description}</p>
                         
                         {/* Room Stats */}
-                        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                          <div className="text-center">
-                            <UsersIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-800 mx-auto mb-1" />
-                            <div className="text-xs sm:text-sm text-gray-600">Max Guests</div>
-                            <div className="font-semibold text-sm sm:text-base">{room.max_occupancy}</div>
-                          </div>
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
                           <div className="text-center">
                             <StarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mx-auto mb-1" />
                             <div className="text-xs sm:text-sm text-gray-600">Rating</div>

@@ -219,7 +219,7 @@ const BookingSuccess: React.FC<BookingSuccessProps> = () => {
                     
                     <div className="flex justify-between">
                       <span className="text-gray-600">Room:</span>
-                      <span className="font-semibold">{room?.name || 'Unknown Room'}</span>
+                      <span className="font-semibold">{room?.name ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) : 'Unknown Room'}</span>
                     </div>
                     
                     <div className="flex justify-between">

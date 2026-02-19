@@ -28,7 +28,7 @@ const RoomDetail: React.FC = () => {
   })
   const [numGuests, setNumGuests] = useState(1)
   const [availableRooms, setAvailableRooms] = useState<any[]>([])
-  const [showCalendar, setShowCalendar] = useState(false)
+  const [showCalendar, setShowCalendar] = useState(true)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [dateError, setDateError] = useState<string>('')
@@ -186,8 +186,6 @@ const RoomDetail: React.FC = () => {
     const bookingState = {
       room,
       selectedDates,
-      numGuests,
-      totalAmount: calculateTotal(),
       availableRooms
     }
     
@@ -432,12 +430,7 @@ const RoomDetail: React.FC = () => {
               )}
 
               {/* Room Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                <div className="text-center">
-                  <UsersIcon className="h-8 w-8 text-blue-800 mx-auto mb-2" />
-                  <div className="text-sm text-gray-500">Max Guests</div>
-                  <div className="font-semibold">{room.max_occupancy}</div>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
                   <StarIcon className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Rating</div>
@@ -637,34 +630,6 @@ const RoomDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* Number of Guests */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Number of Guests
-                </label>
-                    <select
-                      value={numGuests}
-                      onChange={e => setNumGuests(Number(e.target.value))}
-                      disabled={!room?.is_active}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
-                    >
-                  {Array.from({ length: room.max_occupancy || 3 }, (_, i) => i + 1).map(num => (
-                    <option key={num} value={num} className="text-gray-900">{num} {num === 1 ? 'Guest' : 'Guests'}</option>
-                  ))}
-                </select>
-                {/* Show occupancy pricing info */}
-                {room && (
-                  <div className="mt-2 text-xs text-gray-600">
-                    {room.price_double_occupancy && (
-                      <div>2 guests: ₹{room.price_double_occupancy.toLocaleString()}/night</div>
-                    )}
-                    {room.price_triple_occupancy && (
-                      <div>3 guests: ₹{room.price_triple_occupancy.toLocaleString()}/night</div>
-                    )}
-                  </div>
-                )}
-              </div>
-
               {/* Availability Results */}
               {checkingAvailability && (
                 <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -704,52 +669,6 @@ const RoomDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* Price Summary */}
-              {selectedDates.checkIn && selectedDates.checkOut && (() => {
-                const nights = calculateNights()
-                let basePricePerNight = 0
-                let occupancyType = ''
-                
-                // Debug: Check if occupancy pricing fields exist
-                const hasOccupancyPricing = room.price_double_occupancy || room.price_triple_occupancy
-                
-                      if (room.price_triple_occupancy && numGuests === 3) {
-                        basePricePerNight = room.price_triple_occupancy
-                        occupancyType = 'Triple Occupancy'
-                      } else if (room.price_double_occupancy && numGuests >= 2) {
-                        basePricePerNight = room.price_double_occupancy
-                        occupancyType = 'Double Occupancy'
-                      } else {
-                        basePricePerNight = room.price_per_night || 0
-                        occupancyType = 'Base Price'
-                      }
-                
-                const baseAmount = basePricePerNight * nights
-                const total = calculateTotal()
-                
-                return (
-                  <div className="border-t pt-6 mb-6">
-                    <div className="space-y-2">
-                      {!hasOccupancyPricing && (
-                        <div className="mb-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
-                          ⚠️ Occupancy pricing not configured. Please run database migration and update room pricing in admin panel.
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">
-                          {occupancyType} ({numGuests} guest{numGuests !== 1 ? 's' : ''}, {nights} night{nights !== 1 ? 's' : ''}):
-                        </span>
-                        <span>₹{baseAmount.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
-                        <span>Total:</span>
-                        <span>₹{total.toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })()}
-
               {/* Book Now Button */}
               <button
                 onClick={handleBooking}
@@ -764,33 +683,26 @@ const RoomDetail: React.FC = () => {
                       ? 'Checking Availability...' 
                       : availableRooms.length === 0 
                         ? 'Not Available' 
-                        : 'Book Now'
+                        : 'Select Dates to Book'
                 }
               </button>
 
-              {/* Check-in/Check-out Times */}
+              {/* Check-in & Check-out Times Info */}
               <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="text-sm font-medium text-blue-900 mb-2">Check-in & Check-out Times</h4>
-                <div className="text-xs text-blue-800 space-y-1">
-                  <div className="flex items-center">
-                    <span className="font-medium">Check-in:</span>
-                    <span className="ml-2">{room?.check_in_time ? `${room.check_in_time} onwards` : '1:00 PM onwards'}</span>
+                <h4 className="text-base font-semibold text-blue-900 mb-3">Check-in & Check-out Times</h4>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-blue-900">Check-in:</span>
+                    <span className="text-blue-700 ml-2">12PM onwards</span>
                   </div>
-                  <div className="flex items-center">
-                    <span className="font-medium">Check-out:</span>
-                    <span className="ml-2">{room?.check_out_time || '10:00 AM'}</span>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-blue-200">
-                    <span className="text-xs italic">* Check-in and check-out times are flexible depending on other bookings. Please contact us for early check-in or late check-out requests.</span>
+                  <div>
+                    <span className="font-medium text-blue-900">Check-out:</span>
+                    <span className="text-blue-700 ml-2">10AM</span>
                   </div>
                 </div>
-              </div>
-
-              {/* Additional Info */}
-              <div className="mt-6 text-sm text-gray-500">
-                <p>• Free cancellation up to 24 hours before check-in</p>
-                <p>• No prepayment required</p>
-                <p>• Instant confirmation</p>
+                <p className="text-xs text-blue-700 mt-3 italic">
+                  * Check-in and check-out times are flexible depending on other bookings. Please contact us for early check-in or late check-out requests.
+                </p>
               </div>
             </div>
           </div>

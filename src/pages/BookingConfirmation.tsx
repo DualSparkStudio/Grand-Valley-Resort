@@ -121,8 +121,24 @@ const BookingConfirmation: React.FC = () => {
                   <span className="font-medium text-gray-900">{nights}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Guests:</span>
-                  <span className="font-medium text-gray-900">{booking.num_guests}</span>
+                  <span className="text-gray-600">Base Adults:</span>
+                  <span className="font-medium text-gray-900">2</span>
+                </div>
+                {booking.num_extra_adults > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Extra Adults:</span>
+                    <span className="font-medium text-gray-900">{booking.num_extra_adults}</span>
+                  </div>
+                )}
+                {booking.num_children_above_5 > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Children Above 5:</span>
+                    <span className="font-medium text-gray-900">{booking.num_children_above_5}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Guests:</span>
+                  <span className="font-medium text-gray-900">{2 + (booking.num_extra_adults || 0) + (booking.num_children_above_5 || 0)}</span>
                 </div>
               </div>
             </div>
@@ -170,14 +186,29 @@ const BookingConfirmation: React.FC = () => {
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Payment Summary</h2>
             <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Room Rate (per night):</span>
-                <span className="font-medium text-gray-900">₹{room?.price_per_night.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Number of Nights:</span>
-                <span className="font-medium text-gray-900">{nights}</span>
-              </div>
+              {booking.subtotal_amount && booking.gst_amount ? (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal:</span>
+                    <span className="font-medium text-gray-900">₹{booking.subtotal_amount.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">GST ({booking.gst_percentage || 12}%):</span>
+                    <span className="font-medium text-gray-900">₹{booking.gst_amount.toLocaleString()}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Room Rate (per night):</span>
+                    <span className="font-medium text-gray-900">₹{room?.price_per_night.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Number of Nights:</span>
+                    <span className="font-medium text-gray-900">{nights}</span>
+                  </div>
+                </>
+              )}
               <div className="border-t pt-3">
                 <div className="flex justify-between">
                   <span className="text-lg font-semibold text-gray-900">Total Amount:</span>

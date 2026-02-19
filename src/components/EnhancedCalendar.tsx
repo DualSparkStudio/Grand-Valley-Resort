@@ -51,7 +51,7 @@ const EnhancedCalendar: React.FC<EnhancedCalendarProps> = ({
     
     return websiteBookings.map(booking => {
       const room = rooms.find(r => r.id === booking.room_id);
-      const roomName = room ? room.name : 'Unknown Room';
+      const roomName = room ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) : 'Unknown Room';
         
       let backgroundColor = '#ef4444'; // Red for confirmed bookings
       let borderColor = '#dc2626';
@@ -106,7 +106,7 @@ const EnhancedCalendar: React.FC<EnhancedCalendarProps> = ({
     
     return manualBlockedDates.map(blocked => {
       const room = rooms.find(r => r.id === blocked.room_id);
-      const roomName = room ? room.name : 'Unknown Room';
+      const roomName = room ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) : 'Unknown Room';
       
       return {
         id: `blocked-${blocked.id}`,

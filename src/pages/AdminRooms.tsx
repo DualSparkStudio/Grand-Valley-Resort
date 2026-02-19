@@ -6,28 +6,22 @@ import { api } from '../lib/supabase';
 const AdminRooms: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [globalTimes, setGlobalTimes] = useState({
-    check_in_time: '',
-    check_out_time: ''
-  });
 
   const [roomTypeForm, setRoomTypeForm] = useState({
     name: '',
     description: '',
-    price_per_night: '',
-    max_occupancy: '',
+    price_per_night: '', // Couple charges
+    max_capacity: '4', // Maximum number of guests allowed
     quantity: '1', // Number of rooms of this type
     amenities: '',
     image_url: '',
     images: [''], // Add images array like attractions
     is_active: true,
     extra_guest_price: '',
+    child_above_5_price: '', // Child above 5 years price
+    gst_percentage: '12', // Default GST 12%
     accommodation_details: '',
     floor: '',
-    // Occupancy-based pricing
-    price_double_occupancy: '',
-    price_triple_occupancy: '',
-    price_four_occupancy: '',
     extra_mattress_price: '200' // Default ₹200
   });
   const [selectedRoomType, setSelectedRoomType] = useState<Room | null>(null);
@@ -40,15 +34,6 @@ const AdminRooms: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    // Load global times from localStorage
-    const savedCheckIn = localStorage.getItem('globalCheckInTime');
-    const savedCheckOut = localStorage.getItem('globalCheckOutTime');
-    if (savedCheckIn || savedCheckOut) {
-      setGlobalTimes({
-        check_in_time: savedCheckIn || '',
-        check_out_time: savedCheckOut || ''
-      });
-    }
   }, []);
 
   // Update image preview whenever roomTypeForm.images changes
@@ -91,7 +76,9 @@ const AdminRooms: React.FC = () => {
     try {
       setLoading(true);
       const data = await api.getAllRooms();
-      setRoomTypes(data || []);
+      // Filter out soft-deleted rooms from admin display
+      const activeRooms = (data || []).filter(room => !room.is_deleted);
+      setRoomTypes(activeRooms);
     } catch (error) {
       toast.error('Failed to load room type data');
       // Set empty array to prevent undefined errors
@@ -110,18 +97,17 @@ const AdminRooms: React.FC = () => {
           name: '', 
           description: '', 
           price_per_night: '', 
-          max_occupancy: '', 
+          max_capacity: '4',
           quantity: '1',
           amenities: '', 
           image_url: '', 
           images: [''], // Reset images array
           is_active: true, 
           extra_guest_price: '', 
+          child_above_5_price: '',
+          gst_percentage: '12',
           accommodation_details: '',
           floor: '',
-          price_double_occupancy: '',
-          price_triple_occupancy: '',
-          price_four_occupancy: '',
           extra_mattress_price: '200'
         });
     setImagePreview('');
@@ -212,14 +198,6 @@ const AdminRooms: React.FC = () => {
         errors.push('Price per night must be greater than 0');
         newFieldErrors.price_per_night = true;
       }
-      
-      if (!roomTypeForm.max_occupancy.trim()) {
-        errors.push('Max occupancy is required');
-        newFieldErrors.max_occupancy = true;
-      } else if (parseInt(roomTypeForm.max_occupancy) <= 0) {
-        errors.push('Max occupancy must be at least 1');
-        newFieldErrors.max_occupancy = true;
-      }
 
       if (!roomTypeForm.quantity.trim()) {
         errors.push('Number of rooms is required');
@@ -254,7 +232,7 @@ const AdminRooms: React.FC = () => {
         name: roomTypeForm.name.trim(),
         description: roomTypeForm.description.trim(),
         price_per_night: parseFloat(roomTypeForm.price_per_night),
-        max_occupancy: parseInt(roomTypeForm.max_occupancy),
+        max_capacity: parseInt(roomTypeForm.max_capacity) || 4,
         quantity: parseInt(roomTypeForm.quantity) || 1,
         amenities: roomTypeForm.amenities.split('\n').filter(item => item.trim()),
         image_url: validImages[0], // Use first image as main image
@@ -262,14 +240,14 @@ const AdminRooms: React.FC = () => {
         is_active: roomTypeForm.is_active,
         is_available: true, // Set room as available when creating
         extra_guest_price: roomTypeForm.extra_guest_price ? parseFloat(roomTypeForm.extra_guest_price) : 0,
+        child_above_5_price: roomTypeForm.child_above_5_price ? parseFloat(roomTypeForm.child_above_5_price) : 0,
+        gst_percentage: roomTypeForm.gst_percentage ? parseFloat(roomTypeForm.gst_percentage) : 12,
         accommodation_details: roomTypeForm.accommodation_details.trim(),
         floor: roomTypeForm.floor ? parseInt(roomTypeForm.floor) : undefined,
-        room_number: roomTypeForm.name.replace(/\s+/g, '-').toUpperCase(), // Generate from name
-        // Occupancy-based pricing
-        price_double_occupancy: roomTypeForm.price_double_occupancy ? parseFloat(roomTypeForm.price_double_occupancy) : undefined,
-        price_triple_occupancy: roomTypeForm.price_triple_occupancy ? parseFloat(roomTypeForm.price_triple_occupancy) : undefined,
-        price_four_occupancy: roomTypeForm.price_four_occupancy ? parseFloat(roomTypeForm.price_four_occupancy) : undefined,
         extra_mattress_price: roomTypeForm.extra_mattress_price ? parseFloat(roomTypeForm.extra_mattress_price) : 200,
+        check_in_time: '12:00 PM',
+        check_out_time: '10:00 AM',
+        room_number: roomTypeForm.name.replace(/\s+/g, '-').toUpperCase(), // Generate from name
       };
 
       if (roomTypeModalMode === 'edit' && selectedRoomType) {
@@ -304,8 +282,27 @@ const AdminRooms: React.FC = () => {
       await api.deleteRoom(roomId);
       toast.success('Room type deleted successfully!');
       await loadData();
-    } catch (error) {
-      toast.error(`Failed to delete room type: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } catch (error: any) {
+      console.error('Delete room error:', error);
+      
+      // Check if it's a foreign key constraint error
+      // PostgreSQL error code 23503 = foreign key violation
+      if (
+        error?.code === '23503' || 
+        error?.code === 23503 ||
+        error?.details?.includes('still referenced') ||
+        error?.message?.includes('foreign key constraint') ||
+        error?.message?.includes('violates foreign')
+      ) {
+        toast.error('Cannot delete this room type because it has existing bookings. Please deactivate it instead or delete the bookings first.', {
+          duration: 6000
+        });
+      } else {
+        const errorMessage = error?.message || error?.details || 'Unknown error';
+        toast.error(`Failed to delete room type: ${errorMessage}`, {
+          duration: 4000
+        });
+      }
     }
   };
 
@@ -349,18 +346,17 @@ const AdminRooms: React.FC = () => {
           name: roomType.name || '',
           description: roomType.description || '',
           price_per_night: safeToString(roomType.price_per_night),
-          max_occupancy: safeToString(roomType.max_occupancy),
+          max_capacity: safeToString(roomType.max_capacity) || '4',
           quantity: safeToString(roomType.quantity) || '1',
           amenities: Array.isArray(roomType.amenities) ? roomType.amenities.join('\n') : '',
           is_active: roomType.is_active ?? true,
           extra_guest_price: safeToString(roomType.extra_guest_price),
+          child_above_5_price: safeToString(roomType.child_above_5_price),
+          gst_percentage: safeToString(roomType.gst_percentage) || '12',
           accommodation_details: roomType.accommodation_details || '',
           image_url: roomType.image_url || '',
           images: Array.isArray(roomType.images) && roomType.images.length > 0 ? roomType.images : [''],
           floor: safeToString(roomType.floor),
-          price_double_occupancy: safeToString(roomType.price_double_occupancy),
-          price_triple_occupancy: safeToString(roomType.price_triple_occupancy),
-          price_four_occupancy: safeToString(roomType.price_four_occupancy),
           extra_mattress_price: safeToString(roomType.extra_mattress_price) || '200'
         });
 
@@ -374,18 +370,17 @@ const AdminRooms: React.FC = () => {
           name: '', 
           description: '', 
           price_per_night: '', 
-          max_occupancy: '', 
+          max_capacity: '4',
           quantity: '1',
           amenities: '', 
           is_active: true, 
           extra_guest_price: '', 
+          child_above_5_price: '',
+          gst_percentage: '12',
           accommodation_details: '',
           image_url: '', 
           images: [''],
           floor: '',
-          price_double_occupancy: '',
-          price_triple_occupancy: '',
-          price_four_occupancy: '',
           extra_mattress_price: '200'
         });
         setImagePreview('');
@@ -423,54 +418,6 @@ const AdminRooms: React.FC = () => {
             </button>
           </div>
 
-          {/* Check-in/Check-out Times */}
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Check-in & Check-out Times</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-in Time
-                </label>
-                <input
-                  type="text"
-                  value={globalTimes.check_in_time}
-                  onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_in_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  placeholder="e.g., 1:00 PM"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-out Time
-                </label>
-                <input
-                  type="text"
-                  value={globalTimes.check_out_time}
-                  onChange={(e) => setGlobalTimes(prev => ({ ...prev, check_out_time: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                  placeholder="e.g., 10:00 AM"
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <button
-                onClick={async () => {
-                  try {
-                    // Save times to local storage or settings
-                    localStorage.setItem('globalCheckInTime', globalTimes.check_in_time);
-                    localStorage.setItem('globalCheckOutTime', globalTimes.check_out_time);
-                    toast.success('Check-in/out times saved!');
-                  } catch (error) {
-                    toast.error('Failed to save times');
-                  }
-                }}
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
-              >
-                Save Times
-              </button>
-            </div>
-          </div>
-
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
@@ -480,10 +427,7 @@ const AdminRooms: React.FC = () => {
                       Room Type
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price/Night
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Max Occupancy
+                      Price/Night (Couple)
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Number of Rooms
@@ -521,9 +465,6 @@ const AdminRooms: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         ₹{room.price_per_night?.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {room.max_occupancy} guests
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -683,7 +624,7 @@ const AdminRooms: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Price per Night *
+                        Price per Night (Couple) *
                       </label>
                       <input
                         type="number"
@@ -702,112 +643,120 @@ const AdminRooms: React.FC = () => {
                       {fieldErrors.price_per_night && (
                         <p className="mt-1 text-xs text-red-600">Valid price is required</p>
                       )}
+                      <p className="mt-1 text-xs text-gray-500">Base price for couple (2 adults)</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Max Occupancy *
+                        Max Capacity *
                       </label>
                       <input
                         type="number"
-                        name="max_occupancy"
-                        value={roomTypeForm.max_occupancy}
+                        name="max_capacity"
+                        value={roomTypeForm.max_capacity}
                         onChange={handleRoomTypeFormChange}
                         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
-                          fieldErrors.max_occupancy 
+                          fieldErrors.max_capacity 
                             ? 'border-red-300 focus:ring-red-500' 
                             : 'border-gray-300 focus:ring-blue-500'
                         }`}
-                        placeholder="2"
+                        placeholder="4"
                         disabled={roomTypeModalMode === 'view'}
                         required
+                        min="1"
                       />
-                      {fieldErrors.max_occupancy && (
-                        <p className="mt-1 text-xs text-red-600">Valid occupancy is required</p>
+                      {fieldErrors.max_capacity && (
+                        <p className="mt-1 text-xs text-red-600">Max capacity is required</p>
                       )}
+                      <p className="mt-1 text-xs text-gray-500">Maximum guests allowed</p>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Number of Rooms *
-                    </label>
-                    <input
-                      type="number"
-                      name="quantity"
-                      value={roomTypeForm.quantity}
-                      onChange={handleRoomTypeFormChange}
-                      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
-                        fieldErrors.quantity 
-                          ? 'border-red-300 focus:ring-red-500' 
-                          : 'border-gray-300 focus:ring-blue-500'
-                      }`}
-                      placeholder="1"
-                      disabled={roomTypeModalMode === 'view'}
-                      required
-                      min="1"
-                    />
-                    {fieldErrors.quantity && (
-                      <p className="mt-1 text-xs text-red-600">At least 1 room is required</p>
-                    )}
-                    <p className="mt-1 text-xs text-gray-500">How many rooms of this type are available?</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Number of Rooms *
+                      </label>
+                      <input
+                        type="number"
+                        name="quantity"
+                        value={roomTypeForm.quantity}
+                        onChange={handleRoomTypeFormChange}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 text-gray-900 ${
+                          fieldErrors.quantity 
+                            ? 'border-red-300 focus:ring-red-500' 
+                            : 'border-gray-300 focus:ring-blue-500'
+                        }`}
+                        placeholder="1"
+                        disabled={roomTypeModalMode === 'view'}
+                        required
+                        min="1"
+                      />
+                      {fieldErrors.quantity && (
+                        <p className="mt-1 text-xs text-red-600">At least 1 room is required</p>
+                      )}
+                      <p className="mt-1 text-xs text-gray-500">How many rooms of this type?</p>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Extra Guest Price (Legacy)
-                    </label>
-                    <input
-                      type="number"
-                      name="extra_guest_price"
-                      value={roomTypeForm.extra_guest_price}
-                      onChange={handleRoomTypeFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                      placeholder="0"
-                      disabled={roomTypeModalMode === 'view'}
-                      min="0"
-                    />
-                    <p className="mt-1 text-xs text-gray-500">Deprecated - Use occupancy-based pricing below</p>
-                  </div>
-
-                  {/* Occupancy-Based Pricing */}
+                  {/* Additional Charges */}
                   <div className="border-t pt-4 mt-4">
-                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Occupancy-Based Pricing</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Additional Charges</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Double Occupancy (2 guests)
+                          Extra Guest Price
                         </label>
                         <input
                           type="number"
-                          name="price_double_occupancy"
-                          value={roomTypeForm.price_double_occupancy}
+                          name="extra_guest_price"
+                          value={roomTypeForm.extra_guest_price}
                           onChange={handleRoomTypeFormChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                          placeholder="2500"
+                          placeholder="0"
                           disabled={roomTypeModalMode === 'view'}
                           min="0"
                         />
+                        <p className="mt-1 text-xs text-gray-500">Per extra adult per night</p>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Triple Occupancy (3 guests)
+                          Child Above 5 Years
                         </label>
                         <input
                           type="number"
-                          name="price_triple_occupancy"
-                          value={roomTypeForm.price_triple_occupancy}
+                          name="child_above_5_price"
+                          value={roomTypeForm.child_above_5_price}
                           onChange={handleRoomTypeFormChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-                          placeholder="2800"
+                          placeholder="0"
                           disabled={roomTypeModalMode === 'view'}
                           min="0"
                         />
+                        <p className="mt-1 text-xs text-gray-500">Per child per night</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          GST %
+                        </label>
+                        <input
+                          type="number"
+                          name="gst_percentage"
+                          value={roomTypeForm.gst_percentage}
+                          onChange={handleRoomTypeFormChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                          placeholder="12"
+                          disabled={roomTypeModalMode === 'view'}
+                          min="0"
+                          max="100"
+                          step="0.01"
+                        />
+                        <p className="mt-1 text-xs text-gray-500">GST percentage (default: 12%)</p>
                       </div>
                     </div>
                     <div className="mt-4">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Extra Mattress Price (per mattress per night)
+                        Extra Mattress Price
                       </label>
                       <input
                         type="number"
@@ -819,7 +768,7 @@ const AdminRooms: React.FC = () => {
                         disabled={roomTypeModalMode === 'view'}
                         min="0"
                       />
-                      <p className="mt-1 text-xs text-gray-500">Default: ₹200 per mattress per night</p>
+                      <p className="mt-1 text-xs text-gray-500">Per mattress per night (default: ₹200)</p>
                     </div>
                   </div>
 
