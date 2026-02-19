@@ -806,40 +806,85 @@ const BookingForm: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="px-6 py-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Book {room.name}</h1>
+          <div className="px-4 sm:px-6 py-6 sm:py-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Book {room.name}</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Room Details */}
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Room Details</h2>
-                <div className="bg-gray-50 rounded-lg p-6">
+            {/* Room Details - Compact Horizontal Layout */}
+            <div className="mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
+                {/* Room Image */}
+                <div className="lg:col-span-4">
                   <img 
                     src={room.image_url} 
                     alt={room.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
+                    className="w-full h-48 lg:h-full object-cover rounded-lg shadow-md"
                   />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{room.name}</h3>
-                  <p className="text-gray-600 mb-4">{room.description}</p>
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-medium">Price per night (Couple):</span> ₹{room.price_per_night}
-                    </p>
-                    {room.accommodation_details && (
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">Accommodation:</span> {room.accommodation_details}
-                      </p>
-                    )}
+                </div>
+                
+                {/* Room Info - Compact */}
+                <div className="lg:col-span-8 flex flex-col justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">{room.name}</h2>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{room.description}</p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                      {/* Price */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Price per night</p>
+                        <p className="text-lg font-bold text-blue-600">₹{room.price_per_night}</p>
+                        <p className="text-xs text-gray-500">for couple</p>
+                      </div>
+                      
+                      {/* Check-in/Check-out */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Check-in & Check-out</p>
+                        <p className="text-xs font-medium text-gray-700">In: {room?.check_in_time || '1:00 PM'}</p>
+                        <p className="text-xs font-medium text-gray-700">Out: {room?.check_out_time || '10:00 AM'}</p>
+                      </div>
+                      
+                      {/* Capacity */}
+                      <div className="bg-white rounded-lg p-3 border border-gray-200">
+                        <p className="text-xs text-gray-500 mb-1">Max Capacity</p>
+                        <p className="text-lg font-bold text-gray-900">{room.max_capacity || 4}</p>
+                        <p className="text-xs text-gray-500">guests</p>
+                      </div>
+                    </div>
                   </div>
+                  
+                  {/* Amenities - Compact */}
+                  {room.amenities && room.amenities.length > 0 && (
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">Amenities</p>
+                      <div className="flex flex-wrap gap-2">
+                        {room.amenities.slice(0, 8).map((amenity: string, index: number) => (
+                          <span key={index} className="inline-flex items-center text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-200">
+                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            {amenity}
+                          </span>
+                        ))}
+                        {room.amenities.length > 8 && (
+                          <span className="inline-flex items-center text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                            +{room.amenities.length - 8} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
+            </div>
 
-              {/* Booking Form */}
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Booking Details</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Booking Form - Full Width */}
+            <div className="bg-white">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Booking Details</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Left Column - Date Selection and Guest Info */}
+                  <div className="space-y-6">
                   {/* Date Selection */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1001,6 +1046,19 @@ const BookingForm: React.FC = () => {
                       return null
                     })()}
                   </div>
+
+                  {/* Booking Terms */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 className="text-base font-semibold text-gray-900 mb-2">Booking Terms</h3>
+                    <div className="text-sm text-gray-700 space-y-2">
+                      <p>• If the guest agrees with the house rules can book the stay by paying full amount at the time of booking.</p>
+                      <p>• Any change, modification can be allowed if feasible and possible.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Contact Info and Price */}
+                <div className="space-y-6">
 
               {/* Guest Information */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1167,67 +1225,60 @@ const BookingForm: React.FC = () => {
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
 
-                  {/* Booking Terms */}
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Booking Terms</h3>
-                    <div className="text-sm text-gray-700 space-y-2">
-                      <p>• If the guest agrees with the house rules can book the stay by paying full amount at the time of booking.</p>
-                      <p>• Any change, modification can be allowed if feasible and possible.</p>
-                    </div>
-                  </div>
-
-                  {/* Room Unavailable Message */}
-                  {room && !room.is_active && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0">
-                          <svg className="h-5 w-5 text-red-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                        <div className="ml-3">
-                          <h4 className="text-sm font-semibold text-red-900 mb-1">Room Currently Unavailable</h4>
-                          <p className="text-sm text-red-800">This room is temporarily unavailable for booking. Please contact us for more information or check back later.</p>
-                        </div>
+              {/* Full Width Bottom Section */}
+              <div className="space-y-6">
+                {/* Room Unavailable Message */}
+                {room && !room.is_active && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-red-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <h4 className="text-sm font-semibold text-red-900 mb-1">Room Currently Unavailable</h4>
+                        <p className="text-sm text-red-800">This room is temporarily unavailable for booking. Please contact us for more information or check back later.</p>
                       </div>
                     </div>
-                  )}
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={submitting || !room?.is_active || !selectedDates || totalAmount === 0}
-                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed relative"
-                  >
-                    {!room?.is_active ? (
-                      'Room Unavailable'
-                    ) : submitting ? (
-                      <div className="flex items-center justify-center space-x-2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                        <span>Processing Payment...</span>
-                      </div>
-                    ) : (
-                      'Proceed to Payment'
-                    )}
-                  </button>
-                  
-                  {/* Help Text */}
-                  {(!selectedDates || totalAmount === 0) && room?.is_active && (
-                    <p className="text-sm text-gray-600 text-center">
-                      {!selectedDates 
-                        ? 'Please select check-in and check-out dates above'
-                        : 'Please confirm your dates in the calendar to calculate the total amount'}
-                    </p>
-                  )}
-
-
-                </form>
-              </div>
-            </div>
                   </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={submitting || !room?.is_active || !selectedDates || totalAmount === 0}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed relative"
+                >
+                  {!room?.is_active ? (
+                    'Room Unavailable'
+                  ) : submitting ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      <span>Processing Payment...</span>
+                    </div>
+                  ) : (
+                    'Proceed to Payment'
+                  )}
+                </button>
+                
+                {/* Help Text */}
+                {(!selectedDates || totalAmount === 0) && room?.is_active && (
+                  <p className="text-sm text-gray-600 text-center">
+                    {!selectedDates 
+                      ? 'Please select check-in and check-out dates above'
+                      : 'Please confirm your dates in the calendar to calculate the total amount'}
+                  </p>
+                )}
               </div>
-            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
       {/* Calendar Modal */}
       {showCalendar && (
