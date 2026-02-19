@@ -470,6 +470,20 @@ const AdminProfile: React.FC = () => {
                   </form>
                 </div>
 
+                {/* Forgot Password Option */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Forgot Password?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    If you've forgotten your current password, you can reset it using the forgot password feature.
+                  </p>
+                  <button
+                    onClick={() => window.location.href = '/forgot-password'}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Reset Password via Email
+                  </button>
+                </div>
+
               </div>
             )}
 

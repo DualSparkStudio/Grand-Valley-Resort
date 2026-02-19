@@ -1,5 +1,6 @@
 import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
+import { Toaster } from 'react-hot-toast';
 import { Outlet, Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import AdminLayout from './components/AdminLayout';
@@ -27,6 +28,7 @@ import BookingSuccess from './pages/BookingSuccess';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Features from './pages/Features';
+import ForgotPassword from './pages/ForgotPassword';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Policy from './pages/Policy';
@@ -82,6 +84,7 @@ const AppContent: React.FC = () => {
         <Route path="gallery" element={<Gallery />} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="register" element={<Register />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
@@ -163,6 +166,30 @@ function App() {
               v7_relativeSplatPath: true
             }}
           >
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: '#363636',
+                  color: '#fff',
+                },
+                success: {
+                  duration: 3000,
+                  iconTheme: {
+                    primary: '#10b981',
+                    secondary: '#fff',
+                  },
+                },
+                error: {
+                  duration: 4000,
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
             <ScrollToTop />
             <SmoothScroll>
               <MaintenanceProvider>
