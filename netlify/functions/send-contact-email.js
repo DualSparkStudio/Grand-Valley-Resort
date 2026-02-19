@@ -45,6 +45,7 @@ exports.handler = async (event, context) => {
     // Use SMTP username as sender email (since they should be the same)
     const senderEmail = mailUsername
 
+    console.log('SMTP Configuration:', {
       host: mailServer,
       port: mailPort,
       user: mailUsername ? '***' : 'NOT SET',
@@ -54,6 +55,7 @@ exports.handler = async (event, context) => {
 
     // Validate email configuration
     if (!mailUsername || !mailPassword) {
+      console.error('SMTP credentials missing:', {
         mailUsername: mailUsername ? 'Set' : 'Not set',
         mailPassword: mailPassword ? 'Set' : 'Not set',
         mailServer,
@@ -126,9 +128,12 @@ exports.handler = async (event, context) => {
       `
     }
 
+    console.log('Sending email to:', adminEmail)
 
     // Send email
     const result = await transporter.sendMail(mailOptions)
+    
+    console.log('Email sent successfully:', result.messageId)
 
     return {
       statusCode: 200,
@@ -141,6 +146,7 @@ exports.handler = async (event, context) => {
     }
 
   } catch (error) {
+    console.error('Contact email error:', {
       message: error.message,
       stack: error.stack,
       code: error.code

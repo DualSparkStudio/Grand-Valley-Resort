@@ -64,12 +64,15 @@ const Contact: React.FC = () => {
     setIsSubmitting(true)
     
     try {
+      console.log('Submitting contact form...')
       
       // Get SMTP configuration from admin panel
       let smtpConfig = {}
       try {
         smtpConfig = await api.getSmtpConfig()
+        console.log('SMTP Config loaded:', smtpConfig ? 'Yes' : 'No')
       } catch (error) {
+        console.log('Failed to load SMTP config, will use environment variables')
         // Continue with empty smtpConfig (will use environment variables)
       }
       
@@ -86,11 +89,13 @@ const Contact: React.FC = () => {
         })
       })
 
+      console.log('Response status:', response.status)
 
       const responseData = await response.json()
+      console.log('Response data:', responseData)
 
       if (!response.ok) {
-        throw new Error(`Failed to send contact email: ${responseData.error || response.statusText}`)
+        throw new Error(responseData.error || responseData.details || response.statusText)
       }
       
       // Reset form
@@ -104,7 +109,8 @@ const Contact: React.FC = () => {
       
       toast.success('Thank you for your message! We will get back to you soon.')
     } catch (error: any) {
-      toast.error(`Failed to send message: ${error.message}`)
+      console.error('Contact form error:', error)
+      toast.error(error.message || 'Failed to send message. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
