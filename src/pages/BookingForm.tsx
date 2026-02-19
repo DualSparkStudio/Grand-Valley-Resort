@@ -1046,6 +1046,15 @@ const BookingForm: React.FC = () => {
                       return null
                     })()}
                   </div>
+
+                  {/* Booking Terms */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 className="text-base font-semibold text-gray-900 mb-2">Booking Terms</h3>
+                    <div className="text-sm text-gray-700 space-y-2">
+                      <p>• If the guest agrees with the house rules can book the stay by paying full amount at the time of booking.</p>
+                      <p>• Any change, modification can be allowed if feasible and possible.</p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right Column - Contact Info and Price */}
@@ -1216,15 +1225,6 @@ const BookingForm: React.FC = () => {
                       </div>
                     </div>
                   )}
-
-                  {/* Booking Terms */}
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Booking Terms</h3>
-                    <div className="text-sm text-gray-700 space-y-2">
-                      <p>• If the guest agrees with the house rules can book the stay by paying full amount at the time of booking.</p>
-                      <p>• Any change, modification can be allowed if feasible and possible.</p>
-                    </div>
-                  </div>
                 </div>
               </div>
 
