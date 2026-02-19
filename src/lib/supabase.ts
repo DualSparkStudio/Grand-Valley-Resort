@@ -51,6 +51,7 @@ export interface Room {
   amenities?: string[]
   image_url: string
   images?: string[] // Array of image URLs
+  video_url?: string // Cloudinary video URL
   is_active: boolean
   is_deleted?: boolean // Soft delete flag
   deleted_at?: string // Soft delete timestamp
@@ -351,6 +352,7 @@ export const api = {
   },
 
   async deleteRoom(id: number) {
+<<<<<<< HEAD
     // Soft delete: mark as deleted instead of actually deleting
     const { error } = await supabase
       .from('rooms')
@@ -370,8 +372,52 @@ export const api = {
       .from('rooms')
       .delete()
       .eq('id', id)
+=======
+    try {
+      // First, check if there are any bookings for this room
+      const { data: bookings, error: bookingError } = await supabase
+        .from('bookings')
+        .select('id')
+        .eq('room_id', id)
+        .limit(1)
+>>>>>>> 079a1042c5fce31f388edbd991bac126fc949564
 
-    if (error) throw error
+      if (bookingError) throw bookingError
+
+      if (bookings && bookings.length > 0) {
+        throw new Error('Cannot delete room with existing bookings. Please cancel all bookings first or deactivate the room instead.')
+      }
+
+      // Check for blocked dates
+      const { data: blockedDates, error: blockedError } = await supabase
+        .from('blocked_dates')
+        .select('id')
+        .eq('room_id', id)
+        .limit(1)
+
+      if (blockedError) throw blockedError
+
+      // Delete blocked dates if any
+      if (blockedDates && blockedDates.length > 0) {
+        const { error: deleteBlockedError } = await supabase
+          .from('blocked_dates')
+          .delete()
+          .eq('room_id', id)
+
+        if (deleteBlockedError) throw deleteBlockedError
+      }
+
+      // Now delete the room
+      const { error } = await supabase
+        .from('rooms')
+        .delete()
+        .eq('id', id)
+
+      if (error) throw error
+    } catch (error) {
+      console.error('Delete room error:', error)
+      throw error
+    }
   },
 
   async getAllRooms() {

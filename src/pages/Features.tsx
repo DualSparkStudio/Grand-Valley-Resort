@@ -61,10 +61,21 @@ const Features: React.FC = () => {
     {
       title: 'PURE VEG FOOD',
       description: 'The resort\'s in-house pure vegetarian restaurant offers guests fresh, flavorful vegetarian meals throughout the day. It focuses on a variety of delicious veg dishes, from local Indian classics to wholesome comfort food, prepared with quality ingredients — ideal for families, couples and those who prefer vegetarian cuisine while enjoying the hills of Mahabaleshwar.',
-      image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800',
+      image: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431184/6_krjt40.png',
       icon: '🍽️',
       featured: false
     }
+  ]
+
+  // Restaurant Gallery Images
+  const restaurantImages = [
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431184/6_krjt40.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431183/9_lgexk2.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431182/7_exj2bu.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/5_vop9je.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/4_loalg6.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/3_apyy7q.png',
+    'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431181/1_hlb5eu.png'
   ]
 
   const specialAmenities = [
@@ -289,7 +300,7 @@ const Features: React.FC = () => {
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <PremiumImage
-                  src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800"
+                  src={restaurantImages[0]}
                   alt="Pure Veg Restaurant"
                   className="w-full h-[500px] lg:h-[600px] object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
                   parallax
@@ -341,6 +352,37 @@ const Features: React.FC = () => {
                 ))}
               </div>
             </motion.div>
+          </motion.div>
+
+          {/* Restaurant Gallery */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-16"
+          >
+            <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Restaurant Gallery</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {restaurantImages.slice(1).map((image, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="relative group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+                >
+                  <PremiumImage
+                    src={image}
+                    alt={`Restaurant view ${index + 2}`}
+                    className="w-full h-48 object-cover scale-100 group-hover:scale-110 transition-transform duration-500"
+                    blur
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>

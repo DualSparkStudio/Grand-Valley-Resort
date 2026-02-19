@@ -406,6 +406,28 @@ const RoomDetail: React.FC = () => {
               })()}
             </div>
 
+            {/* Room Video Section */}
+            {room.video_url && (
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+                <div className="p-4 bg-gray-50 border-b">
+                  <h3 className="text-lg font-semibold text-gray-900">Room Video Tour</h3>
+                </div>
+                <div className="relative">
+                  <video
+                    src={room.video_url}
+                    controls
+                    className="w-full max-h-[600px] object-contain"
+                    poster={getRoomImages()[0] || undefined}
+                    onError={(e) => {
+                      console.error('Video failed to load');
+                    }}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            )}
+
             {/* Room Information */}
             <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
               <div className="flex items-start justify-between mb-6">

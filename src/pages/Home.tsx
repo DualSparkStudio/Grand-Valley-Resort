@@ -535,7 +535,7 @@ const Home: React.FC = () => {
               <div className="relative">
                 <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden">
                   <img
-                    src="/images/Exterior (Front).PNG"
+                    src="https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431283/5_frweiz.png"
                     alt="Grand Valley Resort"
                     className="w-full h-full object-cover"
                   />
@@ -679,7 +679,7 @@ const Home: React.FC = () => {
                     const isLeftSwipe = distance > 50
                     const isRightSwipe = distance < -50
                     
-                    if (isLeftSwipe && currentRoomIndex < rooms.slice(0, 3).length - 1) {
+                    if (isLeftSwipe && currentRoomIndex < rooms.length - 1) {
                       setCurrentRoomIndex(currentRoomIndex + 1)
                     }
                     if (isRightSwipe && currentRoomIndex > 0) {
@@ -687,7 +687,7 @@ const Home: React.FC = () => {
                     }
                   }}
                 >
-                  {rooms.slice(0, 3).map((room, index) => {
+                  {rooms.map((room, index) => {
                     const isCenter = index === currentRoomIndex;
                     const getMainImage = () => {
                       if (room.images && room.images.length > 0) {
@@ -705,7 +705,7 @@ const Home: React.FC = () => {
                       <motion.div
                         key={room.id}
                         data-room-index={index}
-                        className={`relative flex-shrink-0 ${isCenter ? 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-md lg:max-w-lg' : 'w-[75%] sm:w-auto sm:flex-1 sm:max-w-xs'} cursor-pointer snap-center`}
+                        className={`relative flex-shrink-0 ${isCenter ? 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-md lg:max-w-lg' : 'w-[85%] sm:w-auto sm:flex-1 sm:max-w-xs'} cursor-pointer snap-center`}
                         onMouseEnter={() => {
                           if (window.innerWidth >= 640) {
                             setCurrentRoomIndex(index)
@@ -761,7 +761,7 @@ const Home: React.FC = () => {
                         >
                           {/* Image */}
                           <motion.div 
-                            className={`relative overflow-hidden ${isCenter ? 'h-80 lg:h-96' : 'h-64'}`}
+                            className="relative overflow-hidden h-64 sm:h-72"
                             animate={{
                               scale: 1
                             }}
@@ -948,6 +948,8 @@ const Home: React.FC = () => {
               </motion.p>
             </div>
 
+            {/* Gallery Grid - Removed hardcoded images */}
+            
             {/* Gallery Grid */}
             <motion.div
               className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
@@ -956,55 +958,72 @@ const Home: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              {/* Large Featured Image */}
-              <div className="col-span-2 row-span-2 relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/Exterior (Front).PNG"
-                  alt="Resort Front View"
-                  className="w-full h-full min-h-[200px] sm:min-h-[300px] lg:min-h-[400px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-white font-semibold text-lg sm:text-xl">Resort Front View</h3>
-                </div>
-              </div>
-
-              {/* Smaller Images */}
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/Exterior (back).PNG"
-                  alt="Resort Back View"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="/images/exteror (night).jpg"
-                  alt="Night Ambiance"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
-                  alt="Luxury Interior"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              <div className="relative group overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
-                  alt="Mountain View"
-                  className="w-full h-32 sm:h-40 lg:h-48 object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
+              {/* Collect all images from rooms, restaurant, and exterior */}
+              {(() => {
+                const galleryImages: Array<{ src: string; title: string; isLarge?: boolean }> = [];
+                
+                // Add 2-3 images per room
+                rooms.forEach((room, roomIndex) => {
+                  if (room.images && room.images.length > 0) {
+                    const validImages = room.images.filter((img: string) => img && img.trim());
+                    const imagesToShow = validImages.slice(0, roomIndex === 0 ? 3 : 2);
+                    imagesToShow.forEach((img: string, imgIndex: number) => {
+                      galleryImages.push({
+                        src: img,
+                        title: `${room.name}`,
+                        isLarge: roomIndex === 0 && imgIndex === 0
+                      });
+                    });
+                  } else if (room.image_url) {
+                    galleryImages.push({
+                      src: room.image_url,
+                      title: room.name,
+                      isLarge: roomIndex === 0
+                    });
+                  }
+                });
+                
+                // Add restaurant images
+                const restaurantImages = [
+                  { src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431184/6_krjt40.png', title: 'Restaurant' },
+                  { src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431183/9_lgexk2.png', title: 'Dining Area' },
+                  { src: 'https://res.cloudinary.com/dvf39djml/image/upload/w_auto,f_auto,q_auto/v1771431182/7_exj2bu.png', title: 'Restaurant View' }
+                ];
+                galleryImages.push(...restaurantImages);
+                
+                // Add exterior images (if you have them in public folder, otherwise use placeholders)
+                const exteriorImages = [
+                  { src: '/images/Exterior (Front).PNG', title: 'Resort Exterior' },
+                  { src: '/images/Exterior (back).PNG', title: 'Resort Back View' }
+                ];
+                galleryImages.push(...exteriorImages);
+                
+                // Limit to first 15 images for better performance
+                return galleryImages.slice(0, 15).map((image, index) => {
+                  const isLarge = image.isLarge || false;
+                  
+                  return (
+                    <div 
+                      key={index}
+                      className={`${isLarge ? 'col-span-2 row-span-2' : ''} relative group overflow-hidden rounded-xl shadow-lg`}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.title}
+                        className={`w-full h-full ${isLarge ? 'min-h-[200px] sm:min-h-[300px] lg:min-h-[400px]' : 'h-32 sm:h-40 lg:h-48'} object-cover transform group-hover:scale-110 transition-transform duration-700`}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-dark-blue-800/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 className="text-white font-semibold text-sm sm:text-base lg:text-lg">{image.title}</h3>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
             </motion.div>
 
             {/* View More Button */}
