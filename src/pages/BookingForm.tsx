@@ -1287,6 +1287,7 @@ const BookingForm: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Calendar Modal */}
       {showCalendar && (
