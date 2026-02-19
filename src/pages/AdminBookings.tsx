@@ -314,25 +314,27 @@ const AdminBookings: React.FC = () => {
     <div>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Booking Management</h1>
-              <p className="text-gray-600 mt-1 text-sm sm:text-base">Manage customer bookings and reservations</p>
+              <h1 className="text-3xl font-bold text-gray-900">Booking Management</h1>
+              <p className="text-gray-600 mt-1">Manage customer bookings and reservations</p>
             </div>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-3">
+            <div className="flex items-center space-x-3">
               {selectedBookings.length > 0 && (
-                <button
-                  onClick={handleBulkDelete}
-                  className="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors duration-200"
-                >
-                  <TrashIcon className="h-4 w-4 mr-2" />
-                  Delete Selected ({selectedBookings.length})
-                </button>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleBulkDelete}
+                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors duration-200"
+                  >
+                    <TrashIcon className="h-4 w-4 mr-2" />
+                    Delete Selected ({selectedBookings.length})
+                  </button>
+                </div>
               )}
               <button
                 onClick={loadData}
-                className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
               >
                 Refresh
               </button>
@@ -342,7 +344,7 @@ const AdminBookings: React.FC = () => {
 
         {/* Filters */}
         <div className="mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
@@ -385,7 +387,7 @@ const AdminBookings: React.FC = () => {
               />
             </div>
 
-            <div className="text-sm text-gray-600 flex items-center justify-center sm:justify-start">
+            <div className="text-sm text-gray-600 flex items-center">
               <span className="font-medium">{filteredBookings.length}</span> 
               <span className="ml-1">of {combinedBookings.length} bookings</span>
             </div>
@@ -606,102 +608,203 @@ const AdminBookings: React.FC = () => {
 
         {/* Modal */}
         {isModalOpen && selectedBooking && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Booking Details</h3>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100"
-                >
-                  <XMarkIcon className="h-6 w-6" />
-                </button>
-              </div>
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-screen items-center justify-center p-4">
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 bg-black bg-opacity-60 transition-opacity backdrop-blur-sm"
+                onClick={closeModal}
+              />
               
-              <div className="p-4 sm:p-6">
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Customer Information</h4>
-                    <div className="space-y-2 text-sm text-gray-900">
-                      <p><span className="font-medium">Name:</span> {selectedBooking.guestName}</p>
-                      <p><span className="font-medium">Email:</span> {selectedBooking.email || 'N/A'}</p>
-                      <p><span className="font-medium">Phone:</span> {selectedBooking.phone || 'N/A'}</p>
+              {/* Modal */}
+              <div className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl transform transition-all">
+                {/* Header with Gradient */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-6 rounded-t-2xl">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-white">
+                          Booking Details
+                        </h2>
+                        <p className="text-blue-100 text-sm">
+                          {selectedBooking.status?.toUpperCase()} • Website Booking
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={closeModal}
+                      className="text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-all"
+                    >
+                      <XMarkIcon className="h-6 w-6" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+                  {/* Customer Information Card */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Customer Information
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Name</label>
+                        <p className="text-sm font-semibold text-gray-900">{selectedBooking.guestName}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Email</label>
+                        <p className="text-sm font-medium text-gray-900 break-all">{selectedBooking.email || 'N/A'}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Phone</label>
+                        <p className="text-sm font-medium text-gray-900">{selectedBooking.phone || 'N/A'}</p>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Booking Information</h4>
-                    <div className="space-y-2 text-sm text-gray-900">
-                      <p><span className="font-medium">Room:</span> {selectedBooking.roomName}</p>
-                      <p><span className="font-medium">Check-in:</span> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
-                      <p><span className="font-medium">Check-out:</span> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
-                      <p><span className="font-medium">Base Adults:</span> 2</p>
+
+                  {/* Booking Information Card */}
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Booking Information
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Room</label>
+                        <p className="text-sm font-semibold text-gray-900">{selectedBooking.roomName}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Check-in</label>
+                        <p className="text-sm font-medium text-gray-900">{new Date(selectedBooking.checkInDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Check-out</label>
+                        <p className="text-sm font-medium text-gray-900">{new Date(selectedBooking.checkOutDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Base Adults</label>
+                        <p className="text-sm font-semibold text-gray-900">2</p>
+                      </div>
                       {selectedBooking.numExtraAdults > 0 && (
-                        <p><span className="font-medium">Extra Adults:</span> {selectedBooking.numExtraAdults}</p>
+                        <div className="bg-white rounded-lg p-3">
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Extra Adults</label>
+                          <p className="text-sm font-semibold text-gray-900">{selectedBooking.numExtraAdults}</p>
+                        </div>
                       )}
                       {selectedBooking.numChildrenAbove5 > 0 && (
-                        <p><span className="font-medium">Children Above 5:</span> {selectedBooking.numChildrenAbove5}</p>
+                        <div className="bg-white rounded-lg p-3">
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Children Above 5</label>
+                          <p className="text-sm font-semibold text-gray-900">{selectedBooking.numChildrenAbove5}</p>
+                        </div>
                       )}
-                      <p><span className="font-medium">Total Guests:</span> {2 + (selectedBooking.numExtraAdults || 0) + (selectedBooking.numChildrenAbove5 || 0)}</p>
-                      {selectedBooking.subtotalAmount && selectedBooking.gstAmount ? (
-                        <>
-                          <p><span className="font-medium">Subtotal:</span> ₹{selectedBooking.subtotalAmount?.toLocaleString() || '0'}</p>
-                          <p><span className="font-medium">GST ({selectedBooking.gstPercentage || 12}%):</span> ₹{selectedBooking.gstAmount?.toLocaleString() || '0'}</p>
-                        </>
-                      ) : null}
-                      <p><span className="font-medium">Total Amount:</span> ₹{selectedBooking.totalAmount?.toLocaleString() || '0'}</p>
-                      <p><span className="font-medium">Booking Date:</span> {selectedBooking.bookingDate ? new Date(selectedBooking.bookingDate).toLocaleDateString() + ' ' + new Date(selectedBooking.bookingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A'}</p>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Total Guests</label>
+                        <p className="text-sm font-semibold text-gray-900">{2 + (selectedBooking.numExtraAdults || 0) + (selectedBooking.numChildrenAbove5 || 0)}</p>
+                      </div>
                     </div>
                   </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">Status & Payment</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">Booking Status:</span>
+
+                  {/* Status & Payment Card */}
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 border border-green-200">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Status & Payment
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Booking Status</label>
                         <span className={getStatusBadge(selectedBooking.status)}>
                           {selectedBooking.status}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">Payment Status:</span>
+                      <div className="bg-white rounded-lg p-3">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Payment Status</label>
                         <span className={getPaymentStatusBadge(selectedBooking.paymentStatus)}>
                           {selectedBooking.paymentStatus}
                         </span>
                       </div>
+                      {selectedBooking.subtotalAmount && selectedBooking.gstAmount && (
+                        <>
+                          <div className="bg-white rounded-lg p-3">
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Subtotal</label>
+                            <p className="text-lg font-bold text-gray-900">₹{selectedBooking.subtotalAmount?.toLocaleString()}</p>
+                          </div>
+                          <div className="bg-white rounded-lg p-3">
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">GST ({selectedBooking.gstPercentage || 12}%)</label>
+                            <p className="text-lg font-bold text-gray-900">₹{selectedBooking.gstAmount?.toLocaleString()}</p>
+                          </div>
+                        </>
+                      )}
+                      <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-3 md:col-span-2">
+                        <label className="block text-xs font-semibold text-white/80 uppercase tracking-wide mb-1">Total Amount</label>
+                        <p className="text-2xl font-bold text-white">₹{selectedBooking.totalAmount?.toLocaleString() || '0'}</p>
+                      </div>
                       {selectedBooking.payment_gateway && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Payment Gateway:</span>
-                          <span className="text-sm text-gray-600">{selectedBooking.payment_gateway}</span>
+                        <div className="bg-white rounded-lg p-3">
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Payment Gateway</label>
+                          <p className="text-sm font-medium text-gray-900 capitalize">{selectedBooking.payment_gateway}</p>
+                        </div>
+                      )}
+                      {selectedBooking.bookingDate && (
+                        <div className="bg-white rounded-lg p-3">
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Booking Date</label>
+                          <p className="text-sm font-medium text-gray-900">
+                            {new Date(selectedBooking.bookingDate).toLocaleString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
+                          </p>
                         </div>
                       )}
                       {selectedBooking.razorpay_payment_id && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">Payment ID:</span>
-                          <span className="text-sm text-gray-600">{selectedBooking.razorpay_payment_id}</span>
+                        <div className="bg-white rounded-lg p-3 md:col-span-2">
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Payment ID</label>
+                          <p className="text-xs font-mono text-gray-700 break-all">{selectedBooking.razorpay_payment_id}</p>
                         </div>
                       )}
                     </div>
                   </div>
-                  
+
+                  {/* Special Requests */}
                   {selectedBooking.special_requests && (
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-3">Special Requests</h4>
-                      <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">{selectedBooking.special_requests}</p>
+                    <div className="bg-amber-50 rounded-xl p-5 border border-amber-200">
+                      <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                        <svg className="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                        Special Requests
+                      </h3>
+                      <p className="text-sm text-gray-800 bg-white p-4 rounded-lg leading-relaxed">{selectedBooking.special_requests}</p>
                     </div>
                   )}
                 </div>
-              </div>
-              
-              <div className="flex justify-end gap-3 px-4 sm:px-6 py-4 border-t border-gray-200 sticky bottom-0 bg-white">
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                >
-                  Close
-                </button>
+
+                {/* Footer */}
+                <div className="flex items-center justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-2xl border-t border-gray-200">
+                  <button
+                    onClick={closeModal}
+                    className="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
