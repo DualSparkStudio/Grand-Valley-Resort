@@ -833,7 +833,6 @@ const BookingForm: React.FC = () => {
                       </p>
                     )}
                   </div>
-<<<<<<< HEAD
                   
                   {/* Check-in/Check-out Times */}
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -922,8 +921,6 @@ const BookingForm: React.FC = () => {
                       Contact Us
                     </a>
                   </div>
-=======
->>>>>>> 931e49e5db8fa3f05298d67ccf7fcc554a335d2e
                 </div>
               </div>
 
