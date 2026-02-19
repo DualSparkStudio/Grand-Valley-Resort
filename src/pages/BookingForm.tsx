@@ -962,12 +962,34 @@ const BookingForm: React.FC = () => {
                     <input
                       type="number"
                       value={numExtraGuests}
+                      onBeforeInput={(e: any) => {
+                        // Intercept before the value changes
+                        const input = e.target as HTMLInputElement
+                        const currentValue = parseInt(input.value) || 0
+                        const newChar = e.data
+                        
+                        if (newChar && /\d/.test(newChar)) {
+                          const potentialValue = parseInt(input.value + newChar) || 0
+                          const maxCapacity = room?.max_capacity || 10
+                          const totalGuests = 2 + potentialValue + numChildren
+                          
+                          if (totalGuests > maxCapacity) {
+                            e.preventDefault()
+                            toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                              duration: 4000,
+                              icon: '⚠️'
+                            })
+                          }
+                        }
+                      }}
                       onChange={(e) => {
                         const value = Math.max(0, parseInt(e.target.value) || 0)
                         const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numChildren)
                         const totalGuests = 2 + value + numChildren
                         
-                        if (totalGuests > maxCapacity) {
+                        // Check if trying to exceed max capacity
+                        if (value > maxAllowed || totalGuests > maxCapacity) {
                           toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
                             duration: 4000,
                             icon: '⚠️'
@@ -978,22 +1000,38 @@ const BookingForm: React.FC = () => {
                         setNumExtraGuests(value)
                       }}
                       onKeyDown={(e) => {
-                        // Show alert when user tries to increase beyond max
                         const currentValue = numExtraGuests
                         const maxCapacity = room?.max_capacity || 10
                         const maxAllowed = Math.max(0, maxCapacity - 2 - numChildren)
                         
-                        if ((e.key === 'ArrowUp' || e.key === '+') && currentValue >= maxAllowed) {
+                        // Check for arrow up or any number key that would exceed limit
+                        if (e.key === 'ArrowUp' && currentValue >= maxAllowed) {
                           e.preventDefault()
                           toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
                             duration: 4000,
                             icon: '⚠️'
                           })
+                        } else if (/^\d$/.test(e.key)) {
+                          // User is typing a number
+                          const input = e.target as HTMLInputElement
+                          const selectionStart = input.selectionStart || 0
+                          const selectionEnd = input.selectionEnd || 0
+                          const currentText = input.value
+                          const newText = currentText.substring(0, selectionStart) + e.key + currentText.substring(selectionEnd)
+                          const potentialValue = parseInt(newText) || 0
+                          const totalGuests = 2 + potentialValue + numChildren
+                          
+                          if (totalGuests > maxCapacity) {
+                            e.preventDefault()
+                            toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                              duration: 4000,
+                              icon: '⚠️'
+                            })
+                          }
                         }
                       }}
                       disabled={!room?.is_active}
                       min="0"
-                      max={Math.max(0, (room?.max_capacity || 10) - 2 - numChildren)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                       placeholder="0"
                     />
@@ -1022,12 +1060,34 @@ const BookingForm: React.FC = () => {
                     <input
                       type="number"
                       value={numChildren}
+                      onBeforeInput={(e: any) => {
+                        // Intercept before the value changes
+                        const input = e.target as HTMLInputElement
+                        const currentValue = parseInt(input.value) || 0
+                        const newChar = e.data
+                        
+                        if (newChar && /\d/.test(newChar)) {
+                          const potentialValue = parseInt(input.value + newChar) || 0
+                          const maxCapacity = room?.max_capacity || 10
+                          const totalGuests = 2 + numExtraGuests + potentialValue
+                          
+                          if (totalGuests > maxCapacity) {
+                            e.preventDefault()
+                            toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                              duration: 4000,
+                              icon: '⚠️'
+                            })
+                          }
+                        }
+                      }}
                       onChange={(e) => {
                         const value = Math.max(0, parseInt(e.target.value) || 0)
                         const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numExtraGuests)
                         const totalGuests = 2 + numExtraGuests + value
                         
-                        if (totalGuests > maxCapacity) {
+                        // Check if trying to exceed max capacity
+                        if (value > maxAllowed || totalGuests > maxCapacity) {
                           toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
                             duration: 4000,
                             icon: '⚠️'
@@ -1038,22 +1098,38 @@ const BookingForm: React.FC = () => {
                         setNumChildren(value)
                       }}
                       onKeyDown={(e) => {
-                        // Show alert when user tries to increase beyond max
                         const currentValue = numChildren
                         const maxCapacity = room?.max_capacity || 10
                         const maxAllowed = Math.max(0, maxCapacity - 2 - numExtraGuests)
                         
-                        if ((e.key === 'ArrowUp' || e.key === '+') && currentValue >= maxAllowed) {
+                        // Check for arrow up or any number key that would exceed limit
+                        if (e.key === 'ArrowUp' && currentValue >= maxAllowed) {
                           e.preventDefault()
                           toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
                             duration: 4000,
                             icon: '⚠️'
                           })
+                        } else if (/^\d$/.test(e.key)) {
+                          // User is typing a number
+                          const input = e.target as HTMLInputElement
+                          const selectionStart = input.selectionStart || 0
+                          const selectionEnd = input.selectionEnd || 0
+                          const currentText = input.value
+                          const newText = currentText.substring(0, selectionStart) + e.key + currentText.substring(selectionEnd)
+                          const potentialValue = parseInt(newText) || 0
+                          const totalGuests = 2 + numExtraGuests + potentialValue
+                          
+                          if (totalGuests > maxCapacity) {
+                            e.preventDefault()
+                            toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                              duration: 4000,
+                              icon: '⚠️'
+                            })
+                          }
                         }
                       }}
                       disabled={!room?.is_active}
                       min="0"
-                      max={Math.max(0, (room?.max_capacity || 10) - 2 - numExtraGuests)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                       placeholder="0"
                     />
