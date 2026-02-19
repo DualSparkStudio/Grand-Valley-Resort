@@ -135,6 +135,18 @@ const Login: React.FC = () => {
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </div>
+
+            <div className="flex items-center justify-between mt-4">
+              <div className="text-sm">
+                <button
+                  type="button"
+                  onClick={() => navigate('/forgot-password')}
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Forgot your password?
+                </button>
+              </div>
+            </div>
           </form>
 
           <div className="mt-6">

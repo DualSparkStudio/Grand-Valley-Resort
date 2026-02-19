@@ -44,26 +44,27 @@ export interface Room {
   name: string
   slug?: string // Add slug field for SEO-friendly URLs
   description: string
-  price_per_night: number // Base price (for backward compatibility)
-  max_occupancy: number
+  price_per_night: number // Base price for couple (2 adults)
+  max_occupancy?: number // Optional - kept for backward compatibility
+  max_capacity: number // Maximum number of guests allowed in this room type
   quantity: number // Number of rooms available for this room type
   amenities?: string[]
   image_url: string
   images?: string[] // Array of image URLs
   video_url?: string // Cloudinary video URL
   is_active: boolean
-  extra_guest_price?: number // Deprecated - use occupancy pricing instead
+  is_deleted?: boolean // Soft delete flag
+  deleted_at?: string // Soft delete timestamp
+  extra_guest_price?: number // Price per extra adult per night
+  child_above_5_price?: number // Price per child above 5 years per night
+  gst_percentage?: number // GST percentage (default: 12%)
   accommodation_details?: string
   floor?: number
-  check_in_time?: string
-  check_out_time?: string
+  check_in_time?: string // Hardcoded to 12:00 PM
+  check_out_time?: string // Hardcoded to 10:00 AM
   is_available: boolean
   created_at: string
   room_images?: RoomImage[] // Keep for backward compatibility
-  // Occupancy-based pricing
-  price_double_occupancy?: number // Price for 2 guests
-  price_triple_occupancy?: number // Price for 3 guests
-  price_four_occupancy?: number // Price for 4 guests
   extra_mattress_price?: number // Price per extra mattress (default: ₹200)
 }
 
@@ -73,12 +74,17 @@ export interface Booking {
   check_in_date: string
   check_out_date: string
   num_guests: number
+  num_extra_adults?: number
+  num_children_above_5?: number
   first_name: string
   last_name: string
   email: string
   phone: string
   special_requests?: string
   total_amount: number
+  subtotal_amount?: number
+  gst_amount?: number
+  gst_percentage?: number
   booking_status: 'pending' | 'confirmed' | 'cancelled'
   payment_status: 'pending' | 'paid' | 'failed'
   payment_gateway: 'direct' | 'razorpay'
@@ -229,7 +235,25 @@ export const api = {
   // Room Management
   async getRooms() {
     try {
-      // Just get ALL rooms - no filters, no complications
+      // Get only non-deleted rooms for public display
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('is_deleted', false);
+
+      if (error) {
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      return [];
+    }
+  },
+
+  async getAllRooms() {
+    try {
+      // Get ALL rooms including soft-deleted ones (for admin panel)
       const { data, error } = await supabase
         .from('rooms')
         .select('*');
@@ -328,50 +352,27 @@ export const api = {
   },
 
   async deleteRoom(id: number) {
-    try {
-      // First, check if there are any bookings for this room
-      const { data: bookings, error: bookingError } = await supabase
-        .from('bookings')
-        .select('id')
-        .eq('room_id', id)
-        .limit(1)
+    // Soft delete: mark as deleted instead of actually deleting
+    const { error } = await supabase
+      .from('rooms')
+      .update({ 
+        is_deleted: true, 
+        deleted_at: new Date().toISOString(),
+        is_active: false // Also deactivate the room
+      })
+      .eq('id', id)
 
-      if (bookingError) throw bookingError
+    if (error) throw error
+  },
 
-      if (bookings && bookings.length > 0) {
-        throw new Error('Cannot delete room with existing bookings. Please cancel all bookings first or deactivate the room instead.')
-      }
+  async permanentlyDeleteRoom(id: number) {
+    // Hard delete: actually remove from database (use with caution!)
+    const { error } = await supabase
+      .from('rooms')
+      .delete()
+      .eq('id', id)
 
-      // Check for blocked dates
-      const { data: blockedDates, error: blockedError } = await supabase
-        .from('blocked_dates')
-        .select('id')
-        .eq('room_id', id)
-        .limit(1)
-
-      if (blockedError) throw blockedError
-
-      // Delete blocked dates if any
-      if (blockedDates && blockedDates.length > 0) {
-        const { error: deleteBlockedError } = await supabase
-          .from('blocked_dates')
-          .delete()
-          .eq('room_id', id)
-
-        if (deleteBlockedError) throw deleteBlockedError
-      }
-
-      // Now delete the room
-      const { error } = await supabase
-        .from('rooms')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
-    } catch (error) {
-      console.error('Delete room error:', error)
-      throw error
-    }
+    if (error) throw error
   },
 
   async getAllRooms() {
@@ -416,6 +417,15 @@ export const api = {
       }
     }
     
+    // Normalize dates to avoid timezone issues
+    const normalizeDate = (dateStr: string) => {
+      const date = new Date(dateStr + 'T00:00:00')
+      return date
+    }
+    
+    const checkInDate = normalizeDate(checkIn)
+    const checkOutDate = normalizeDate(checkOut)
+    
     // First check website bookings with more precise conflict detection
     const { data: websiteBookings, error: websiteError } = await supabase
       .from('bookings')
@@ -430,10 +440,8 @@ export const api = {
 
     // Manually check for conflicts with more precise logic
     const conflictingBookings = websiteBookings?.filter(booking => {
-      const bookingStart = new Date(booking.check_in_date)
-      const bookingEnd = new Date(booking.check_out_date)
-      const checkInDate = new Date(checkIn)
-      const checkOutDate = new Date(checkOut)
+      const bookingStart = normalizeDate(booking.check_in_date)
+      const bookingEnd = normalizeDate(booking.check_out_date)
 
       // Check for overlap: if the booking overlaps with the requested dates
       const hasOverlap = (
@@ -467,18 +475,18 @@ export const api = {
     }
 
     // Check if any blocked date overlaps with the requested dates
+    // IMPORTANT: We need to check if ANY day in the check-in to check-out range is blocked
     const conflictingBlockedDates = blockedDates?.filter(blocked => {
-      const blockedStart = new Date(blocked.start_date)
-      const blockedEnd = new Date(blocked.end_date)
-      const checkInDate = new Date(checkIn)
-      const checkOutDate = new Date(checkOut)
+      const blockedStart = normalizeDate(blocked.start_date)
+      const blockedEnd = normalizeDate(blocked.end_date)
 
-      // Check for overlap: if the blocked date overlaps with the requested dates
+      // Check for overlap: if ANY day in the requested range falls within a blocked period
+      // A date is blocked if: checkInDate <= blockedDate < blockedEnd
       const hasOverlap = (
-        (blockedStart <= checkInDate && blockedEnd > checkInDate) || // Blocked starts before check-in and ends after check-in
-        (blockedStart < checkOutDate && blockedEnd >= checkOutDate) || // Blocked starts before check-out and ends after check-out
-        (blockedStart >= checkInDate && blockedEnd <= checkOutDate) || // Blocked is completely within requested dates
-        (checkInDate >= blockedStart && checkOutDate <= blockedEnd)   // Requested dates are completely within blocked
+        (blockedStart <= checkInDate && blockedEnd > checkInDate) || // Blocked period includes check-in date
+        (blockedStart < checkOutDate && blockedEnd >= checkOutDate) || // Blocked period includes check-out date
+        (blockedStart >= checkInDate && blockedStart < checkOutDate) || // Blocked period starts within requested dates
+        (checkInDate >= blockedStart && checkInDate < blockedEnd)   // Check-in date falls within blocked period
       )
 
       return hasOverlap

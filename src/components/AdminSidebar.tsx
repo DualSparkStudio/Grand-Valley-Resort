@@ -61,7 +61,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ onClose }) => {
       <div className="flex items-center justify-between h-16 px-4 border-b border-golden-500/20 flex-shrink-0 bg-dark-blue-800">
         <div className="flex items-center">
           <img 
-            src="/images/logo.png" 
+            src="/images/GRAND VALLEY LOGO.jpg.jpeg" 
             alt="Grand Valley Resort Logo" 
             className="h-10 w-auto mr-3"
             onError={(e) => {

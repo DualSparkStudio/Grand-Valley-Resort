@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+ import nodemailer from 'nodemailer'
 
 export const handler = async (event, context) => {
   // Enable CORS
@@ -28,14 +28,114 @@ export const handler = async (event, context) => {
 
   try {
     const { 
+      type,
       booking, 
       room, 
+      to,
       adminEmail = process.env.ADMIN_EMAIL || '',
       smtpConfig = {},
       notificationType = 'confirmation' // 'confirmation', 'update', 'cancellation'
     } = JSON.parse(event.body)
 
-    // Validate required data
+    // Handle test email
+    if (type === 'test') {
+      const mailUsername = smtpConfig.mail_username || process.env.MAIL_USERNAME
+      const mailPassword = smtpConfig.mail_password || process.env.MAIL_PASSWORD
+      const mailServer = smtpConfig.mail_server || process.env.MAIL_SERVER || 'smtp.gmail.com'
+      const mailPort = smtpConfig.mail_port || process.env.MAIL_PORT || '587'
+
+      if (!mailUsername || !mailPassword) {
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({
+            error: 'SMTP configuration is incomplete',
+            success: false
+          }),
+        }
+      }
+
+      // Configure test email transporter
+      const transporter = nodemailer.createTransport({
+        host: mailServer,
+        port: parseInt(mailPort),
+        secure: false,
+        auth: {
+          user: mailUsername,
+          pass: mailPassword,
+        },
+      })
+
+      // Verify SMTP connection
+      try {
+        await transporter.verify()
+      } catch (verifyError) {
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({
+            error: 'SMTP connection failed: ' + verifyError.message,
+            success: false,
+            hint: 'Make sure you are using a Gmail App Password (not regular password) and 2-Step Verification is enabled.'
+          }),
+        }
+      }
+
+      // Send test email
+      const testMailOptions = {
+        from: mailUsername,
+        to: to || mailUsername,
+        subject: '✅ SMTP Test Email - Resort Booking System',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
+              .success-box { background: #dcfce7; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 4px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>✅ SMTP Test Successful!</h1>
+              </div>
+              <div class="content">
+                <div class="success-box">
+                  <h3>🎉 Congratulations!</h3>
+                  <p>Your SMTP configuration is working correctly. You can now send booking confirmation emails.</p>
+                </div>
+                <p><strong>SMTP Server:</strong> ${mailServer}</p>
+                <p><strong>SMTP Port:</strong> ${mailPort}</p>
+                <p><strong>From Email:</strong> ${mailUsername}</p>
+                <p><strong>Test Date:</strong> ${new Date().toLocaleString()}</p>
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+                <p style="color: #6b7280; font-size: 14px;">This is an automated test email from Resort Booking System.</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      }
+
+      const result = await transporter.sendMail(testMailOptions)
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          message: 'Test email sent successfully',
+          messageId: result.messageId
+        }),
+      }
+    }
+
+    // Validate required data for booking emails
     if (!booking || !room) {
       return {
         statusCode: 400,

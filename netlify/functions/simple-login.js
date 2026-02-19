@@ -95,8 +95,8 @@ exports.handler = async (event, context) => {
     const { action, ...data } = JSON.parse(event.body)
 
 
-    // Check environment variables
-    const supabaseUrl = process.env.VITE_SUPABASE_URL
+    // Check environment variables - try both naming conventions
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseServiceKey) {
@@ -618,16 +618,34 @@ async function handleUpdateProfile(data, headers, supabase) {
 
     // Input validation
     if (!userData || !userData.id) {
+      console.error('Invalid user data:', userData)
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Invalid user data' })
+        body: JSON.stringify({ error: 'Invalid user data - ID is required' })
       }
     }
 
-    // Verify admin authentication (users can only update their own profile if they're admin)
-    const authCheck = await verifyAdmin({ userId: userData.id }, supabase)
-    if (!authCheck.isValid) {
+    console.log('Updating profile for user ID:', userData.id)
+
+    // First check if user exists and is admin
+    const { data: existingUser, error: fetchError } = await supabase
+      .from('users')
+      .select('id, is_admin')
+      .eq('id', userData.id)
+      .single()
+
+    if (fetchError || !existingUser) {
+      console.error('User not found:', fetchError)
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: 'User not found' })
+      }
+    }
+
+    if (!existingUser.is_admin) {
+      console.error('User is not admin:', existingUser)
       return {
         statusCode: 403,
         headers,
@@ -645,16 +663,14 @@ async function handleUpdateProfile(data, headers, supabase) {
     }
 
     // Sanitize string inputs
-    const updateData = {
-      first_name: userData.first_name ? sanitizeString(userData.first_name) : undefined,
-      last_name: userData.last_name ? sanitizeString(userData.last_name) : undefined,
-      email: userData.email ? userData.email.trim() : undefined,
-      phone: userData.phone ? sanitizeString(userData.phone) : undefined,
-      address: userData.address ? sanitizeString(userData.address) : undefined
-    }
+    const updateData = {}
+    if (userData.first_name) updateData.first_name = sanitizeString(userData.first_name)
+    if (userData.last_name) updateData.last_name = sanitizeString(userData.last_name)
+    if (userData.email) updateData.email = userData.email.trim()
+    if (userData.phone) updateData.phone = sanitizeString(userData.phone)
+    if (userData.address) updateData.address = sanitizeString(userData.address)
 
-    // Remove undefined values
-    Object.keys(updateData).forEach(key => updateData[key] === undefined && delete updateData[key])
+    console.log('Update data:', updateData)
 
     // Update user
     const { data: updatedUser, error } = await supabase
@@ -665,14 +681,15 @@ async function handleUpdateProfile(data, headers, supabase) {
       .single()
 
     if (error) {
+      console.error('Update error:', error)
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: 'Failed to update profile' })
+        body: JSON.stringify({ error: 'Failed to update profile: ' + error.message })
       }
     }
 
-    
+    console.log('Profile updated successfully')
     const { password_hash, ...userDataClean } = updatedUser
 
     return {
@@ -685,10 +702,11 @@ async function handleUpdateProfile(data, headers, supabase) {
       })
     }
   } catch (error) {
+    console.error('Profile update exception:', error)
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Profile update failed' })
+      body: JSON.stringify({ error: 'Profile update failed: ' + error.message })
     }
   }
 }

@@ -18,9 +18,14 @@ interface CombinedBooking {
   checkInDate: string;
   checkOutDate: string;
   numGuests?: number;
+  numExtraAdults?: number;
+  numChildrenAbove5?: number;
   status: string;
   paymentStatus: string;
   totalAmount?: number;
+  subtotalAmount?: number;
+  gstAmount?: number;
+  gstPercentage?: number;
   roomName: string;
   source: 'Website';
   special_requests?: string;
@@ -37,8 +42,9 @@ const AdminBookings: React.FC = () => {
   const [combinedBookings, setCombinedBookings] = useState<CombinedBooking[]>([])
   const [filteredBookings, setFilteredBookings] = useState<CombinedBooking[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [sourceFilter, setSourceFilter] = useState<string>('all')
+  const [roomFilter, setRoomFilter] = useState<string>('all')
+  const [checkInFilter, setCheckInFilter] = useState<string>('')
+  const [checkOutFilter, setCheckOutFilter] = useState<string>('')
   const [selectedBookings, setSelectedBookings] = useState<string[]>([])
   const [selectAll, setSelectAll] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -55,7 +61,7 @@ const AdminBookings: React.FC = () => {
 
   useEffect(() => {
     filterBookings()
-  }, [combinedBookings, searchTerm, statusFilter, sourceFilter])
+  }, [combinedBookings, searchTerm, roomFilter, checkInFilter, checkOutFilter])
 
   const loadData = async () => {
     try {
@@ -124,10 +130,15 @@ const AdminBookings: React.FC = () => {
         checkInDate: booking.check_in_date,
         checkOutDate: booking.check_out_date,
         numGuests: booking.num_guests,
+        numExtraAdults: booking.num_extra_adults,
+        numChildrenAbove5: booking.num_children_above_5,
         status: booking.booking_status,
         paymentStatus: booking.payment_status,
         totalAmount: booking.total_amount,
-        roomName: room ? room.name : 'Unknown Room',
+        subtotalAmount: booking.subtotal_amount,
+        gstAmount: booking.gst_amount,
+        gstPercentage: booking.gst_percentage,
+        roomName: room ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) : 'Unknown Room',
         source: 'Website',
         special_requests: booking.special_requests,
         originalBooking: booking,
@@ -157,14 +168,19 @@ const AdminBookings: React.FC = () => {
       )
     }
 
-    // Filter by status
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(booking => booking.status === statusFilter)
+    // Filter by room type
+    if (roomFilter !== 'all') {
+      filtered = filtered.filter(booking => booking.roomName === roomFilter)
     }
 
-    // Filter by source
-    if (sourceFilter !== 'all') {
-      filtered = filtered.filter(booking => booking.source === sourceFilter)
+    // Filter by check-in date
+    if (checkInFilter) {
+      filtered = filtered.filter(booking => booking.checkInDate >= checkInFilter)
+    }
+
+    // Filter by check-out date
+    if (checkOutFilter) {
+      filtered = filtered.filter(booking => booking.checkOutDate <= checkOutFilter)
     }
 
     setFilteredBookings(filtered)
@@ -327,42 +343,54 @@ const AdminBookings: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by name, email, phone, or room..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-            />
-          </div>
-          
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-          >
-            <option value="all">All Statuses</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="pending">Pending</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="completed">Completed</option>
-          </select>
+        <div className="mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name, email, phone..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              />
+            </div>
 
-          <select
-            value={sourceFilter}
-            onChange={(e) => setSourceFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-          >
-            <option value="all">All Sources</option>
-            <option value="Website">Website</option>
-          </select>
+            <select
+              value={roomFilter}
+              onChange={(e) => setRoomFilter(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+            >
+              <option value="all">All Room Types</option>
+              {rooms.map(room => (
+                <option key={room.id} value={room.name}>{room.name}</option>
+              ))}
+            </select>
 
-          <div className="text-sm text-gray-600 flex items-center">
-            <span className="font-medium">{filteredBookings.length}</span> 
-            <span className="ml-1">of {combinedBookings.length} bookings</span>
+            <div className="relative">
+              <input
+                type="date"
+                value={checkInFilter}
+                onChange={(e) => setCheckInFilter(e.target.value)}
+                placeholder="Check-in From"
+                className="px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              />
+            </div>
+
+            <div className="relative">
+              <input
+                type="date"
+                value={checkOutFilter}
+                onChange={(e) => setCheckOutFilter(e.target.value)}
+                placeholder="Check-out Until"
+                className="px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              />
+            </div>
+
+            <div className="text-sm text-gray-600 flex items-center">
+              <span className="font-medium">{filteredBookings.length}</span> 
+              <span className="ml-1">of {combinedBookings.length} bookings</span>
+            </div>
           </div>
         </div>
 
@@ -529,7 +557,20 @@ const AdminBookings: React.FC = () => {
                       <p><span className="font-medium">Room:</span> {selectedBooking.roomName}</p>
                       <p><span className="font-medium">Check-in:</span> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
                       <p><span className="font-medium">Check-out:</span> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
-                      <p><span className="font-medium">Guests:</span> {selectedBooking.numGuests || 1}</p>
+                      <p><span className="font-medium">Base Adults:</span> 2</p>
+                      {selectedBooking.numExtraAdults > 0 && (
+                        <p><span className="font-medium">Extra Adults:</span> {selectedBooking.numExtraAdults}</p>
+                      )}
+                      {selectedBooking.numChildrenAbove5 > 0 && (
+                        <p><span className="font-medium">Children Above 5:</span> {selectedBooking.numChildrenAbove5}</p>
+                      )}
+                      <p><span className="font-medium">Total Guests:</span> {2 + (selectedBooking.numExtraAdults || 0) + (selectedBooking.numChildrenAbove5 || 0)}</p>
+                      {selectedBooking.subtotalAmount && selectedBooking.gstAmount ? (
+                        <>
+                          <p><span className="font-medium">Subtotal:</span> ₹{selectedBooking.subtotalAmount?.toLocaleString() || '0'}</p>
+                          <p><span className="font-medium">GST ({selectedBooking.gstPercentage || 12}%):</span> ₹{selectedBooking.gstAmount?.toLocaleString() || '0'}</p>
+                        </>
+                      ) : null}
                       <p><span className="font-medium">Total Amount:</span> ₹{selectedBooking.totalAmount?.toLocaleString() || '0'}</p>
                       <p><span className="font-medium">Booking Date:</span> {selectedBooking.bookingDate ? new Date(selectedBooking.bookingDate).toLocaleDateString() + ' ' + new Date(selectedBooking.bookingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A'}</p>
                     </div>

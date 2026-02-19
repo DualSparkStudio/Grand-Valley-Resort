@@ -12,6 +12,7 @@ const AdminProfile: React.FC = () => {
   const { user, updateProfile, changePassword, refreshUserData } = useAuth()
   const [loading, setLoading] = useState(false)
   const [settingsLoading, setSettingsLoading] = useState(true)
+  const [testingSmtp, setTestingSmtp] = useState(false)
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'settings'>('profile')
   
   // Profile form state
@@ -40,6 +41,8 @@ const AdminProfile: React.FC = () => {
     mail_server: 'smtp.gmail.com',
     mail_port: '587'
   })
+
+  const [testEmailRecipient, setTestEmailRecipient] = useState('')
 
   // Update form when user changes
   useEffect(() => {
@@ -180,6 +183,69 @@ const AdminProfile: React.FC = () => {
       toast.error(error.message || 'Failed to update SMTP settings. Check console for details.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleTestSmtp = async () => {
+    try {
+      setTestingSmtp(true)
+      
+      // Validate SMTP configuration first
+      if (!settingsForm.mail_username || !settingsForm.mail_password) {
+        toast.error('Please configure SMTP settings before testing')
+        return
+      }
+
+      // Validate test email recipient
+      if (!testEmailRecipient) {
+        toast.error('Please enter a test email recipient')
+        return
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(testEmailRecipient)) {
+        toast.error('Please enter a valid email address')
+        return
+      }
+
+      toast.loading('Sending test email...', { id: 'test-smtp' })
+      
+      // Send test email using the email service
+      const response = await fetch('/.netlify/functions/send-booking-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'test',
+          to: testEmailRecipient,
+          smtpConfig: {
+            mail_username: settingsForm.mail_username,
+            mail_password: settingsForm.mail_password,
+            mail_server: settingsForm.mail_server,
+            mail_port: settingsForm.mail_port
+          }
+        })
+      })
+
+      const result = await response.json()
+      
+      if (response.ok && result.success) {
+        toast.success(`Test email sent successfully to ${testEmailRecipient}! Check the inbox.`, { 
+          id: 'test-smtp',
+          duration: 5000 
+        })
+      } else {
+        throw new Error(result.error || 'Failed to send test email')
+      }
+    } catch (error: any) {
+      console.error('SMTP test failed:', error)
+      toast.error(`SMTP test failed: ${error.message || 'Unknown error'}. Please check your configuration.`, { 
+        id: 'test-smtp',
+        duration: 5000 
+      })
+    } finally {
+      setTestingSmtp(false)
     }
   }
 
@@ -404,12 +470,39 @@ const AdminProfile: React.FC = () => {
                   </form>
                 </div>
 
+                {/* Forgot Password Option */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Forgot Password?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    If you've forgotten your current password, you can reset it using the forgot password feature.
+                  </p>
+                  <button
+                    onClick={() => window.location.href = '/forgot-password'}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Reset Password via Email
+                  </button>
+                </div>
+
               </div>
             )}
 
             {activeTab === 'settings' && (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">System Settings</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">SMTP Settings</h2>
+                    <p className="text-gray-600 text-sm mt-1">Configure email service</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleTestSmtp}
+                    disabled={testingSmtp || !settingsForm.mail_username || !settingsForm.mail_password}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {testingSmtp ? 'Testing...' : 'Test Email'}
+                  </button>
+                </div>
                 
                 {settingsLoading ? (
                   <div className="flex items-center justify-center py-8">
@@ -417,8 +510,67 @@ const AdminProfile: React.FC = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleSettingsUpdate} className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Configuration (SMTP Settings)</h3>
+                    {/* Email Configuration Section */}
+                    <div className="border border-gray-200 rounded-lg p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">Email Configuration</h3>
+                          <p className="text-sm text-gray-600">Google Workspace SMTP</p>
+                        </div>
+                        {settingsForm.mail_username && settingsForm.mail_password ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                            <span className="text-sm font-medium">SMTP Configured</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 text-gray-400">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                            <span className="text-sm font-medium">Not Configured</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {settingsForm.mail_username && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                          <p className="text-sm text-green-800">
+                            <span className="font-medium">Provider:</span> Google Workspace SMTP
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="space-y-4">
+                        <div>
+                          <label htmlFor="from_email" className="block text-sm font-medium text-gray-700 mb-2">
+                            From Email
+                          </label>
+                          <input
+                            type="email"
+                            id="from_email"
+                            value={settingsForm.mail_username}
+                            disabled
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="test_email_recipient" className="block text-sm font-medium text-gray-700 mb-2">
+                            Test Email Recipient
+                          </label>
+                          <input
+                            type="email"
+                            id="test_email_recipient"
+                            value={testEmailRecipient}
+                            onChange={(e) => setTestEmailRecipient(e.target.value)}
+                            placeholder="Enter email to receive test"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SMTP Configuration Section */}
+                    <div className="border border-gray-200 rounded-lg p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">SMTP Configuration</h3>
                       
                       {/* Help Box */}
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
@@ -497,9 +649,9 @@ const AdminProfile: React.FC = () => {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="btn-primary disabled:opacity-50"
+                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
-                        {loading ? 'Updating...' : 'Update Settings'}
+                        {loading ? 'Saving...' : 'Save Settings'}
                       </button>
                     </div>
                   </form>

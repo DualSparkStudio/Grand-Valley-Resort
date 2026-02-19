@@ -26,8 +26,11 @@ const BookingForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
   const [selectedDates, setSelectedDates] = useState<{ checkIn: string; checkOut: string } | null>(null)
-  const [numGuests, setNumGuests] = useState(1)
+  const [numExtraGuests, setNumExtraGuests] = useState(0)
+  const [numChildren, setNumChildren] = useState(0)
   const [totalAmount, setTotalAmount] = useState(0)
+  const [subtotal, setSubtotal] = useState(0)
+  const [gstAmount, setGstAmount] = useState(0)
   const [calendarEvents, setCalendarEvents] = useState<any[]>([])
   const [initialDate, setInitialDate] = useState<string>('')
   const [showCancellationModal, setShowCancellationModal] = useState(false)
@@ -46,60 +49,68 @@ const BookingForm: React.FC = () => {
     special_requests: ''
   })
 
-  // Helper function to calculate total amount with occupancy-based pricing
-  const calculateTotalAmount = (checkInDate: string, checkOutDate: string, guestCount: number) => {
-    if (!room || !checkInDate || !checkOutDate) return 0
+  // Helper function to calculate total amount with new pricing structure
+  const calculateTotalAmount = (checkInDate: string, checkOutDate: string, extraGuests: number, children: number) => {
+    if (!room || !checkInDate || !checkOutDate) return { subtotal: 0, gst: 0, total: 0 }
     
     const checkIn = new Date(checkInDate)
     const checkOut = new Date(checkOutDate)
     const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24))
     
-    // Determine base price based on occupancy
-    let basePricePerNight = 0
+    // Base price for couple (2 adults)
+    const basePricePerNight = typeof room.price_per_night === 'string' ? parseFloat(room.price_per_night) : (room.price_per_night || 0)
     
-    // Check if occupancy pricing is available (convert to number if it's a string)
-    const priceTriple = typeof room.price_triple_occupancy === 'string' ? parseFloat(room.price_triple_occupancy) : (room.price_triple_occupancy || 0)
-    const priceDouble = typeof room.price_double_occupancy === 'string' ? parseFloat(room.price_double_occupancy) : (room.price_double_occupancy || 0)
+    // Extra guest price per night
+    const extraGuestPrice = typeof room.extra_guest_price === 'string' ? parseFloat(room.extra_guest_price) : (room.extra_guest_price || 0)
     
-    if (priceTriple > 0 && guestCount === 3) {
-      basePricePerNight = priceTriple
-    } else if (priceDouble > 0 && guestCount >= 2) {
-      basePricePerNight = priceDouble
-    } else {
-      // Fallback to price_per_night for backward compatibility
-      basePricePerNight = typeof room.price_per_night === 'string' ? parseFloat(room.price_per_night) : (room.price_per_night || 0)
-    }
+    // Child above 5 years price per night
+    const childPrice = typeof room.child_above_5_price === 'string' ? parseFloat(room.child_above_5_price) : (room.child_above_5_price || 0)
     
-    const total = basePricePerNight * nights
+    // GST percentage
+    const gstPercentage = typeof room.gst_percentage === 'string' ? parseFloat(room.gst_percentage) : (room.gst_percentage || 12)
+    
+    // Calculate subtotal
+    const baseAmount = basePricePerNight * nights
+    const extraGuestsAmount = extraGuestPrice * extraGuests * nights
+    const childrenAmount = childPrice * children * nights
+    
+    const subtotal = baseAmount + extraGuestsAmount + childrenAmount
+    
+    // Calculate GST
+    const gst = (subtotal * gstPercentage) / 100
+    
+    // Total with GST
+    const total = subtotal + gst
     
     // Debug logging (can be removed in production)
     if (process.env.NODE_ENV === 'development') {
       console.log('Price Calculation:', {
-        guestCount,
         nights,
-        priceDouble,
-        priceTriple,
         basePricePerNight,
+        extraGuestPrice,
+        childPrice,
+        gstPercentage,
+        baseAmount,
+        extraGuestsAmount,
+        childrenAmount,
+        subtotal,
+        gst,
         total
       })
     }
     
-    return total
+    return { subtotal, gst, total }
   }
 
   useEffect(() => {
     loadRazorpayScript().catch(() => {})
     
-    // Check if we have state passed from RoomDetail (for dates and guests only)
+    // Check if we have state passed from RoomDetail (for dates only)
     if (location.state) {
-      const { selectedDates: passedDates, numGuests: passedGuests } = location.state as any
+      const { selectedDates: passedDates } = location.state as any
       
       if (passedDates) {
         setSelectedDates(passedDates)
-      }
-      
-      if (passedGuests) {
-        setNumGuests(passedGuests)
       }
     }
     
@@ -121,10 +132,17 @@ const BookingForm: React.FC = () => {
   // Recalculate total when dates, guests, or room changes
   useEffect(() => {
     if (room && selectedDates?.checkIn && selectedDates?.checkOut) {
-      const total = calculateTotalAmount(selectedDates.checkIn, selectedDates.checkOut, numGuests)
-      setTotalAmount(total)
+      const { subtotal: calcSubtotal, gst: calcGst, total: calcTotal } = calculateTotalAmount(
+        selectedDates.checkIn, 
+        selectedDates.checkOut, 
+        numExtraGuests, 
+        numChildren
+      )
+      setSubtotal(calcSubtotal)
+      setGstAmount(calcGst)
+      setTotalAmount(calcTotal)
     }
-  }, [selectedDates, numGuests, room])
+  }, [selectedDates, numExtraGuests, numChildren, room])
 
   const loadRoomData = async () => {
     try {
@@ -170,8 +188,15 @@ const BookingForm: React.FC = () => {
 
   const handleCalendarConfirm = () => {
     if (selectedDates?.checkIn && selectedDates?.checkOut) {
-      const total = calculateTotalAmount(selectedDates.checkIn, selectedDates.checkOut, numGuests)
-      setTotalAmount(total)
+      const { subtotal: calcSubtotal, gst: calcGst, total: calcTotal } = calculateTotalAmount(
+        selectedDates.checkIn, 
+        selectedDates.checkOut, 
+        numExtraGuests, 
+        numChildren
+      )
+      setSubtotal(calcSubtotal)
+      setGstAmount(calcGst)
+      setTotalAmount(calcTotal)
       setShowCalendar(false)
     }
   }
@@ -179,16 +204,6 @@ const BookingForm: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleGuestChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const guests = parseInt(e.target.value)
-    setNumGuests(guests)
-    
-    if (selectedDates?.checkIn && selectedDates?.checkOut) {
-      const total = calculateTotalAmount(selectedDates.checkIn, selectedDates.checkOut, guests)
-      setTotalAmount(total)
-    }
   }
 
   const checkAvailability = async () => {
@@ -322,7 +337,7 @@ const BookingForm: React.FC = () => {
           guest_name: `${formData.first_name} ${formData.last_name}`,
           check_in: selectedDates.checkIn,
           check_out: selectedDates.checkOut,
-          guests: numGuests,
+          guests: 2 + numExtraGuests + numChildren,
           amount: totalAmount
         },
         theme: {
@@ -572,7 +587,7 @@ const BookingForm: React.FC = () => {
           guest_name: `${formData.first_name} ${formData.last_name}`,
           check_in: selectedDates.checkIn,
           check_out: selectedDates.checkOut,
-          guests: numGuests,
+          guests: 2 + numExtraGuests + numChildren,
           amount: totalAmount
         },
         theme: {
@@ -676,18 +691,26 @@ const BookingForm: React.FC = () => {
     // Set submitting to false to ensure button state is correct
     setSubmitting(false)
     try {
+      // Calculate total number of guests (2 base adults + extra adults + children)
+      const totalGuests = 2 + numExtraGuests + numChildren
+      
       // Create booking only after successful payment
       const bookingData = {
         room_id: room.id,
         check_in_date: selectedDates.checkIn,
         check_out_date: selectedDates.checkOut,
-        num_guests: numGuests,
+        num_guests: totalGuests,
+        num_extra_adults: numExtraGuests,
+        num_children_above_5: numChildren,
         first_name: formData.first_name,
         last_name: formData.last_name,
         email: formData.email,
         phone: formData.phone,
         special_requests: formData.special_requests,
         total_amount: totalAmount,
+        subtotal_amount: subtotal,
+        gst_amount: gstAmount,
+        gst_percentage: room?.gst_percentage || 12,
         booking_status: 'confirmed',
         payment_status: 'paid',
         payment_gateway: 'razorpay',
@@ -703,12 +726,12 @@ const BookingForm: React.FC = () => {
         const emailResult = await EmailService.sendBookingConfirmation(booking, room)
         
         if (emailResult.success) {
-          toast.success('Booking confirmed! Confirmation emails sent.')
+          console.log('✅ Confirmation emails sent successfully')
         } else {
-          toast.error('Booking confirmed but email notification failed.')
+          console.warn('⚠️ Email notification failed:', emailResult.error)
         }
       } catch (emailError) {
-        toast.error('Booking confirmed but email notification failed.')
+        console.error('❌ Error sending email:', emailError)
         // Don't fail the booking if email fails
       }
 
@@ -802,10 +825,7 @@ const BookingForm: React.FC = () => {
                   <p className="text-gray-600 mb-4">{room.description}</p>
                   <div className="space-y-2">
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">Price per night:</span> ₹{room.price_per_night}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-medium">Max occupancy:</span> {room.max_occupancy} guests
+                      <span className="font-medium">Price per night (Couple):</span> ₹{room.price_per_night}
                     </p>
                     {room.accommodation_details && (
                       <p className="text-sm text-gray-600">
@@ -813,6 +833,7 @@ const BookingForm: React.FC = () => {
                       </p>
                     )}
                   </div>
+<<<<<<< HEAD
                   
                   {/* Check-in/Check-out Times */}
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -901,6 +922,8 @@ const BookingForm: React.FC = () => {
                       Contact Us
                     </a>
                   </div>
+=======
+>>>>>>> 931e49e5db8fa3f05298d67ccf7fcc554a335d2e
                 </div>
               </div>
 
@@ -929,33 +952,145 @@ const BookingForm: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Number of Guests */}
+                  {/* Base Adults Info */}
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Base Adults (2)</p>
+                        <p className="text-xs text-gray-500 mt-1">Base price includes 2 adults (couple)</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-gray-900">₹{room?.price_per_night?.toLocaleString() || '0'}</div>
+                        <div className="text-xs text-gray-500">per night</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Max Capacity Warning */}
+                  {room?.max_capacity && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-sm text-blue-800">
+                        <span className="font-semibold">Maximum Capacity:</span> {room.max_capacity} guests
+                      </p>
+                      <p className="text-xs text-blue-600 mt-1">
+                        Total guests (base adults + extra adults + children) cannot exceed {room.max_capacity}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Total Guests Counter */}
+                  {(() => {
+                    const totalGuests = 2 + numExtraGuests + numChildren
+                    const maxCapacity = room?.max_capacity || 10
+                    const isOverCapacity = totalGuests > maxCapacity
+                    
+                    return (
+                      <div className={`border rounded-lg p-3 ${isOverCapacity ? 'bg-red-50 border-red-300' : 'bg-green-50 border-green-300'}`}>
+                        <div className="flex items-center justify-between">
+                          <span className={`text-sm font-medium ${isOverCapacity ? 'text-red-800' : 'text-green-800'}`}>
+                            Total Guests: {totalGuests}
+                          </span>
+                          {isOverCapacity && (
+                            <span className="text-xs text-red-600 font-semibold">
+                              Exceeds max capacity!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })()}
+
+                  {/* Extra Guests */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Number of Guests *
+                      Extra Adults
                     </label>
-                    <select
-                      value={numGuests}
-                      onChange={handleGuestChange}
+                    <input
+                      type="number"
+                      value={numExtraGuests}
+                      onChange={(e) => {
+                        const value = Math.max(0, parseInt(e.target.value) || 0)
+                        const maxCapacity = room?.max_capacity || 10
+                        const totalGuests = 2 + value + numChildren
+                        
+                        if (totalGuests > maxCapacity) {
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                          return
+                        }
+                        
+                        setNumExtraGuests(value)
+                      }}
                       disabled={!room?.is_active}
+                      min="0"
+                      max={Math.max(0, (room?.max_capacity || 10) - 2 - numChildren)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
-                      required
-                    >
-                      {Array.from({ length: room?.max_occupancy || 3 }, (_, i) => i + 1).map(num => (
-                        <option key={num} value={num}>{num} {num === 1 ? 'Guest' : 'Guests'}</option>
-                      ))}
-                    </select>
-                    {/* Show occupancy pricing info */}
-                    {room && (
-                      <div className="mt-2 text-xs text-gray-600">
-                        {room.price_double_occupancy && (
-                          <div>2 guests: ₹{room.price_double_occupancy.toLocaleString()}/night</div>
-                        )}
-                        {room.price_triple_occupancy && (
-                          <div>3 guests: ₹{room.price_triple_occupancy.toLocaleString()}/night</div>
-                        )}
-                      </div>
+                      placeholder="0"
+                    />
+                    {room?.extra_guest_price > 0 && (
+                      <p className="mt-1 text-xs text-gray-500">₹{room.extra_guest_price.toLocaleString()} per extra adult per night</p>
                     )}
+                    {(() => {
+                      const maxCapacity = room?.max_capacity || 10
+                      const remainingCapacity = maxCapacity - 2 - numChildren
+                      if (remainingCapacity <= 0) {
+                        return (
+                          <p className="mt-1 text-xs text-red-600 font-semibold">
+                            ⚠️ Maximum capacity reached. Cannot add more adults.
+                          </p>
+                        )
+                      }
+                      return null
+                    })()}
+                  </div>
+
+                  {/* Children Above 5 Years */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Children Above 5 Years
+                    </label>
+                    <input
+                      type="number"
+                      value={numChildren}
+                      onChange={(e) => {
+                        const value = Math.max(0, parseInt(e.target.value) || 0)
+                        const maxCapacity = room?.max_capacity || 10
+                        const totalGuests = 2 + numExtraGuests + value
+                        
+                        if (totalGuests > maxCapacity) {
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                          return
+                        }
+                        
+                        setNumChildren(value)
+                      }}
+                      disabled={!room?.is_active}
+                      min="0"
+                      max={Math.max(0, (room?.max_capacity || 10) - 2 - numExtraGuests)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
+                      placeholder="0"
+                    />
+                    {room?.child_above_5_price > 0 && (
+                      <p className="mt-1 text-xs text-gray-500">₹{room.child_above_5_price.toLocaleString()} per child per night</p>
+                    )}
+                    <p className="mt-1 text-xs text-gray-500">Children below 5 years are free</p>
+                    {(() => {
+                      const maxCapacity = room?.max_capacity || 10
+                      const remainingCapacity = maxCapacity - 2 - numExtraGuests
+                      if (remainingCapacity <= 0) {
+                        return (
+                          <p className="mt-1 text-xs text-red-600 font-semibold">
+                            ⚠️ Maximum capacity reached. Cannot add more children.
+                          </p>
+                        )
+                      }
+                      return null
+                    })()}
                   </div>
 
               {/* Guest Information */}
@@ -1007,7 +1142,7 @@ const BookingForm: React.FC = () => {
                     required
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="your.email@example.com"
-                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}"
                         title="Please enter a valid email address"
                   />
                 </div>
@@ -1054,39 +1189,67 @@ const BookingForm: React.FC = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Price Breakdown</h3>
                       <div className="space-y-2 text-sm">
                         {(() => {
-                          const checkIn = new Date(selectedDates.checkIn)
-                          const checkOut = new Date(selectedDates.checkOut)
-                          const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24))
+                          const nights = Math.ceil((new Date(selectedDates.checkOut).getTime() - new Date(selectedDates.checkIn).getTime()) / (1000 * 60 * 60 * 24))
                           
-                          // Calculate occupancy-based price
-                          let basePricePerNight = 0
-                          let occupancyType = ''
-                          
-                          if (room?.price_triple_occupancy && numGuests === 3) {
-                            basePricePerNight = room.price_triple_occupancy
-                            occupancyType = 'Triple Occupancy'
-                          } else if (room?.price_double_occupancy && numGuests >= 2) {
-                            basePricePerNight = room.price_double_occupancy
-                            occupancyType = 'Double Occupancy'
-                          } else {
-                            basePricePerNight = room?.price_per_night || 0
-                            occupancyType = 'Base Price'
-                          }
-                          
+                          // Calculate breakdown - ensure numbers are valid
+                          const basePricePerNight = parseFloat(room?.price_per_night) || 0
                           const baseAmount = basePricePerNight * nights
+                          
+                          const extraGuestPrice = parseFloat(room?.extra_guest_price) || 0
+                          const extraGuestsAmount = extraGuestPrice * numExtraGuests * nights
+                          
+                          const childPrice = parseFloat(room?.child_above_5_price) || 0
+                          const childrenAmount = childPrice * numChildren * nights
+                          
+                          const gstPercentage = parseFloat(room?.gst_percentage) || 12
                           
                           return (
                             <>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  {occupancyType} ({numGuests} guest{numGuests !== 1 ? 's' : ''}, {nights} night{nights !== 1 ? 's' : ''}):
-                                </span>
-                                <span className="font-medium">₹{baseAmount.toLocaleString()}</span>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">
+                                    Base Price (2 Adults, {nights} night{nights !== 1 ? 's' : ''}):
+                                  </span>
+                                  <span className="font-medium text-gray-900">₹{baseAmount.toFixed(0)}</span>
+                                </div>
+                                
+                                {numExtraGuests > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">
+                                      Extra Adults ({numExtraGuests} × ₹{extraGuestPrice.toFixed(0)} × {nights} night{nights !== 1 ? 's' : ''}):
+                                    </span>
+                                    <span className="font-medium text-gray-900">₹{extraGuestsAmount.toFixed(0)}</span>
+                                  </div>
+                                )}
+                                
+                                {numChildren > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">
+                                      Children Above 5 ({numChildren} × ₹{childPrice.toFixed(0)} × {nights} night{nights !== 1 ? 's' : ''}):
+                                    </span>
+                                    <span className="font-medium text-gray-900">₹{childrenAmount.toFixed(0)}</span>
+                                  </div>
+                                )}
+                                
+                                <div className="border-t border-blue-200 pt-2">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-700 font-medium">Subtotal:</span>
+                                    <span className="font-semibold text-gray-900">₹{subtotal.toFixed(0)}</span>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">
+                                    GST ({gstPercentage}%):
+                                  </span>
+                                  <span className="font-medium text-gray-900">₹{gstAmount.toFixed(0)}</span>
+                                </div>
                               </div>
-                              <div className="border-t border-blue-200 pt-2 mt-2">
+                              
+                              <div className="border-t-2 border-blue-300 pt-3 mt-3">
                                 <div className="flex justify-between">
                                   <span className="text-lg font-semibold text-gray-900">Total Amount:</span>
-                                  <span className="text-2xl font-bold text-blue-600">₹{totalAmount.toLocaleString()}</span>
+                                  <span className="text-2xl font-bold text-blue-600">₹{totalAmount.toFixed(0)}</span>
                                 </div>
                               </div>
                             </>
@@ -1203,7 +1366,7 @@ const BookingForm: React.FC = () => {
           onProceed={processPayment}
           roomName={room.name}
           guestName={`${formData.first_name} ${formData.last_name}`}
-          guestCount={numGuests}
+          guestCount={2 + numExtraGuests + numChildren}
           checkIn={selectedDates.checkIn}
           checkOut={selectedDates.checkOut}
           totalAmount={totalAmount}
