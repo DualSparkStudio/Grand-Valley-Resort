@@ -831,6 +831,76 @@ const BookingForm: React.FC = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Room Amenities */}
+                  {room.amenities && room.amenities.length > 0 && (
+                    <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                      <h4 className="text-sm font-medium text-green-900 mb-3">Room Amenities</h4>
+                      <div className="grid grid-cols-1 gap-2">
+                        {room.amenities.slice(0, 6).map((amenity: string, index: number) => (
+                          <div key={index} className="flex items-center text-xs text-green-800">
+                            <svg className="w-4 h-4 mr-2 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>{amenity}</span>
+                          </div>
+                        ))}
+                        {room.amenities.length > 6 && (
+                          <div className="text-xs text-green-700 font-medium mt-1">
+                            +{room.amenities.length - 6} more amenities
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Why Book With Us */}
+                  <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <h4 className="text-sm font-medium text-purple-900 mb-3">Why Book With Us?</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-start text-xs text-purple-800">
+                        <svg className="w-4 h-4 mr-2 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Instant booking confirmation</span>
+                      </div>
+                      <div className="flex items-start text-xs text-purple-800">
+                        <svg className="w-4 h-4 mr-2 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Secure payment gateway</span>
+                      </div>
+                      <div className="flex items-start text-xs text-purple-800">
+                        <svg className="w-4 h-4 mr-2 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>24/7 customer support</span>
+                      </div>
+                      <div className="flex items-start text-xs text-purple-800">
+                        <svg className="w-4 h-4 mr-2 text-purple-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Best price guarantee</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Need Help */}
+                  <div className="mt-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <h4 className="text-sm font-medium text-orange-900 mb-2">Need Help?</h4>
+                    <p className="text-xs text-orange-800 mb-3">
+                      Have questions about your booking? We're here to help!
+                    </p>
+                    <a
+                      href="/contact"
+                      className="inline-flex items-center text-xs font-medium text-orange-700 hover:text-orange-900"
+                    >
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      Contact Us
+                    </a>
+                  </div>
                 </div>
               </div>
 
