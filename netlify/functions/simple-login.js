@@ -95,8 +95,8 @@ exports.handler = async (event, context) => {
     const { action, ...data } = JSON.parse(event.body)
 
 
-    // Check environment variables
-    const supabaseUrl = process.env.VITE_SUPABASE_URL
+    // Check environment variables - try both naming conventions
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseServiceKey) {
