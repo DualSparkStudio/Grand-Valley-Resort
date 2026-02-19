@@ -977,6 +977,20 @@ const BookingForm: React.FC = () => {
                         
                         setNumExtraGuests(value)
                       }}
+                      onKeyDown={(e) => {
+                        // Show alert when user tries to increase beyond max
+                        const currentValue = numExtraGuests
+                        const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numChildren)
+                        
+                        if ((e.key === 'ArrowUp' || e.key === '+') && currentValue >= maxAllowed) {
+                          e.preventDefault()
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                        }
+                      }}
                       disabled={!room?.is_active}
                       min="0"
                       max={Math.max(0, (room?.max_capacity || 10) - 2 - numChildren)}
@@ -1022,6 +1036,20 @@ const BookingForm: React.FC = () => {
                         }
                         
                         setNumChildren(value)
+                      }}
+                      onKeyDown={(e) => {
+                        // Show alert when user tries to increase beyond max
+                        const currentValue = numChildren
+                        const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numExtraGuests)
+                        
+                        if ((e.key === 'ArrowUp' || e.key === '+') && currentValue >= maxAllowed) {
+                          e.preventDefault()
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests (currently ${2 + numExtraGuests + numChildren} guests)`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                        }
                       }}
                       disabled={!room?.is_active}
                       min="0"
