@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
 import GoogleReviews from '../components/GoogleReviews'
@@ -62,9 +62,11 @@ const Home: React.FC = () => {
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0)
   const [checkInDate, setCheckInDate] = useState('')
   const [checkOutDate, setCheckOutDate] = useState('')
+  const [numGuests, setNumGuests] = useState('')
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   // Gallery modal state
   const [galleryModal, setGalleryModal] = useState<{
@@ -261,6 +263,19 @@ const Home: React.FC = () => {
     }))
   }
 
+  // Handle Book Now button click
+  const handleBookNow = () => {
+    // Build query parameters from filter values
+    const params = new URLSearchParams()
+    if (checkInDate) params.append('checkIn', checkInDate)
+    if (checkOutDate) params.append('checkOut', checkOutDate)
+    if (numGuests) params.append('guests', numGuests)
+    
+    // Navigate to rooms page with query parameters to show available rooms
+    const queryString = params.toString()
+    navigate(`/rooms${queryString ? `?${queryString}` : ''}`)
+  }
+
   // Gallery functions for attractions
   const openAttractionGallery = (images: string[], title: string) => {
     setGalleryModal({
@@ -344,25 +359,18 @@ const Home: React.FC = () => {
                     <div className="flex items-stretch justify-center gap-1 sm:gap-2">
                       {/* Guest Select */}
                       <div className="flex-1 min-w-0 relative">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5">
-                          <option value="">Guest</option>
+                        <select 
+                          value={numGuests}
+                          onChange={(e) => setNumGuests(e.target.value)}
+                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5"
+                        >
+                          <option value="">Guests</option>
                           <option value="1">1 Guest</option>
                           <option value="2">2 Guests</option>
                           <option value="3">3 Guests</option>
-                          <option value="4">4+ Guests</option>
-                        </select>
-                        <svg className="absolute right-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                      
-                      {/* Room Select */}
-                      <div className="flex-1 min-w-0 relative">
-                        <select className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5">
-                          <option value="">Room</option>
-                          <option value="1">1 Room</option>
-                          <option value="2">2 Rooms</option>
-                          <option value="3">3 Rooms</option>
+                          <option value="4">4 Guests</option>
+                          <option value="5">5 Guests</option>
+                          <option value="6">6+ Guests</option>
                         </select>
                         <svg className="absolute right-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -451,12 +459,12 @@ const Home: React.FC = () => {
                       
                       {/* Book Now Button - Matching Navbar Style */}
                       <div className="flex-1 min-w-0">
-                        <Link
-                          to="/rooms"
+                        <button
+                          onClick={handleBookNow}
                           className="w-full h-[18px] sm:h-5 flex items-center justify-center px-1.5 sm:px-3 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-[10px] sm:text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
                         >
                           <span>Book Now</span>
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </motion.div>

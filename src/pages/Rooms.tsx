@@ -5,7 +5,7 @@ import {
     UsersIcon
 } from '@heroicons/react/24/outline'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import HouseRules from '../components/HouseRules'
 import RoomUnavailableModal from '../components/RoomUnavailableModal'
 import LogoLoader from '../components/LogoLoader'
@@ -14,16 +14,63 @@ import type { Room } from '../lib/supabase'
 import { api } from '../lib/supabase'
 
 const Rooms: React.FC = () => {
+  const [searchParams] = useSearchParams()
   const [roomTypes, setRoomTypes] = useState<Room[]>([])
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedAmenities, setExpandedAmenities] = useState<{ [key: string]: boolean }>({})
   const [roomSlugs, setRoomSlugs] = useState<{ [key: number]: string }>({})
   const [showUnavailableModal, setShowUnavailableModal] = useState(false)
   const [unavailableRoomName, setUnavailableRoomName] = useState<string | undefined>(undefined)
+  
+  // Get filter parameters from URL
+  const numGuests = searchParams.get('guests')
+  const checkInDate = searchParams.get('checkIn')
+  const checkOutDate = searchParams.get('checkOut')
 
   useEffect(() => {
     loadRoomTypes()
   }, [])
+
+  useEffect(() => {
+    filterRooms()
+  }, [roomTypes, numGuests, checkInDate, checkOutDate])
+
+  const filterRooms = async () => {
+    let filtered = [...roomTypes]
+    
+    // Filter by guest capacity
+    if (numGuests) {
+      const guestCount = parseInt(numGuests)
+      filtered = filtered.filter(room => room.max_capacity >= guestCount)
+    }
+    
+    // Filter by availability (check if room is booked for selected dates)
+    if (checkInDate && checkOutDate) {
+      const availableRooms = await Promise.all(
+        filtered.map(async (room) => {
+          try {
+            const result = await api.checkRoomAvailability(
+              room.id,
+              checkInDate,
+              checkOutDate
+            )
+            // Check if the result has the 'available' property
+            const isAvailable = typeof result === 'object' && result !== null && 'available' in result
+              ? result.available
+              : false
+            return isAvailable ? room : null
+          } catch (error) {
+            console.error(`Error checking availability for room ${room.id}:`, error)
+            return null
+          }
+        })
+      )
+      filtered = availableRooms.filter((room): room is Room => room !== null)
+    }
+    
+    setFilteredRooms(filtered)
+  }
 
   const loadRoomTypes = async () => {
     try {
@@ -116,14 +163,60 @@ const Rooms: React.FC = () => {
         {/* Rooms Grid */}
         <section className="py-8 sm:py-12 lg:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={`grid gap-6 sm:gap-8 auto-rows-fr ${
-              roomTypes.length === 1 
-                ? 'grid-cols-1 max-w-4xl mx-auto' 
-                : roomTypes.length === 2
-                ? 'grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto'
-                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'
-            }`}>
-              {roomTypes.map((room) => {
+            {/* Filter Info Banner */}
+            {(numGuests || checkInDate || checkOutDate) && (
+              <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-blue-900 mb-2">Search Results</h3>
+                    <div className="text-sm text-blue-800 space-y-1">
+                      {numGuests && <p>• Guests: {numGuests}</p>}
+                      {checkInDate && <p>• Check-in: {new Date(checkInDate).toLocaleDateString()}</p>}
+                      {checkOutDate && <p>• Check-out: {new Date(checkOutDate).toLocaleDateString()}</p>}
+                    </div>
+                    <p className="text-sm text-blue-700 mt-2">
+                      Showing {filteredRooms.length} available room{filteredRooms.length !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                  <Link
+                    to="/rooms"
+                    className="text-sm text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Clear filters
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {filteredRooms.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full mb-4">
+                  <UsersIcon className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No rooms available</h3>
+                <p className="text-gray-600 mb-4">
+                  {(numGuests || checkInDate || checkOutDate)
+                    ? 'No rooms match your search criteria. Try adjusting your dates or guest count.'
+                    : 'No rooms are currently available.'}
+                </p>
+                {(numGuests || checkInDate || checkOutDate) && (
+                  <Link
+                    to="/rooms"
+                    className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    View all rooms
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className={`grid gap-6 sm:gap-8 auto-rows-fr ${
+                filteredRooms.length === 1 
+                  ? 'grid-cols-1 max-w-4xl mx-auto' 
+                  : filteredRooms.length === 2
+                  ? 'grid-cols-1 lg:grid-cols-2 max-w-6xl mx-auto'
+                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3'
+              }`}>
+                {filteredRooms.map((room) => {
                   // Get the primary image or first image from room.images array
                   const getMainImage = () => {
                     if (room.images && room.images.length > 0) {
@@ -240,7 +333,8 @@ const Rooms: React.FC = () => {
                     </div>
                   );
                 })}
-            </div>
+              </div>
+            )}
           </div>
         </section>
 

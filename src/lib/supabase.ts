@@ -417,6 +417,15 @@ export const api = {
       }
     }
     
+    // Normalize dates to avoid timezone issues
+    const normalizeDate = (dateStr: string) => {
+      const date = new Date(dateStr + 'T00:00:00')
+      return date
+    }
+    
+    const checkInDate = normalizeDate(checkIn)
+    const checkOutDate = normalizeDate(checkOut)
+    
     // First check website bookings with more precise conflict detection
     const { data: websiteBookings, error: websiteError } = await supabase
       .from('bookings')
@@ -431,10 +440,8 @@ export const api = {
 
     // Manually check for conflicts with more precise logic
     const conflictingBookings = websiteBookings?.filter(booking => {
-      const bookingStart = new Date(booking.check_in_date)
-      const bookingEnd = new Date(booking.check_out_date)
-      const checkInDate = new Date(checkIn)
-      const checkOutDate = new Date(checkOut)
+      const bookingStart = normalizeDate(booking.check_in_date)
+      const bookingEnd = normalizeDate(booking.check_out_date)
 
       // Check for overlap: if the booking overlaps with the requested dates
       const hasOverlap = (
@@ -468,18 +475,18 @@ export const api = {
     }
 
     // Check if any blocked date overlaps with the requested dates
+    // IMPORTANT: We need to check if ANY day in the check-in to check-out range is blocked
     const conflictingBlockedDates = blockedDates?.filter(blocked => {
-      const blockedStart = new Date(blocked.start_date)
-      const blockedEnd = new Date(blocked.end_date)
-      const checkInDate = new Date(checkIn)
-      const checkOutDate = new Date(checkOut)
+      const blockedStart = normalizeDate(blocked.start_date)
+      const blockedEnd = normalizeDate(blocked.end_date)
 
-      // Check for overlap: if the blocked date overlaps with the requested dates
+      // Check for overlap: if ANY day in the requested range falls within a blocked period
+      // A date is blocked if: checkInDate <= blockedDate < blockedEnd
       const hasOverlap = (
-        (blockedStart <= checkInDate && blockedEnd > checkInDate) || // Blocked starts before check-in and ends after check-in
-        (blockedStart < checkOutDate && blockedEnd >= checkOutDate) || // Blocked starts before check-out and ends after check-out
-        (blockedStart >= checkInDate && blockedEnd <= checkOutDate) || // Blocked is completely within requested dates
-        (checkInDate >= blockedStart && checkOutDate <= blockedEnd)   // Requested dates are completely within blocked
+        (blockedStart <= checkInDate && blockedEnd > checkInDate) || // Blocked period includes check-in date
+        (blockedStart < checkOutDate && blockedEnd >= checkOutDate) || // Blocked period includes check-out date
+        (blockedStart >= checkInDate && blockedStart < checkOutDate) || // Blocked period starts within requested dates
+        (checkInDate >= blockedStart && checkInDate < blockedEnd)   // Check-in date falls within blocked period
       )
 
       return hasOverlap
