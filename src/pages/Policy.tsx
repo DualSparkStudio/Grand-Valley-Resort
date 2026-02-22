@@ -4,6 +4,62 @@ import React from 'react';
 const Policy: React.FC = () => {
   const policies = [
     {
+      title: 'Guest Consent & General Rules',
+      icon: DocumentTextIcon,
+      content: [
+        {
+          subtitle: 'Payment & Food Policy',
+          text: '1. Kindly submit the full payment receipt in the Resort office - its mandatory. 2. Outside food is not allowed inside Resort.'
+        },
+        {
+          subtitle: 'Guest Conduct',
+          text: 'Please show common courtesy to fellow Resort Guests and our Service Staff. Do not use any foul language and engage in unsafe and offensive behavior.'
+        },
+        {
+          subtitle: 'Swimming Pool Rules',
+          text: 'Swimming Pool Time: morning 10 am to 6 pm. Do not allow any beverage and food in swimming pool. Proper clothes must be worn at all times while enjoying the swimming pool of the resort.'
+        },
+        {
+          subtitle: 'Meal Timings',
+          text: 'Please don\'t ask for Breakfast or Lunch after the prescribed timings. Breakfast: 9:00 am to 10:30 am, Lunch: 1:00 pm to 2:30 pm, Hi-Tea: 5:00 pm to 6:00 pm, Dinner: 8:30 pm to 10:30 pm. We have buffet system - kindly do not waste our food.'
+        },
+        {
+          subtitle: 'Personal Belongings',
+          text: 'Please don\'t leave your belongings unattended. Management will not be responsible for losses.'
+        },
+        {
+          subtitle: 'Discounts & Pricing',
+          text: 'Please don\'t ask to argue with our staff for any kind of discount or concession even if you are late.'
+        },
+        {
+          subtitle: 'Alcohol & Pets',
+          text: 'Alcohol is allowed in Room Only. Pet animals are not allowed inside the Room.'
+        },
+        {
+          subtitle: 'Photography & Media',
+          text: 'We may photograph, film, videotape, record or otherwise reproduce the image and/or voice of any person who enters the resort and use the same for publicity purposes without payment to any person. Signing of Indemnity Bond is Compulsory.'
+        }
+      ]
+    },
+    {
+      title: 'For Room Guests - Check-in/Check-out',
+      icon: ShieldCheckIcon,
+      content: [
+        {
+          subtitle: 'Check-in & Check-out Times',
+          text: 'Room Check-In time is 12 noon & Check-Out time is 10 am next day (22 Hours). Check out strictly at 10 am. For late check out you have to pay actual room rent for that day and we will suppose you are checked out at 10 am and allot your room to the next check-in guest.'
+        },
+        {
+          subtitle: 'Intercom Facility',
+          text: 'Intercom Facility Available: 9 - Reception, 100 - Security, 222 - Dining. For any queries please call Reception (Extension 9).'
+        },
+        {
+          subtitle: 'Power & Electricity',
+          text: 'As our resort is situated far away from the city, power cuts are often. Please co-operate in such circumstances. Please switch off lights before leaving your room.'
+        }
+      ]
+    },
+    {
       title: 'Cancellation Policy',
       icon: XCircleIcon,
       content: [
@@ -48,12 +104,12 @@ const Policy: React.FC = () => {
       ]
     },
     {
-      title: 'Terms & Conditions - House Rules',
+      title: 'Additional House Rules',
       icon: DocumentTextIcon,
       content: [
         {
           subtitle: 'Smoking & Alcohol',
-          text: 'Smoking inside rooms is not allowed. Alcohol drinking is not allowed on the premises. Violation may result in immediate eviction without refund.'
+          text: 'Smoking inside rooms is not allowed. Alcohol drinking is allowed in rooms only. Violation may result in immediate eviction without refund.'
         },
         {
           subtitle: 'Visitors & Identification',
@@ -61,7 +117,7 @@ const Policy: React.FC = () => {
         },
         {
           subtitle: 'Pets & Property Care',
-          text: 'Pets are allowed with responsibility of proper cleaning. Any damage to furniture, linens will be recovered. Guests are responsible for maintaining the cleanliness and condition of their rooms.'
+          text: 'Pets are not allowed inside rooms. Any damage to furniture, linens will be recovered. Guests are responsible for maintaining the cleanliness and condition of their rooms.'
         },
         {
           subtitle: 'Utilities & Accommodation',
@@ -166,7 +222,7 @@ const Policy: React.FC = () => {
 
           {/* Last Updated */}
           <div className="mt-8 text-center text-sm text-gray-500">
-            <p>Last updated: January 2025</p>
+            <p>Last updated: February 2025</p>
             <p className="mt-1">
               These policies are subject to change. Please check back periodically for updates.
             </p>
