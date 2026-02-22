@@ -452,11 +452,16 @@ const RoomDetail: React.FC = () => {
               )}
 
               {/* Room Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                 <div className="text-center">
                   <StarIcon className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Rating</div>
                   <div className="font-semibold">5.0</div>
+                </div>
+                <div className="text-center">
+                  <UsersIcon className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                  <div className="text-sm text-gray-500">Max Capacity</div>
+                  <div className="font-semibold">{room.max_capacity || 4} Guests</div>
                 </div>
                 <div className="text-center">
                   <MapPinIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
