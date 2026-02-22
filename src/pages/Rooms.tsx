@@ -265,16 +265,23 @@ const Rooms: React.FC = () => {
                         <p className="text-gray-600 mb-4 line-clamp-2 text-sm sm:text-base">{room.description}</p>
                         
                         {/* Room Stats */}
-                        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                           <div className="text-center">
                             <StarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mx-auto mb-1" />
                             <div className="text-xs sm:text-sm text-gray-600">Rating</div>
-                            <div className="font-semibold text-sm sm:text-base">5.0</div>
+                            <div className="font-semibold text-sm sm:text-base text-gray-900">5.0</div>
+                          </div>
+                          <div className="text-center">
+                            <UsersIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 mx-auto mb-1" />
+                            <div className="text-xs sm:text-sm text-gray-600">Max Capacity</div>
+                            <div className="font-semibold text-xs sm:text-sm text-gray-900">
+                              {room.max_capacity ? `${room.max_capacity} Guests` : '4 Guests'}
+                            </div>
                           </div>
                           <div className="text-center">
                             <MapPinIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 mx-auto mb-1" />
                             <div className="text-xs sm:text-sm text-gray-600">Location</div>
-                            <div className="font-semibold text-xs sm:text-sm">River View</div>
+                            <div className="font-semibold text-xs sm:text-sm text-gray-900">Valley View</div>
                           </div>
                         </div>
 

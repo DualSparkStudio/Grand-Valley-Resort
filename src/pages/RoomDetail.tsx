@@ -470,7 +470,7 @@ const RoomDetail: React.FC = () => {
                 <div className="text-center">
                   <MapPinIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Location</div>
-                  <div className="font-semibold text-gray-900">River View</div>
+                  <div className="font-semibold text-gray-900">Valley View</div>
                 </div>
                 <div className="text-center">
                   <CheckCircleIcon className={`h-8 w-8 mx-auto mb-2 ${room.is_active ? 'text-green-600' : 'text-red-600'}`} />
