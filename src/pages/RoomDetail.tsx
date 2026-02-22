@@ -58,6 +58,8 @@ const RoomDetail: React.FC = () => {
           const foundRoom = await api.getRoomBySlugAnyStatus(slug)
           
           // Room exists, set it (even if inactive - we'll just disable booking)
+          console.log('Room data loaded:', foundRoom)
+          console.log('Max capacity value:', foundRoom.max_capacity)
           setRoom(foundRoom)
         } catch (error) {
           // Room not found or error
@@ -456,17 +458,19 @@ const RoomDetail: React.FC = () => {
                 <div className="text-center">
                   <StarIcon className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Rating</div>
-                  <div className="font-semibold">5.0</div>
+                  <div className="font-semibold text-gray-900">5.0</div>
                 </div>
                 <div className="text-center">
                   <UsersIcon className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Max Capacity</div>
-                  <div className="font-semibold">{room.max_capacity || 4} Guests</div>
+                  <div className="font-semibold text-gray-900">
+                    {room.max_capacity ? `${room.max_capacity} Guests` : '4 Guests'}
+                  </div>
                 </div>
                 <div className="text-center">
                   <MapPinIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
                   <div className="text-sm text-gray-500">Location</div>
-                  <div className="font-semibold">River View</div>
+                  <div className="font-semibold text-gray-900">River View</div>
                 </div>
                 <div className="text-center">
                   <CheckCircleIcon className={`h-8 w-8 mx-auto mb-2 ${room.is_active ? 'text-green-600' : 'text-red-600'}`} />
