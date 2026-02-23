@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AttractionCard from '../components/AttractionCard'
 import FAQ from '../components/FAQ'
 import GoogleReviews from '../components/GoogleReviews'
@@ -60,13 +60,9 @@ const Home: React.FC = () => {
   })
   const [expandedAmenities, setExpandedAmenities] = useState<{ [key: string]: boolean }>({})
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0)
-  const [checkInDate, setCheckInDate] = useState('')
-  const [checkOutDate, setCheckOutDate] = useState('')
-  const [numGuests, setNumGuests] = useState('')
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
-  const navigate = useNavigate()
 
   // Gallery modal state
   const [galleryModal, setGalleryModal] = useState<{
@@ -263,19 +259,6 @@ const Home: React.FC = () => {
     }))
   }
 
-  // Handle Book Now button click
-  const handleBookNow = () => {
-    // Build query parameters from filter values
-    const params = new URLSearchParams()
-    if (checkInDate) params.append('checkIn', checkInDate)
-    if (checkOutDate) params.append('checkOut', checkOutDate)
-    if (numGuests) params.append('guests', numGuests)
-    
-    // Navigate to rooms page with query parameters to show available rooms
-    const queryString = params.toString()
-    navigate(`/rooms${queryString ? `?${queryString}` : ''}`)
-  }
-
   // Gallery functions for attractions
   const openAttractionGallery = (images: string[], title: string) => {
     setGalleryModal({
@@ -332,10 +315,10 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 bg-black/40"></div>
             
             {/* Content Container - Optimized for 300px Mobile Height */}
-            <div className="relative h-full flex flex-col px-2 sm:px-4 pt-12 sm:pt-20 pb-1 sm:pb-4">
+            <div className="relative h-full flex flex-col px-2 sm:px-4 pt-16 sm:pt-24 pb-1 sm:pb-4">
               <div className="w-full max-w-5xl mx-auto flex flex-col flex-1 justify-between">
                 {/* Top Section: Heading - Compact for Mobile */}
-                <div className="text-center mb-2 sm:mb-4">
+                <div className="text-center mb-2 sm:mb-4 mt-8 sm:mt-12">
                   <motion.h1
                     className="text-3xl sm:text-5xl font-serif font-bold text-golden-400 leading-tight tracking-tight"
                     initial={{ opacity: 0, y: 20 }}
@@ -346,128 +329,6 @@ const Home: React.FC = () => {
                     <span className="inline-block mr-1 sm:mr-2">LUXURY</span>
                     <span className="inline-block">EXPERIENCE</span>
                   </motion.h1>
-                </div>
-                
-                {/* Middle Section: Booking Form - 280x45 mobile */}
-                <div className="mb-2 sm:mb-4">
-                  <motion.div
-                    className="bg-white rounded-lg sm:rounded-xl py-0.5 px-1.5 sm:p-3 shadow-lg max-w-[280px] sm:max-w-4xl mx-auto"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                  >
-                    <div className="flex items-stretch justify-center gap-1 sm:gap-2">
-                      {/* Guest Select */}
-                      <div className="flex-1 min-w-0 relative">
-                        <select 
-                          value={numGuests}
-                          onChange={(e) => setNumGuests(e.target.value)}
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[10px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white appearance-none cursor-pointer text-gray-900 font-medium pr-5"
-                        >
-                          <option value="">Guests</option>
-                          <option value="1">1 Guest</option>
-                          <option value="2">2 Guests</option>
-                          <option value="3">3 Guests</option>
-                          <option value="4">4 Guests</option>
-                          <option value="5">5 Guests</option>
-                          <option value="6">6+ Guests</option>
-                        </select>
-                        <svg className="absolute right-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                      
-                      {/* Check In */}
-                      <div className="flex-1 min-w-0 relative">
-                        <input 
-                          type="date" 
-                          value={checkInDate}
-                          onChange={(e) => setCheckInDate(e.target.value)}
-                          min={new Date().toISOString().split('T')[0]}
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
-                          style={{ 
-                            color: 'transparent',
-                            colorScheme: 'light'
-                          }}
-                        />
-                        {checkInDate ? (
-                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
-                            <div className="flex flex-col leading-[0.6rem] sm:leading-tight">
-                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium whitespace-nowrap">
-                                {new Date(checkInDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }).replace('/', '-')}
-                              </span>
-                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium">
-                                {new Date(checkInDate + 'T00:00:00').getFullYear()}
-                              </span>
-                            </div>
-                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
-                            <div className="flex flex-col leading-tight">
-                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check</span>
-                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">In</span>
-                            </div>
-                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Check Out */}
-                      <div className="flex-1 min-w-0 relative">
-                        <input 
-                          type="date" 
-                          value={checkOutDate}
-                          onChange={(e) => setCheckOutDate(e.target.value)}
-                          min={checkInDate || new Date().toISOString().split('T')[0]}
-                          className="w-full h-[18px] sm:h-5 px-1 sm:px-2 py-0 text-[8px] sm:text-xs border border-gray-300 rounded-md focus:ring-2 focus:ring-golden-500 focus:border-golden-500 bg-white cursor-pointer font-medium [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:top-0"
-                          style={{ 
-                            color: 'transparent',
-                            colorScheme: 'light'
-                          }}
-                        />
-                        {checkOutDate ? (
-                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
-                            <div className="flex flex-col leading-[0.6rem] sm:leading-tight">
-                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium whitespace-nowrap">
-                                {new Date(checkOutDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }).replace('/', '-')}
-                              </span>
-                              <span className="text-[8px] sm:text-xs text-gray-900 font-medium">
-                                {new Date(checkOutDate + 'T00:00:00').getFullYear()}
-                              </span>
-                            </div>
-                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-between pointer-events-none px-1 sm:px-2">
-                            <div className="flex flex-col leading-tight">
-                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Check</span>
-                              <span className="text-[10px] sm:text-xs text-gray-900 font-medium">Out</span>
-                            </div>
-                            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Book Now Button - Matching Navbar Style */}
-                      <div className="flex-1 min-w-0">
-                        <button
-                          onClick={handleBookNow}
-                          className="w-full h-[18px] sm:h-5 flex items-center justify-center px-1.5 sm:px-3 bg-gradient-to-r from-dark-blue-800 to-golden-500 text-white font-medium text-[10px] sm:text-xs rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-golden-500 focus:ring-offset-2"
-                        >
-                          <span>Book Now</span>
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
                 
                 {/* Bottom Section: Image Gallery - Compact for Mobile */}

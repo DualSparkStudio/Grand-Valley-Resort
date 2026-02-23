@@ -1030,7 +1030,22 @@ const BookingForm: React.FC = () => {
                           }
                         }
                       }}
-                      disabled={!room?.is_active}
+                      onInput={(e) => {
+                        // Additional safety check on input event
+                        const input = e.target as HTMLInputElement
+                        const value = parseInt(input.value) || 0
+                        const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numChildren)
+                        
+                        if (value > maxAllowed) {
+                          input.value = maxAllowed.toString()
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                        }
+                      }}
+                      disabled={!room?.is_active || (room?.max_capacity && (2 + numChildren) >= room.max_capacity)}
                       min="0"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                       placeholder="0"
@@ -1128,7 +1143,22 @@ const BookingForm: React.FC = () => {
                           }
                         }
                       }}
-                      disabled={!room?.is_active}
+                      onInput={(e) => {
+                        // Additional safety check on input event
+                        const input = e.target as HTMLInputElement
+                        const value = parseInt(input.value) || 0
+                        const maxCapacity = room?.max_capacity || 10
+                        const maxAllowed = Math.max(0, maxCapacity - 2 - numExtraGuests)
+                        
+                        if (value > maxAllowed) {
+                          input.value = maxAllowed.toString()
+                          toast.error(`Cannot add more guests! Maximum capacity is ${maxCapacity} guests`, {
+                            duration: 4000,
+                            icon: '⚠️'
+                          })
+                        }
+                      }}
+                      disabled={!room?.is_active || (room?.max_capacity && (2 + numExtraGuests) >= room.max_capacity)}
                       min="0"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 text-gray-900"
                       placeholder="0"
