@@ -312,6 +312,11 @@ const RoomDetail: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-1">
+            {/* Room Title */}
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-900">{room.name}</h1>
+            </div>
+
             {/* Room Image Gallery */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
               {(() => {
@@ -432,12 +437,12 @@ const RoomDetail: React.FC = () => {
 
             {/* Room Information */}
             <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+              <div className="mb-6">
+                <p className="text-gray-600 text-lg">{room.description}</p>
+              </div>
+              
               <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{room.name}</h1>
-                  <p className="text-gray-600 text-lg">{room.description}</p>
-                </div>
-                <div className="text-right">
+                <div className="text-right ml-auto">
                   <div className="text-3xl font-bold text-blue-800">₹{room.price_per_night.toLocaleString()}</div>
                   <div className="text-gray-500">per night</div>
                 </div>

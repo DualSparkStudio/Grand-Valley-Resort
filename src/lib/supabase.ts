@@ -1824,9 +1824,10 @@ export const api = {
       .select('*')
       .eq('slug', slug)
       .eq('is_active', true)
-      .single()
+      .maybeSingle()
 
     if (error) throw error
+    if (!data) throw new Error('Room not found')
     return data
   },
 
@@ -1836,9 +1837,10 @@ export const api = {
       .from('rooms')
       .select('*')
       .eq('slug', slug)
-      .single()
+      .maybeSingle()
 
     if (error) throw error
+    if (!data) throw new Error('Room not found')
     return data
   },
 
