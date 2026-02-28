@@ -34,7 +34,6 @@ const ForgotPassword: React.FC = () => {
       })
 
       const result = await response.json()
-      console.log('Check email response:', result)
 
       if (result.success && result.exists) {
         toast.success('Email verified! Please enter your new password.')

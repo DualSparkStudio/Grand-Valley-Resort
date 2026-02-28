@@ -30,7 +30,6 @@ const AdminCalendar: React.FC = () => {
   // Reload data when refresh trigger changes
   useEffect(() => {
     if (refreshTrigger > 0) {
-      console.log('🔄 Refresh trigger changed, reloading data...');
       loadData()
     }
   }, [refreshTrigger])
@@ -38,7 +37,6 @@ const AdminCalendar: React.FC = () => {
 
   const loadData = async () => {
     try {
-      console.log('🔄 Loading data...');
       setLoading(true)
       const [bookingsData, roomsData, blockedDatesData] = await Promise.all([
         api.getBookings(),
@@ -46,12 +44,6 @@ const AdminCalendar: React.FC = () => {
         api.getBlockedDates()
       ])
       
-      console.log('📊 Data loaded:', {
-        bookings: bookingsData?.length || 0,
-        rooms: roomsData?.length || 0,
-        blockedDates: blockedDatesData?.length || 0
-      });
-
       // Show all blocked dates
       const filteredBlockedDates = blockedDatesData || []
 

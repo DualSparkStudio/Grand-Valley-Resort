@@ -64,15 +64,12 @@ const Contact: React.FC = () => {
     setIsSubmitting(true)
     
     try {
-      console.log('Submitting contact form...')
       
       // Get SMTP configuration from admin panel
       let smtpConfig = {}
       try {
         smtpConfig = await api.getSmtpConfig()
-        console.log('SMTP Config loaded:', smtpConfig ? 'Yes' : 'No')
       } catch (error) {
-        console.log('Failed to load SMTP config, will use environment variables')
         // Continue with empty smtpConfig (will use environment variables)
       }
       
@@ -89,10 +86,7 @@ const Contact: React.FC = () => {
         })
       })
 
-      console.log('Response status:', response.status)
-
       const responseData = await response.json()
-      console.log('Response data:', responseData)
 
       if (!response.ok) {
         throw new Error(responseData.error || responseData.details || response.statusText)

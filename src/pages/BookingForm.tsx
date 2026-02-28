@@ -82,23 +82,6 @@ const BookingForm: React.FC = () => {
     // Total with GST
     const total = subtotal + gst
     
-    // Debug logging (can be removed in production)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Price Calculation:', {
-        nights,
-        basePricePerNight,
-        extraGuestPrice,
-        childPrice,
-        gstPercentage,
-        baseAmount,
-        extraGuestsAmount,
-        childrenAmount,
-        subtotal,
-        gst,
-        total
-      })
-    }
-    
     return { subtotal, gst, total }
   }
 
@@ -727,7 +710,7 @@ const BookingForm: React.FC = () => {
         const emailResult = await EmailService.sendBookingConfirmation(booking, room)
         
         if (emailResult.success) {
-          console.log('✅ Confirmation emails sent successfully')
+          // Email sent successfully
         } else {
           console.warn('⚠️ Email notification failed:', emailResult.error)
         }

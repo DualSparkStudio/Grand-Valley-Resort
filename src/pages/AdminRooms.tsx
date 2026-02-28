@@ -257,9 +257,7 @@ const AdminRooms: React.FC = () => {
         await api.updateRoom(selectedRoomType.id, roomData);
         toast.success('Room type updated successfully!');
       } else {
-        console.log('Creating room type with data:', roomData);
         const result = await api.createRoom(roomData);
-        console.log('Room type created successfully:', result);
         toast.success('Room type added successfully!');
       }
 

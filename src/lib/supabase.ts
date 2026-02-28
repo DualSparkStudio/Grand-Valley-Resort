@@ -1676,13 +1676,6 @@ export const api = {
         mail_port: config.mail_port || '587'
       }
 
-      console.log('SMTP Config Retrieved:', {
-        hasUsername: !!result.mail_username,
-        hasPassword: !!result.mail_password,
-        server: result.mail_server,
-        port: result.mail_port
-      })
-
       return result
     } catch (error) {
       console.error('Error in getSmtpConfig:', error)
@@ -1703,13 +1696,6 @@ export const api = {
     mail_port: string
   }): Promise<void> {
     try {
-      console.log('Updating SMTP Config...', {
-        hasUsername: !!config.mail_username,
-        hasPassword: !!config.mail_password,
-        server: config.mail_server,
-        port: config.mail_port
-      })
-
       const settings = [
         { setting_key: 'mail_username', setting_value: config.mail_username, description: 'SMTP username/email' },
         { setting_key: 'mail_password', setting_value: config.mail_password, description: 'SMTP password/app password' },
@@ -1745,7 +1731,6 @@ export const api = {
               console.error(`Error updating ${setting.setting_key}:`, error)
               errorCount++
             } else {
-              console.log(`✓ Updated ${setting.setting_key}`)
               successCount++
             }
           } else {
@@ -1758,7 +1743,6 @@ export const api = {
               console.error(`Error inserting ${setting.setting_key}:`, error)
               errorCount++
             } else {
-              console.log(`✓ Inserted ${setting.setting_key}`)
               successCount++
             }
           }
@@ -1767,8 +1751,6 @@ export const api = {
           errorCount++
         }
       }
-
-      console.log(`SMTP Config Update Complete: ${successCount} succeeded, ${errorCount} failed`)
 
       if (errorCount > 0) {
         throw new Error(`Failed to update ${errorCount} SMTP setting(s). Check console for details.`)

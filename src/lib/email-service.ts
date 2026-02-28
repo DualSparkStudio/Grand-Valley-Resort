@@ -59,8 +59,6 @@ export class EmailService {
         throw new Error(errorMessage + errorDetails + errorHint)
       }
 
-      console.log('✅ Email notification successful:', result)
-
       return {
         success: true,
         customerEmailId: result.guestEmailId,

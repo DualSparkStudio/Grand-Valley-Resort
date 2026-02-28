@@ -166,8 +166,6 @@ const AdminProfile: React.FC = () => {
         toast.error('Please provide a valid SMTP port number (1-65535)')
         return
       }
-
-      console.log('Saving SMTP settings...')
       
       // Update SMTP configuration
       await api.updateSmtpConfig({

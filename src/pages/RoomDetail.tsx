@@ -59,8 +59,6 @@ const RoomDetail: React.FC = () => {
           const foundRoom = await api.getRoomBySlugAnyStatus(slug)
           
           // Room exists, set it (even if inactive - we'll just disable booking)
-          console.log('Room data loaded:', foundRoom)
-          console.log('Max capacity value:', foundRoom.max_capacity)
           setRoom(foundRoom)
         } catch (error) {
           // Room not found or error
