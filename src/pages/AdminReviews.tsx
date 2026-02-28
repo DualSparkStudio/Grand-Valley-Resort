@@ -170,15 +170,37 @@ const AdminReviews: React.FC = () => {
   }
 
   const handleDelete = async (review: Testimonial) => {
-    if (window.confirm(`Are you sure you want to delete the review by ${review.guest_name}?`)) {
-      try {
-        await api.deleteTestimonial(review.id)
-        toast.success('Review deleted successfully!')
-        loadReviews()
-      } catch (error) {
-        toast.error('Failed to delete review')
-      }
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete the review by {review.guest_name}?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                await api.deleteTestimonial(review.id)
+                toast.success('Review deleted successfully!')
+                loadReviews()
+              } catch (error) {
+                toast.error('Failed to delete review')
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   }
 
   const renderStars = (rating: number, interactive = false, onRate?: (rating: number) => void) => {

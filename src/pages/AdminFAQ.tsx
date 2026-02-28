@@ -116,26 +116,46 @@ const AdminFAQ: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this FAQ?')) {
-      return;
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete this FAQ?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                const { error } = await supabase
+                  .from('faqs')
+                  .delete()
+                  .eq('id', id);
 
-    try {
-      const { error } = await supabase
-        .from('faqs')
-        .delete()
-        .eq('id', id);
+                if (error) {
+                  toast.error('Failed to delete FAQ');
+                  return;
+                }
 
-      if (error) {
-        toast.error('Failed to delete FAQ');
-        return;
-      }
-
-      toast.success('FAQ deleted successfully');
-      fetchFAQs();
-    } catch (error) {
-      toast.error('Failed to delete FAQ');
-    }
+                toast.success('FAQ deleted successfully');
+                fetchFAQs();
+              } catch (error) {
+                toast.error('Failed to delete FAQ');
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   };
 
   const handleCancel = () => {

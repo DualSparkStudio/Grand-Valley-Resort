@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { api } from '../lib/supabase'
 
 interface AvailabilityCalendarProps {
@@ -237,10 +238,10 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
       const blockedConflicts = conflictingEvents.filter(event => event.extendedProps?.type === 'blocked')
       
       if (blockedConflicts.length > 0) {
-        alert('Cannot book this date range because it includes blocked dates. Please select a different range.')
+        toast.error('Cannot book this date range because it includes blocked dates. Please select a different range.')
         return
       } else {
-        alert('Cannot book this date range because it conflicts with existing bookings. Please select a different range.')
+        toast.error('Cannot book this date range because it conflicts with existing bookings. Please select a different range.')
         return
       }
     }
@@ -250,7 +251,7 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
     today.setHours(0, 0, 0, 0)
     const start = new Date(startDate)
     if (start < today) {
-      alert('Cannot book dates in the past. Please select future dates.')
+      toast.error('Cannot book dates in the past. Please select future dates.')
       return
     }
     

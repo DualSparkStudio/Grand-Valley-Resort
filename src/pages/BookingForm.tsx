@@ -697,6 +697,7 @@ const BookingForm: React.FC = () => {
       // Create booking only after successful payment
       const bookingData = {
         room_id: room.id,
+        room_name: room.name, // Store room name for preservation after deletion
         check_in_date: selectedDates.checkIn,
         check_out_date: selectedDates.checkOut,
         num_guests: totalGuests,

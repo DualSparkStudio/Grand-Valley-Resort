@@ -146,29 +146,50 @@ const AdminFeatures: React.FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this feature?')) return;
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete this feature?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                const { data, error } = await supabase
+                  .from('features')
+                  .delete()
+                  .eq('id', id)
+                  .select();
 
-    try {
-      
-      const { data, error } = await supabase
-        .from('features')
-        .delete()
-        .eq('id', id)
-        .select(); // Add select to see what was deleted
-
-      if (error) {
-        throw error;
-      }
-      
-      toast.success('Feature deleted successfully');
-      fetchFeatures();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(`Failed to delete feature: ${error.message}`);
-      } else {
-        toast.error('Failed to delete feature');
-      }
-    }
+                if (error) {
+                  throw error;
+                }
+                
+                toast.success('Feature deleted successfully');
+                fetchFeatures();
+              } catch (error) {
+                if (error instanceof Error) {
+                  toast.error(`Failed to delete feature: ${error.message}`);
+                } else {
+                  toast.error('Failed to delete feature');
+                }
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   };
 
   const resetForm = () => {

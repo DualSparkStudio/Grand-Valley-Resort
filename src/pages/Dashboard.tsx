@@ -102,41 +102,64 @@ const Dashboard: React.FC = () => {
   }
 
   const handleCancelBooking = async (bookingId: number) => {
-    if (window.confirm('Are you sure you want to cancel this booking?')) {
-      try {
-        // Get the booking details before cancelling
-        const booking = bookings.find(b => b.id === bookingId)
-        if (!booking) {
-          toast.error('Booking not found')
-          return
-        }
+    // Show confirmation toast with action buttons
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to cancel this booking?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                // Get the booking details before cancelling
+                const booking = bookings.find(b => b.id === bookingId)
+                if (!booking) {
+                  toast.error('Booking not found')
+                  return
+                }
 
-        // Cancel the booking
-        const cancelledBooking = await api.cancelBooking(bookingId)
-        
-        // Send cancellation email notification
-        try {
-          // Get room details
-          const room = await api.getRoom(booking.room_id)
-          
-          // Send cancellation email
-          const { EmailService } = await import('../lib/email-service')
-          const emailResult = await EmailService.sendBookingCancellation(cancelledBooking, room)
-          
-          if (emailResult.success) {
-            toast.success('Booking cancelled and notification emails sent!')
-          } else {
-            toast.error('Booking cancelled but email notification failed.')
-          }
-        } catch (emailError) {
-          toast.error('Booking cancelled but email notification failed.')
-        }
-        
-        loadBookings() // Reload bookings
-      } catch (error) {
-        toast.error('Failed to cancel booking. Please try again.')
-      }
-    }
+                // Cancel the booking
+                const cancelledBooking = await api.cancelBooking(bookingId)
+                
+                // Send cancellation email notification
+                try {
+                  // Get room details
+                  const room = await api.getRoom(booking.room_id)
+                  
+                  // Send cancellation email
+                  const { EmailService } = await import('../lib/email-service')
+                  const emailResult = await EmailService.sendBookingCancellation(cancelledBooking, room)
+                  
+                  if (emailResult.success) {
+                    toast.success('Booking cancelled and notification emails sent!')
+                  } else {
+                    toast.error('Booking cancelled but email notification failed.')
+                  }
+                } catch (emailError) {
+                  toast.error('Booking cancelled but email notification failed.')
+                }
+                
+                loadBookings() // Reload bookings
+              } catch (error) {
+                toast.error('Failed to cancel booking. Please try again.')
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Yes, Cancel
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
+          >
+            No, Keep It
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   }
 
   if (loading) {
@@ -277,16 +300,16 @@ const Dashboard: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <img
-                            src={booking.room?.image_url}
-                            alt={booking.room?.name}
+                            src={booking.room?.image_url || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+                            alt={booking.room?.name || booking.room_name}
                             className="w-12 h-12 object-cover rounded-lg mr-4"
                           />
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {booking.room?.name}
+                              {booking.room?.name || (booking.room_name ? `${booking.room_name} (Deleted)` : 'Unknown Room')}
                             </div>
                             <div className="text-sm text-gray-500">
-                              Room {booking.room?.room_number}
+                              {booking.room?.room_number ? `Room ${booking.room.room_number}` : ''}
                             </div>
                           </div>
                         </div>

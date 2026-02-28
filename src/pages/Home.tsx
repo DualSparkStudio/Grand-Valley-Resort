@@ -129,24 +129,8 @@ const Home: React.FC = () => {
         setRoomsLoading(true)
         const data = await api.getRooms()
         
-        // Always generate new cryptic slugs for security (replace predictable slugs)
-        const roomsWithSlugs = await Promise.all(
-          data.slice(0, 3).map(async (room) => {
-            try {
-              // Generate a new cryptic slug for every room
-              const crypticSlug = await api.generateCrypticSlug(room.name, room.id)
-              
-              // Update the room in the database with the new cryptic slug
-              await api.updateRoom(room.id, { slug: crypticSlug })
-              
-              return { ...room, slug: crypticSlug }
-            } catch (error) {
-              return room
-            }
-          })
-        )
-        
-        setRooms(roomsWithSlugs)
+        // Just use the first 3 rooms with their existing slugs
+        setRooms(data.slice(0, 3))
       } catch (error) {
       } finally {
         setRoomsLoading(false)

@@ -138,7 +138,9 @@ const AdminBookings: React.FC = () => {
         subtotalAmount: booking.subtotal_amount,
         gstAmount: booking.gst_amount,
         gstPercentage: booking.gst_percentage,
-        roomName: room ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) : 'Unknown Room',
+        roomName: room 
+          ? (room.is_deleted ? `${room.name} (Deleted)` : room.name) 
+          : (booking.room_name ? `${booking.room_name} (Deleted)` : 'Unknown Room'),
         source: 'Website',
         special_requests: booking.special_requests,
         originalBooking: booking,

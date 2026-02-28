@@ -78,26 +78,11 @@ const Rooms: React.FC = () => {
       const data = await api.getRooms()
       setRoomTypes(data || [])
       
-      // Always generate new cryptic slugs for security (replace predictable slugs)
-      const slugPromises = (data || []).map(async (room) => {
-        try {
-          // Generate a new cryptic slug for every room
-          const crypticSlug = await api.generateCrypticSlug(room.name, room.id)
-          
-          // Update the room in the database with the new cryptic slug
-          await api.updateRoom(room.id, { slug: crypticSlug })
-          
-          return { roomId: room.id, slug: crypticSlug }
-        } catch (error) {
-          // Fallback to simple slug if cryptic generation fails
-          const fallbackSlug = api.generateSlug(room.name)
-          return { roomId: room.id, slug: fallbackSlug }
+      // Use existing slugs from the database
+      const slugMap = (data || []).reduce((acc, room) => {
+        if (room.slug) {
+          acc[room.id] = room.slug
         }
-      })
-      
-      const slugResults = await Promise.all(slugPromises)
-      const slugMap = slugResults.reduce((acc, { roomId, slug }) => {
-        acc[roomId] = slug
         return acc
       }, {} as { [key: number]: string })
       

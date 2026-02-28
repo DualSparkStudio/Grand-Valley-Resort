@@ -131,27 +131,46 @@ const AdminHouseRules: React.FC = () => {
       return;
     }
     
-    if (!window.confirm('Are you sure you want to delete this house rule?')) {
-      return;
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete this house rule?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                const { error } = await supabase
+                  .from('house_rules')
+                  .delete()
+                  .eq('id', id);
 
-    try {
-      
-      const { error } = await supabase
-        .from('house_rules')
-        .delete()
-        .eq('id', id);
+                if (error) {
+                  toast.error(`Failed to delete house rule: ${error.message}`);
+                  return;
+                }
 
-      if (error) {
-        toast.error(`Failed to delete house rule: ${error.message}`);
-        return;
-      }
-
-      toast.success('House rule deleted successfully');
-      fetchHouseRules();
-    } catch (error) {
-      toast.error('Failed to delete house rule');
-    }
+                toast.success('House rule deleted successfully');
+                fetchHouseRules();
+              } catch (error) {
+                toast.error('Failed to delete house rule');
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   };
 
   const handleCancel = () => {

@@ -54,17 +54,38 @@ const AdminFacilities: React.FC = () => {
   }
 
   const deleteFacility = async (facilityId: number) => {
-    if (!confirm('Are you sure you want to delete this facility? This action cannot be undone.')) {
-      return
-    }
-
-    try {
-      await api.deleteFacility(facilityId)
-      await loadFacilities()
-      toast.success('Facility deleted successfully')
-    } catch (error) {
-      toast.error('Failed to delete facility')
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete this facility?</p>
+        <p className="text-sm text-gray-600">This action cannot be undone.</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                await api.deleteFacility(facilityId)
+                await loadFacilities()
+                toast.success('Facility deleted successfully')
+              } catch (error) {
+                toast.error('Failed to delete facility')
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      icon: '⚠️'
+    })
   }
 
   const getStatusColor = (isActive: boolean) => {

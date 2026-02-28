@@ -280,38 +280,65 @@ const AdminRooms: React.FC = () => {
     const room = roomTypes.find(r => r.id === roomId);
     const roomName = room?.name || 'this room';
     
-    if (!window.confirm(`Are you sure you want to delete "${roomName}"?\n\nThis will:\n- Delete the room permanently\n- Remove all blocked dates for this room\n- This action cannot be undone\n\nNote: Rooms with existing bookings cannot be deleted.`)) {
-      return;
-    }
-
-    try {
-      const loadingToast = toast.loading('Deleting room...');
-      await api.deleteRoom(roomId);
-      toast.dismiss(loadingToast);
-      toast.success(`${roomName} deleted successfully!`);
-      await loadData();
-    } catch (error: any) {
-      console.error('Delete room error:', error);
-      
-      // Check if it's a foreign key constraint error
-      // PostgreSQL error code 23503 = foreign key violation
-      if (
-        error?.code === '23503' || 
-        error?.code === 23503 ||
-        error?.details?.includes('still referenced') ||
-        error?.message?.includes('foreign key constraint') ||
-        error?.message?.includes('violates foreign')
-      ) {
-        toast.error('Cannot delete this room type because it has existing bookings. Please deactivate it instead or delete the bookings first.', {
-          duration: 6000
-        });
-      } else {
-        const errorMessage = error?.message || error?.details || 'Unknown error';
-        toast.error(`Failed to delete room type: ${errorMessage}`, {
-          duration: 4000
-        });
-      }
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Are you sure you want to delete "{roomName}"?</p>
+        <p className="text-sm text-gray-600">This will:</p>
+        <ul className="text-sm text-gray-600 list-disc list-inside">
+          <li>Delete the room permanently</li>
+          <li>Remove all blocked dates for this room</li>
+          <li>This action cannot be undone</li>
+        </ul>
+        <p className="text-xs text-orange-600">Note: Rooms with existing bookings cannot be deleted.</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                const loadingToast = toast.loading('Deleting room...');
+                await api.deleteRoom(roomId);
+                toast.dismiss(loadingToast);
+                toast.success(`${roomName} deleted successfully!`);
+                await loadData();
+              } catch (error: any) {
+                console.error('Delete room error:', error);
+                
+                // Check if it's a foreign key constraint error
+                // PostgreSQL error code 23503 = foreign key violation
+                if (
+                  error?.code === '23503' || 
+                  error?.code === 23503 ||
+                  error?.details?.includes('still referenced') ||
+                  error?.message?.includes('foreign key constraint') ||
+                  error?.message?.includes('violates foreign')
+                ) {
+                  toast.error('Cannot delete this room type because it has existing bookings. Please deactivate it instead or delete the bookings first.', {
+                    duration: 6000
+                  });
+                } else {
+                  const errorMessage = error?.message || error?.details || 'Unknown error';
+                  toast.error(`Failed to delete room type: ${errorMessage}`, {
+                    duration: 4000
+                  });
+                }
+              }
+            }}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 15000,
+      icon: '⚠️'
+    })
   };
 
   const handleToggleRoomStatus = async (roomId: number, currentStatus: boolean) => {

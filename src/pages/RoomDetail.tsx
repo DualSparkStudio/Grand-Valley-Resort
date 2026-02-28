@@ -9,6 +9,7 @@ import {
     UsersIcon
 } from '@heroicons/react/24/outline'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import AvailabilityCalendar from '../components/AvailabilityCalendar'
 import HouseRules from '../components/HouseRules'
@@ -171,17 +172,17 @@ const RoomDetail: React.FC = () => {
   const handleBooking = () => {
     // Check if room is inactive
     if (room && !room.is_active) {
-      alert('This room is currently unavailable for booking. Please contact us for more information.')
+      toast.error('This room is currently unavailable for booking. Please contact us for more information.')
       return
     }
 
     if (!selectedDates.checkIn || !selectedDates.checkOut) {
-      alert('Please select check-in and check-out dates')
+      toast.error('Please select check-in and check-out dates')
       return
     }
 
     if (availableRooms.length === 0) {
-      alert('No rooms available for selected dates')
+      toast.error('No rooms available for selected dates')
       return
     }
 

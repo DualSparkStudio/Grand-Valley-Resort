@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useMaintenance } from '../contexts/MaintenanceContext';
 
 const AdminMaintenance: React.FC = () => {
@@ -6,25 +7,50 @@ const AdminMaintenance: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleToggle = async () => {
-    const confirmed = window.confirm(
-      isMaintenanceMode 
-        ? 'Are you sure you want to disable maintenance mode? This will make the site accessible to all visitors.'
-        : 'Are you sure you want to enable maintenance mode? This will show the maintenance page to all visitors except admins.'
-    );
-    
-    if (confirmed) {
-      try {
-        setIsSaving(true);
-        await toggleMaintenanceMode();
-        // Refresh to ensure it's saved
-        await refreshMaintenanceMode();
-      } catch (error) {
-        alert('Failed to update maintenance mode. Please try again.');
-        console.error('Error toggling maintenance mode:', error);
-      } finally {
-        setIsSaving(false);
-      }
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">
+          {isMaintenanceMode 
+            ? 'Are you sure you want to disable maintenance mode?' 
+            : 'Are you sure you want to enable maintenance mode?'}
+        </p>
+        <p className="text-sm text-gray-600">
+          {isMaintenanceMode
+            ? 'This will make the site accessible to all visitors.'
+            : 'This will show the maintenance page to all visitors except admins.'}
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id)
+              try {
+                setIsSaving(true);
+                await toggleMaintenanceMode();
+                await refreshMaintenanceMode();
+                toast.success(`Maintenance mode ${isMaintenanceMode ? 'disabled' : 'enabled'} successfully!`)
+              } catch (error) {
+                toast.error('Failed to update maintenance mode. Please try again.');
+                console.error('Error toggling maintenance mode:', error);
+              } finally {
+                setIsSaving(false);
+              }
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+          >
+            Confirm
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 15000,
+      icon: '⚠️'
+    })
   };
 
   return (

@@ -70,7 +70,8 @@ export interface Room {
 
 export interface Booking {
   id: number
-  room_id: number
+  room_id: number | null // Can be null if room is deleted
+  room_name?: string // Preserved room name even after deletion
   check_in_date: string
   check_out_date: string
   num_guests: number
@@ -352,14 +353,11 @@ export const api = {
   },
 
   async deleteRoom(id: number) {
-    // Soft delete: mark as deleted instead of actually deleting
+    // Hard delete: actually remove from database
+    // Room name is preserved in bookings table, so old bookings will show "Room Name (deleted)"
     const { error } = await supabase
       .from('rooms')
-      .update({ 
-        is_deleted: true, 
-        deleted_at: new Date().toISOString(),
-        is_active: false // Also deactivate the room
-      })
+      .delete()
       .eq('id', id)
 
     if (error) throw error

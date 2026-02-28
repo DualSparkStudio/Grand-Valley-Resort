@@ -167,15 +167,26 @@ function App() {
             }}
           >
             <Toaster
-              position="top-right"
+              position="top-center"
               toastOptions={{
                 duration: 4000,
                 style: {
-                  background: '#363636',
-                  color: '#fff',
+                  background: '#f5f5f5',
+                  color: '#333333',
+                  border: '1px solid #e0e0e0',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                 },
                 success: {
                   duration: 3000,
+                  style: {
+                    background: '#f5f5f5',
+                    color: '#0f5132',
+                    border: '1px solid #badbcc',
+                  },
                   iconTheme: {
                     primary: '#10b981',
                     secondary: '#fff',
@@ -183,6 +194,11 @@ function App() {
                 },
                 error: {
                   duration: 4000,
+                  style: {
+                    background: '#f5f5f5',
+                    color: '#842029',
+                    border: '1px solid #f5c2c7',
+                  },
                   iconTheme: {
                     primary: '#ef4444',
                     secondary: '#fff',
