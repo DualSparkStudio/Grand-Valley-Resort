@@ -988,3 +988,26 @@ html {
 .fc .fc-daygrid-day.fc-day-selected {
   @apply bg-white;
 }
+
+/* Fix for date input visibility */
+input[type="date"] {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+}
+
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+input[type="date"]:focus {
+  outline: none;
+}

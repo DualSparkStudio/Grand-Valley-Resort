@@ -547,25 +547,86 @@ export const api = {
 
   // Dashboard Stats
   async getDashboardStats() {
-    const [
-      { count: totalBookings },
-      { count: confirmedBookings },
-      { count: pendingBookings },
-      { count: totalRooms },
-      { count: totalUsers }
-    ] = await Promise.all([
-      supabase.from('bookings').select('*', { count: 'exact', head: true }),
-      supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'confirmed'),
-      supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'pending'),
-      supabase.from('rooms').select('*', { count: 'exact', head: true }).eq('is_active', true),
-      supabase.from('users').select('*', { count: 'exact', head: true })
-    ])
+    try {
+      const [
+        { count: totalBookings },
+        { count: confirmedBookings },
+        { count: pendingBookings },
+        { data: roomsData, error: roomsError },
+        { count: totalUsers },
+        { data: bookingsData, error: bookingsError }
+      ] = await Promise.all([
+        supabase.from('bookings').select('*', { count: 'exact', head: true }),
+        supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'confirmed'),
+        supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'pending'),
+        supabase.from('rooms').select('id, quantity, is_deleted, is_active').eq('is_active', true),
+        supabase.from('users').select('*', { count: 'exact', head: true }),
+        supabase.from('bookings').select('room_id, check_in_date, check_out_date, booking_status').in('booking_status', ['confirmed', 'pending'])
+      ])
 
-    return {
-      totalBookings: totalBookings || 0,
-      confirmedBookings: confirmedBookings || 0,
-      pendingBookings: pendingBookings || 0,
-      totalRooms: totalRooms || 0,
+      if (roomsError) {
+        console.error('Error fetching rooms:', roomsError)
+      }
+      if (bookingsError) {
+        console.error('Error fetching bookings:', bookingsError)
+      }
+
+      // Filter out soft-deleted rooms
+      const activeRooms = roomsData?.filter(room => !room.is_deleted) || []
+
+      // Calculate total room types and total rooms
+      const totalRoomTypes = activeRooms.length
+      const totalRooms = activeRooms.reduce((sum, room) => sum + (room.quantity || 1), 0)
+
+      // Calculate currently occupied rooms (bookings that include today)
+      const today = new Date().toISOString().split('T')[0]
+      const occupiedRoomsCount: { [key: number]: number } = {}
+
+      bookingsData?.forEach(booking => {
+        if (booking.check_in_date <= today && booking.check_out_date > today) {
+          occupiedRoomsCount[booking.room_id] = (occupiedRoomsCount[booking.room_id] || 0) + 1
+        }
+      })
+
+      // Calculate available rooms
+      let availableRooms = 0
+      let availableRoomTypes = 0
+
+      activeRooms.forEach(room => {
+        const occupied = occupiedRoomsCount[room.id] || 0
+        const available = (room.quantity || 1) - occupied
+        availableRooms += available
+        if (available > 0) {
+          availableRoomTypes++
+        }
+      })
+
+      return {
+        totalBookings: totalBookings || 0,
+        confirmedBookings: confirmedBookings || 0,
+        pendingBookings: pendingBookings || 0,
+        totalRooms: totalRooms,
+        totalRoomTypes: totalRoomTypes,
+        availableRooms: availableRooms,
+        availableRoomTypes: availableRoomTypes,
+        totalUsers: totalUsers || 0
+      }
+    } catch (error) {
+      console.error('Error in getDashboardStats:', error)
+      return {
+        totalBookings: 0,
+        confirmedBookings: 0,
+        pendingBookings: 0,
+        totalRooms: 0,
+        totalRoomTypes: 0,
+        availableRooms: 0,
+        availableRoomTypes: 0,
+        totalUsers: 0
+      }
+    }
+  },
+      availableRooms: availableRooms,
+      availableRoomTypes: availableRoomTypes,
       totalUsers: totalUsers || 0
     }
   },

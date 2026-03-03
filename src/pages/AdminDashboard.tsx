@@ -23,9 +23,16 @@ const AdminDashboard: React.FC = () => {
     totalRevenue: 0,
     activeBookings: 0,
     totalRooms: 0,
+    totalRoomTypes: 0,
+    availableRooms: 0,
+    availableRoomTypes: 0,
     confirmedBookings: 0
   })
   const [loading, setLoading] = useState(true)
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: new Date().toISOString().split('T')[0]
+  })
 
   useEffect(() => {
     loadDashboardData()
@@ -34,22 +41,39 @@ const AdminDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true)
+      console.log('Loading dashboard with date range:', dateRange.startDate, 'to', dateRange.endDate)
       const [statsData] = await Promise.all([
-        api.getDashboardStats(),
+        api.getDashboardStats(dateRange.startDate, dateRange.endDate),
         api.getBookings()
       ])
+      console.log('Stats received:', statsData)
       setStats({
         totalUsers: statsData?.totalUsers ?? 0,
         totalBookings: statsData?.totalBookings ?? 0,
         totalRevenue: (statsData as any)?.totalRevenue ?? 0,
         activeBookings: (statsData as any)?.activeBookings ?? 0,
         totalRooms: statsData?.totalRooms ?? 0,
+        totalRoomTypes: statsData?.totalRoomTypes ?? 0,
+        availableRooms: statsData?.availableRooms ?? 0,
+        availableRoomTypes: statsData?.availableRoomTypes ?? 0,
         confirmedBookings: statsData?.confirmedBookings ?? 0
       })
     } catch (error) {
+      console.error('Error loading dashboard:', error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleDateRangeChange = (field: 'startDate' | 'endDate', value: string) => {
+    setDateRange(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const applyDateRange = () => {
+    loadDashboardData()
   }
 
   const StatCard: React.FC<{
@@ -129,7 +153,7 @@ const AdminDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Welcome back, Admin!</h1>
               <p className="text-gray-600 mt-1">Here's what's happening at Resort Booking System today</p>
@@ -149,6 +173,75 @@ const AdminDashboard: React.FC = () => {
                 <EyeIcon className="h-4 w-4 mr-2" />
                 View Website
               </Link>
+            </div>
+          </div>
+
+          {/* Date Range Selector */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <CalendarIcon className="h-5 w-5 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">Check Availability:</span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600 font-medium">From:</label>
+                <input
+                  type="date"
+                  value={dateRange.startDate}
+                  onChange={(e) => handleDateRangeChange('startDate', e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white min-w-[150px] cursor-pointer"
+                  style={{ colorScheme: 'light' }}
+                  required
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600 font-medium">To:</label>
+                <input
+                  type="date"
+                  value={dateRange.endDate}
+                  onChange={(e) => handleDateRangeChange('endDate', e.target.value)}
+                  min={dateRange.startDate}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white min-w-[150px] cursor-pointer"
+                  style={{ colorScheme: 'light' }}
+                  required
+                />
+              </div>
+
+              <button
+                onClick={applyDateRange}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+              >
+                Apply
+              </button>
+
+              <button
+                onClick={() => {
+                  const today = new Date().toISOString().split('T')[0]
+                  setDateRange({ startDate: today, endDate: today })
+                  setTimeout(() => loadDashboardData(), 100)
+                }}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors duration-200"
+              >
+                Today
+              </button>
+
+              <button
+                onClick={() => {
+                  const today = new Date()
+                  const nextWeek = new Date(today)
+                  nextWeek.setDate(today.getDate() + 7)
+                  setDateRange({
+                    startDate: today.toISOString().split('T')[0],
+                    endDate: nextWeek.toISOString().split('T')[0]
+                  })
+                  setTimeout(() => loadDashboardData(), 100)
+                }}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors duration-200"
+              >
+                Next 7 Days
+              </button>
             </div>
           </div>
         </div>
@@ -182,13 +275,80 @@ const AdminDashboard: React.FC = () => {
             trend="2 pending"
             trendUp={false}
           />
-          <StatCard
-            title="Total Rooms"
-            value={stats.totalRooms}
-            solidIcon={BuildingOfficeIcon}
-            color="text-orange-600"
-            bgColor="bg-orange-100"
-          />
+          
+          {/* Total Rooms Card with dual metrics */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Rooms</p>
+              </div>
+              <div className="relative bg-orange-100 rounded-full p-4">
+                <BuildingOfficeIcon className="h-8 w-8 text-orange-600" />
+                <div className="absolute inset-0 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-gray-600">Room Types:</span>
+                <span className="text-2xl font-bold text-gray-900">{stats.totalRoomTypes}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-gray-600">Total Rooms:</span>
+                <span className="text-2xl font-bold text-gray-900">{stats.totalRooms}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Availability Stats - New Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Available Rooms Card */}
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-xl shadow-sm border border-emerald-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-emerald-800 mb-1">
+                  {dateRange.startDate === dateRange.endDate 
+                    ? `Available on ${new Date(dateRange.startDate).toLocaleDateString()}`
+                    : 'Available in Range'}
+                </p>
+              </div>
+              <div className="relative bg-emerald-200 rounded-full p-4">
+                <CheckCircleIcon className="h-8 w-8 text-emerald-700" />
+                <div className="absolute inset-0 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-emerald-700">Room Types:</span>
+                <span className="text-2xl font-bold text-emerald-900">{stats.availableRoomTypes}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-emerald-700">Rooms:</span>
+                <span className="text-2xl font-bold text-emerald-900">{stats.availableRooms}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Occupancy Rate Card */}
+          <div className="bg-gradient-to-br from-indigo-50 to-blue-100 rounded-xl shadow-sm border border-indigo-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-indigo-800 mb-1">Occupancy Rate</p>
+                <p className="text-3xl font-bold text-indigo-900 mb-2">
+                  {stats.totalRooms > 0 
+                    ? Math.round(((stats.totalRooms - stats.availableRooms) / stats.totalRooms) * 100)
+                    : 0}%
+                </p>
+                <div className="flex items-center text-sm text-indigo-700">
+                  <span>{stats.totalRooms - stats.availableRooms} of {stats.totalRooms} occupied</span>
+                </div>
+              </div>
+              <div className="relative bg-indigo-200 rounded-full p-4">
+                <BuildingOfficeIcon className="h-8 w-8 text-indigo-700" />
+                <div className="absolute inset-0 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Main Content Grid */}
