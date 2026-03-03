@@ -117,20 +117,24 @@ const AdminDashboard: React.FC = () => {
   }> = ({ title, description, icon: Icon, href, color, bgColor }) => (
     <Link
       to={href}
-      className="group bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-blue-200 transition-all duration-200"
+      className="group bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-200 h-full"
     >
-      <div className="flex items-start">
-        <div className={`${bgColor} rounded-lg p-3 group-hover:scale-110 transition-transform duration-200`}>
-          <Icon className={`h-6 w-6 ${color}`} />
+      <div className="flex flex-col h-full">
+        <div className="flex items-start gap-4 mb-4">
+          <div className={`${bgColor} rounded-xl p-3 group-hover:scale-110 transition-transform duration-200 flex-shrink-0`}>
+            <Icon className={`h-6 w-6 ${color}`} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 mb-2">
+              {title}
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+          </div>
         </div>
-        <div className="ml-4 flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
-            {title}
-          </h3>
-          <p className="text-sm text-gray-600 mt-1">{description}</p>
-          <div className="mt-3 flex items-center text-sm text-blue-600 group-hover:text-blue-700">
+        <div className="mt-auto pt-4 border-t border-gray-100">
+          <div className="flex items-center text-sm font-medium text-blue-600 group-hover:text-blue-700 group-hover:translate-x-1 transition-all duration-200">
             <span>Manage now</span>
-            <ArrowTrendingUpIcon className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform duration-200" />
+            <ArrowTrendingUpIcon className="h-4 w-4 ml-2 rotate-90" />
           </div>
         </div>
       </div>
@@ -275,7 +279,42 @@ const AdminDashboard: React.FC = () => {
             trend="2 pending"
             trendUp={false}
           />
-          
+
+          {/* Booking Status Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Booking Status</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-xs text-gray-600">Confirmed</span>
+                </div>
+                <span className="text-lg font-bold text-gray-900">{stats.confirmedBookings}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                  <span className="text-xs text-gray-600">Pending</span>
+                </div>
+                <span className="text-lg font-bold text-gray-900">{stats.activeBookings}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <span className="text-xs text-gray-600">Completed</span>
+                </div>
+                <span className="text-lg font-bold text-gray-900">{stats.totalBookings - stats.confirmedBookings - stats.activeBookings}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Availability Stats - New Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Rooms Card with dual metrics */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between mb-4">
@@ -298,10 +337,7 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Availability Stats - New Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Available Rooms Card */}
           <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-xl shadow-sm border border-emerald-200 p-6 hover:shadow-md transition-shadow duration-200">
             <div className="flex items-center justify-between mb-4">
@@ -349,129 +385,96 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* System Status Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">System Status</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-600">Website</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-xs font-semibold text-green-600">Online</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-600">Booking</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-xs font-semibold text-green-600">Active</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-600">Payment</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-xs font-semibold text-green-600">Connected</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          {/* Quick Actions */}
-          <div className="lg:col-span-2">
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Quick Actions</h2>
-              <p className="text-gray-600">Manage your resort operations efficiently</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <QuickActionCard
-                title="Manage Bookings"
-                description="View, update, and track all guest reservations"
-                icon={CalendarIcon}
-                href="/admin/bookings"
-                color="text-blue-600"
-                bgColor="bg-blue-100"
-              />
-              <QuickActionCard
-                title="Room Management"
-                description="Update room details, availability, and pricing"
-                icon={BuildingOfficeIcon}
-                href="/admin/rooms"
-                color="text-green-600"
-                bgColor="bg-green-100"
-              />
-              <QuickActionCard
-                title="Guest Reviews"
-                description="Monitor and respond to customer feedback"
-                icon={StarIcon}
-                href="/admin/reviews"
-                color="text-yellow-600"
-                bgColor="bg-yellow-100"
-              />
+          {/* Today's Priority */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl border border-blue-200 p-6">
+            <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center">
+              <ClockIcon className="h-5 w-5 mr-2" />
+              Today's Priority
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 text-sm text-blue-800">
+                <CheckCircleIcon className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <span>Check new bookings</span>
+              </div>
+              <div className="flex items-start gap-3 text-sm text-blue-800">
+                <CheckCircleIcon className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <span>Review room availability</span>
+              </div>
+              <div className="flex items-start gap-3 text-sm text-blue-800">
+                <CheckCircleIcon className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <span>Respond to reviews</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <div className="space-y-6">
-            
-            {/* Booking Status Overview */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Status</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-green-500 mr-3"></div>
-                    <span className="text-sm font-medium text-gray-700">Confirmed</span>
-                  </div>
-                  <span className="text-sm font-bold text-gray-900">{stats.confirmedBookings}</span>
+          {/* Quick Links */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+              <div className="w-1 h-5 bg-blue-600 rounded-full mr-3"></div>
+              Quick Links
+            </h3>
+            <div className="space-y-3">
+              <Link to="/admin/bookings" className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 transition-colors group">
+                <div className="flex items-center gap-3">
+                  <CalendarIcon className="h-5 w-5 text-blue-600" />
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600">Manage Bookings</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500 mr-3"></div>
-                    <span className="text-sm font-medium text-gray-700">Pending</span>
-                  </div>
-                  <span className="text-sm font-bold text-gray-900">{stats.activeBookings}</span>
+                <ArrowTrendingUpIcon className="h-4 w-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all rotate-90" />
+              </Link>
+              <Link to="/admin/rooms" className="flex items-center justify-between p-3 rounded-lg hover:bg-green-50 transition-colors group">
+                <div className="flex items-center gap-3">
+                  <BuildingOfficeIcon className="h-5 w-5 text-green-600" />
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-green-600">Room Management</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 rounded-full bg-blue-500 mr-3"></div>
-                    <span className="text-sm font-medium text-gray-700">Completed</span>
-                  </div>
-                  <span className="text-sm font-bold text-gray-900">{stats.totalBookings - stats.confirmedBookings - stats.activeBookings}</span>
+                <ArrowTrendingUpIcon className="h-4 w-4 text-gray-400 group-hover:text-green-600 group-hover:translate-x-1 transition-all rotate-90" />
+              </Link>
+              <Link to="/admin/reviews" className="flex items-center justify-between p-3 rounded-lg hover:bg-yellow-50 transition-colors group">
+                <div className="flex items-center gap-3">
+                  <StarIcon className="h-5 w-5 text-yellow-600" />
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Guest Reviews</span>
                 </div>
-              </div>
+                <ArrowTrendingUpIcon className="h-4 w-4 text-gray-400 group-hover:text-yellow-600 group-hover:translate-x-1 transition-all rotate-90" />
+              </Link>
             </div>
-
-            {/* Today's Tasks */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
-                <ClockIcon className="h-5 w-5 mr-2" />
-                Today's Priority
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center text-sm text-blue-800">
-                  <CheckCircleIcon className="h-4 w-4 mr-2 text-blue-600" />
-                  Check new bookings
-                </div>
-                <div className="flex items-center text-sm text-blue-800">
-                  <CheckCircleIcon className="h-4 w-4 mr-2 text-blue-600" />
-                  Review room availability
-                </div>
-                <div className="flex items-center text-sm text-blue-800">
-                  <CheckCircleIcon className="h-4 w-4 mr-2 text-blue-600" />
-                  Respond to reviews
-                </div>
-
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Website Status</span>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-sm font-medium text-green-600">Online</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Booking System</span>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-sm font-medium text-green-600">Active</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Payment Gateway</span>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-sm font-medium text-green-600">Connected</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
+
         </div>
       </div>
     </div>
