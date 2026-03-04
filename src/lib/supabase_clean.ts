@@ -546,22 +546,29 @@ export const api = {
   },
 
   // Dashboard Stats
-  async getDashboardStats() {
+  async getDashboardStats(startDate?: string, endDate?: string) {
     try {
+      // Default to today if no dates provided
+      const today = new Date().toISOString().split('T')[0]
+      const checkStartDate = startDate || today
+      const checkEndDate = endDate || today
+
       const [
         { count: totalBookings },
         { count: confirmedBookings },
         { count: pendingBookings },
         { data: roomsData, error: roomsError },
         { count: totalUsers },
-        { data: bookingsData, error: bookingsError }
+        { data: bookingsData, error: bookingsError },
+        { data: revenueData, error: revenueError }
       ] = await Promise.all([
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'confirmed'),
         supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'pending'),
         supabase.from('rooms').select('id, quantity, is_deleted, is_active').eq('is_active', true),
         supabase.from('users').select('*', { count: 'exact', head: true }),
-        supabase.from('bookings').select('room_id, check_in_date, check_out_date, booking_status').in('booking_status', ['confirmed', 'pending'])
+        supabase.from('bookings').select('room_id, check_in_date, check_out_date, booking_status').in('booking_status', ['confirmed', 'pending']),
+        supabase.from('bookings').select('total_amount, payment_status').eq('payment_status', 'paid')
       ])
 
       if (roomsError) {
@@ -570,6 +577,12 @@ export const api = {
       if (bookingsError) {
         console.error('Error fetching bookings:', bookingsError)
       }
+      if (revenueError) {
+        console.error('Error fetching revenue:', revenueError)
+      }
+
+      // Calculate total revenue from paid bookings
+      const totalRevenue = revenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
 
       // Filter out soft-deleted rooms
       const activeRooms = roomsData?.filter(room => !room.is_deleted) || []
@@ -578,12 +591,17 @@ export const api = {
       const totalRoomTypes = activeRooms.length
       const totalRooms = activeRooms.reduce((sum, room) => sum + (room.quantity || 1), 0)
 
-      // Calculate currently occupied rooms (bookings that include today)
-      const today = new Date().toISOString().split('T')[0]
+      // Calculate occupied rooms for the selected date range
       const occupiedRoomsCount: { [key: number]: number } = {}
 
       bookingsData?.forEach(booking => {
-        if (booking.check_in_date <= today && booking.check_out_date > today) {
+        const checkIn = booking.check_in_date
+        const checkOut = booking.check_out_date
+        
+        // Check if booking overlaps with selected date range
+        const hasOverlap = checkIn <= checkEndDate && checkOut > checkStartDate
+        
+        if (hasOverlap) {
           occupiedRoomsCount[booking.room_id] = (occupiedRoomsCount[booking.room_id] || 0) + 1
         }
       })
@@ -609,7 +627,9 @@ export const api = {
         totalRoomTypes: totalRoomTypes,
         availableRooms: availableRooms,
         availableRoomTypes: availableRoomTypes,
-        totalUsers: totalUsers || 0
+        totalUsers: totalUsers || 0,
+        totalRevenue: totalRevenue,
+        activeBookings: pendingBookings || 0
       }
     } catch (error) {
       console.error('Error in getDashboardStats:', error)
@@ -621,13 +641,10 @@ export const api = {
         totalRoomTypes: 0,
         availableRooms: 0,
         availableRoomTypes: 0,
-        totalUsers: 0
+        totalUsers: 0,
+        totalRevenue: 0,
+        activeBookings: 0
       }
-    }
-  },
-      availableRooms: availableRooms,
-      availableRoomTypes: availableRoomTypes,
-      totalUsers: totalUsers || 0
     }
   },
 

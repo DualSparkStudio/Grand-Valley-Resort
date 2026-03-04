@@ -991,14 +991,16 @@ export const api = {
         { count: pendingBookings },
         { data: roomsData, error: roomsError },
         { count: totalUsers },
-        { data: bookingsData, error: bookingsError }
+        { data: bookingsData, error: bookingsError },
+        { data: revenueData, error: revenueError }
       ] = await Promise.all([
         supabase.from('bookings').select('*', { count: 'exact', head: true }),
         supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'confirmed'),
         supabase.from('bookings').select('*', { count: 'exact', head: true }).eq('booking_status', 'pending'),
         supabase.from('rooms').select('id, quantity, is_deleted, is_active').eq('is_active', true),
         supabase.from('users').select('*', { count: 'exact', head: true }),
-        supabase.from('bookings').select('room_id, check_in_date, check_out_date, booking_status').in('booking_status', ['confirmed', 'pending'])
+        supabase.from('bookings').select('room_id, check_in_date, check_out_date, booking_status').in('booking_status', ['confirmed', 'pending']),
+        supabase.from('bookings').select('total_amount, payment_status').eq('payment_status', 'paid')
       ])
 
       if (roomsError) {
@@ -1007,6 +1009,12 @@ export const api = {
       if (bookingsError) {
         console.error('Error fetching bookings:', bookingsError)
       }
+      if (revenueError) {
+        console.error('Error fetching revenue:', revenueError)
+      }
+
+      // Calculate total revenue from paid bookings
+      const totalRevenue = revenueData?.reduce((sum, booking) => sum + (booking.total_amount || 0), 0) || 0
 
       // Filter out soft-deleted rooms
       const activeRooms = roomsData?.filter(room => !room.is_deleted) || []
@@ -1021,6 +1029,7 @@ export const api = {
       console.log('Total Room Types:', totalRoomTypes)
       console.log('Total Rooms:', totalRooms)
       console.log('All Bookings Data:', bookingsData)
+      console.log('Total Revenue:', totalRevenue)
 
       // Calculate occupied rooms for the selected date range
       // A room is occupied if there's ANY overlap with the selected date range
@@ -1074,7 +1083,9 @@ export const api = {
         totalRoomTypes: totalRoomTypes,
         availableRooms: availableRooms,
         availableRoomTypes: availableRoomTypes,
-        totalUsers: totalUsers || 0
+        totalUsers: totalUsers || 0,
+        totalRevenue: totalRevenue,
+        activeBookings: pendingBookings || 0
       }
     } catch (error) {
       console.error('Error in getDashboardStats:', error)
@@ -1086,7 +1097,9 @@ export const api = {
         totalRoomTypes: 0,
         availableRooms: 0,
         availableRoomTypes: 0,
-        totalUsers: 0
+        totalUsers: 0,
+        totalRevenue: 0,
+        activeBookings: 0
       }
     }
   },

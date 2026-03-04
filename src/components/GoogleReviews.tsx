@@ -44,6 +44,15 @@ const GoogleReviews: React.FC = () => {
       setLoading(true)
       setError(null)
       
+      // Only try to fetch if we're in production or Netlify Dev environment
+      const isNetlifyEnv = window.location.hostname.includes('netlify.app') || 
+                          window.location.hostname === 'localhost' && window.location.port === '8888'
+      
+      if (!isNetlifyEnv) {
+        // Skip API call in regular dev mode, use mock data
+        throw new Error('Using mock data in development')
+      }
+      
       const response = await fetch('/.netlify/functions/get-google-reviews')
       
       // Check if response is JSON before parsing
@@ -62,6 +71,7 @@ const GoogleReviews: React.FC = () => {
       setReviewsData(data)
     } catch (err) {
       // Silently fail - don't show errors to users
+      // This is expected in development mode
       setError(null)
     } finally {
       setLoading(false)

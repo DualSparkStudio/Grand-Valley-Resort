@@ -1,44 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage -->
   <url>
-    <loc>https://riverbreezehomestay.com/</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- Rooms Listing -->
   <url>
-    <loc>https://riverbreezehomestay.com/rooms</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/rooms</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  
+  <!-- Individual Room Pages -->
   <url>
-    <loc>https://riverbreezehomestay.com/about</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/room/family-room</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://grandvalleyresort.com/room/valley-view-room</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://grandvalleyresort.com/room/deluxe-room</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Features & Amenities -->
+  <url>
+    <loc>https://grandvalleyresort.com/features</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Tourist Attractions -->
   <url>
-    <loc>https://riverbreezehomestay.com/contact</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/attractions</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- About Page -->
   <url>
-    <loc>https://riverbreezehomestay.com/features</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/about</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Gallery -->
+  <url>
+    <loc>https://grandvalleyresort.com/gallery</loc>
+    <lastmod>2026-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact Page -->
+  <url>
+    <loc>https://grandvalleyresort.com/contact</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Privacy Policy -->
   <url>
-    <loc>https://riverbreezehomestay.com/attractions</loc>
-    <lastmod>2024-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://riverbreezehomestay.com/policy</loc>
-    <lastmod>2024-01-01</lastmod>
+    <loc>https://grandvalleyresort.com/policy</loc>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

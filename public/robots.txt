@@ -2,13 +2,24 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://riverbreezehomestay.com/sitemap.xml
+Sitemap: https://grandvalleyresort.com/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
 
-# Disallow admin areas
+# Disallow admin and private areas
 Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /profile/
 Disallow: /bookings/
+Disallow: /booking/
+Disallow: /api/
+
+# Allow important pages
+Allow: /rooms
+Allow: /room/
+Allow: /features
+Allow: /attractions
+Allow: /about
+Allow: /contact
+Allow: /gallery

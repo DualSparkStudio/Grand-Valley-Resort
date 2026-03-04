@@ -270,10 +270,55 @@ const Home: React.FC = () => {
   return (
     <>
       <SEO 
-        title="Grand Valley Resort - Luxury Hilltop Heaven in Mahabaleshwar"
-        description="Experience luxury and comfort at Grand Valley Resort. Book your perfect getaway in Mahabaleshwar with stunning valley views, premium amenities, and exceptional service."
-        keywords="Grand Valley Resort, Mahabaleshwar resort, Bhilar resort, luxury resort, hilltop heaven, valley view resort"
+        title="Grand Valley Resort Bhilar - Best Luxury Resort in Mahabaleshwar | Premium Hill Station Stay"
+        description="Grand Valley Resort Bhilar offers luxury accommodation in Mahabaleshwar with breathtaking valley views. Premium rooms, modern amenities, in-house restaurant. Perfect for families & couples. Book now for best rates!"
+        keywords="Grand Valley Resort Bhilar, Mahabaleshwar resort, Bhilar resort, luxury resort Mahabaleshwar, best resort in Mahabaleshwar, Panchgani hotels, hill station resort Maharashtra, valley view resort, weekend getaway Mahabaleshwar, family resort Mahabaleshwar"
         url="https://grandvalleyresort.com"
+        image="https://grandvalleyresort.com/images/resort-hero.jpg"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Hotel",
+          "name": "Grand Valley Resort Bhilar",
+          "description": "Luxury resort in Mahabaleshwar offering premium accommodation with stunning valley views",
+          "image": "https://grandvalleyresort.com/images/resort-hero.jpg",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Bhilar Village, Near Mahabaleshwar",
+            "addressLocality": "Mahabaleshwar",
+            "addressRegion": "Maharashtra",
+            "postalCode": "412806",
+            "addressCountry": "IN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "17.9244",
+            "longitude": "73.6588"
+          },
+          "url": "https://grandvalleyresort.com",
+          "telephone": "+91-XXXXXXXXXX",
+          "priceRange": "₹₹₹",
+          "starRating": {
+            "@type": "Rating",
+            "ratingValue": "4.5",
+            "bestRating": "5"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.5",
+            "reviewCount": "150"
+          },
+          "amenityFeature": [
+            { "@type": "LocationFeatureSpecification", "name": "Free WiFi", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Restaurant", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Valley View", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Room Service", "value": true },
+            { "@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true }
+          ],
+          "checkinTime": "12:00",
+          "checkoutTime": "10:00",
+          "petsAllowed": false
+        }}
       />
       <div className="bg-cream-beige">
         {/* Hero Section - Responsive Height, Same Design */}
@@ -282,7 +327,7 @@ const Home: React.FC = () => {
             {/* Background Image with Dark Overlay */}
             <img
               src={heroImage}
-              alt="Grand Valley Resort"
+              alt="Grand Valley Resort Bhilar - Luxury Resort in Mahabaleshwar with Valley Views"
               className="absolute inset-0 w-full h-full object-cover"
               style={{
                 objectFit: 'cover',

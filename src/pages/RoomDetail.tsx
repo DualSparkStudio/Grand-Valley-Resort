@@ -14,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import AvailabilityCalendar from '../components/AvailabilityCalendar'
 import HouseRules from '../components/HouseRules'
 import RoomUnavailableModal from '../components/RoomUnavailableModal'
+import SEO from '../components/SEO'
 import type { Room } from '../lib/supabase'
 import { api } from '../lib/supabase'
 
@@ -291,27 +292,62 @@ const RoomDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/rooms')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <ArrowLeftIcon className="h-5 w-5" />
-              <span>Back to Rooms</span>
-            </button>
+    <>
+      <SEO 
+        title={`${room.name} - Grand Valley Resort Bhilar | Book Luxury Room in Mahabaleshwar`}
+        description={`Book ${room.name} at Grand Valley Resort Bhilar, Mahabaleshwar. ${room.description.substring(0, 150)}... Starting from ₹${room.price_per_night}/night. Premium amenities, valley views.`}
+        keywords={`${room.name}, Grand Valley Resort rooms, Mahabaleshwar accommodation, ${room.name} booking, luxury room Mahabaleshwar, resort rooms Bhilar`}
+        url={`https://grandvalleyresort.com/room/${slug}`}
+        image={room.image_url || room.images?.[0]}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "HotelRoom",
+          "name": room.name,
+          "description": room.description,
+          "image": room.images || [room.image_url],
+          "offers": {
+            "@type": "Offer",
+            "price": room.price_per_night,
+            "priceCurrency": "INR",
+            "availability": "https://schema.org/InStock",
+            "url": `https://grandvalleyresort.com/room/${slug}`
+          },
+          "occupancy": {
+            "@type": "QuantitativeValue",
+            "maxValue": room.max_capacity
+          },
+          "bed": {
+            "@type": "BedDetails",
+            "numberOfBeds": room.quantity
+          },
+          "amenity": room.amenities?.map(amenity => ({
+            "@type": "LocationFeatureSpecification",
+            "name": amenity,
+            "value": true
+          }))
+        }}
+      />
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/rooms')}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <ArrowLeftIcon className="h-5 w-5" />
+                <span>Back to Rooms</span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-1">
-            {/* Room Title */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-1">
+              {/* Room Title */}
             <div className="mb-6">
               <h1 className="text-3xl font-bold text-gray-900">{room.name}</h1>
             </div>
@@ -741,9 +777,10 @@ const RoomDetail: React.FC = () => {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

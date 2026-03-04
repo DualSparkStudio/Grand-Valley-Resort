@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AttractionCard from '../components/AttractionCard';
 import LogoLoader from '../components/LogoLoader';
+import SEO from '../components/SEO';
 
 interface Attraction {
   id: number;
@@ -502,8 +503,15 @@ const TouristAttractions: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
+    <>
+      <SEO 
+        title="Tourist Attractions Near Grand Valley Resort | Places to Visit in Mahabaleshwar"
+        description="Explore top tourist attractions near Grand Valley Resort Bhilar. Discover waterfalls, viewpoints, temples, and scenic spots in Mahabaleshwar & Panchgani. Complete travel guide with distances."
+        keywords="Mahabaleshwar tourist places, Panchgani attractions, places near Bhilar, Mahabaleshwar sightseeing, tourist spots Mahabaleshwar, things to do Mahabaleshwar"
+        url="https://grandvalleyresort.com/attractions"
+      />
+      <div className="min-h-screen bg-gray-50">
+        {/* Hero Section */}
       <section className="relative h-64 sm:h-80 lg:h-96 bg-gradient-to-r from-dark-blue-800 to-golden-500">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 flex items-center justify-center h-full">
@@ -610,6 +618,7 @@ const TouristAttractions: React.FC = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
