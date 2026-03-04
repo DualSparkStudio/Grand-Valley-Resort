@@ -96,7 +96,7 @@ const MaintenancePage: React.FC = () => {
           <div className="mt-8 text-white/60">
             <p>Thank you for your patience. We'll be back soon!</p>
             <p className="text-sm mt-2">
-              © 2024 Resort Booking System. All rights reserved.
+              © {new Date().getFullYear()} Grand Valley Resort. All rights reserved.
             </p>
           </div>
         </div>

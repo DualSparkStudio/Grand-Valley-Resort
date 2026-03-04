@@ -297,22 +297,8 @@ const Profile: React.FC = () => {
                 <p className="text-sm text-gray-600">@{formData.username}</p>
               </div>
 
-              {/* Account Info */}
+              {/* Contact Info */}
               <div className="space-y-4">
-                <div>
-                  <div className="text-sm text-gray-600">Member Since</div>
-                  <div className="font-semibold text-gray-900">
-                    {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-gray-600">Account Type</div>
-                  <div className="font-semibold text-gray-900">
-                    {user?.is_admin ? 'Administrator' : 'Guest'}
-                  </div>
-                </div>
-
                 <div>
                   <div className="text-sm text-gray-600">Email</div>
                   <div className="font-semibold text-gray-900">{formData.email}</div>

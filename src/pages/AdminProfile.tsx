@@ -390,21 +390,6 @@ const AdminProfile: React.FC = () => {
                     </button>
                   </div>
                 </form>
-
-                {/* Account Info */}
-                <div className="mt-8 pt-8 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-gray-700">Account Type:</span>
-                      <span className="ml-2 text-gray-600">{user?.is_admin ? 'Administrator' : 'User'}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-700">Member Since:</span>
-                      <span className="ml-2 text-gray-600">{user?.created_at ? formatDate(user.created_at) : 'N/A'}</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
 

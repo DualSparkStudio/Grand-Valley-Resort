@@ -306,7 +306,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="mt-8 pt-8 border-t border-gray-200">
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-gray-600">
               <div className="flex flex-wrap justify-center sm:justify-start sm:items-center gap-x-4 gap-y-2">
-                <span>© 2025 Grand Valley Resort. All rights reserved.</span>
+                <span>© {new Date().getFullYear()} Grand Valley Resort. All rights reserved.</span>
                 <span className="text-gray-400">•</span>
                 <span className="text-golden-500 hover:text-golden-600 font-medium transition-colors duration-200">
                   <a href="/policy">Privacy Policy & Terms</a>
